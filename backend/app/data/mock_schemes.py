@@ -1,0 +1,6 @@
+from app.services.finance import SCHEME_MICRO_FINANCE, SCHEME_TERM_LOAN
+
+MOCK_SCHEMES = [
+    SCHEME_MICRO_FINANCE,
+    SCHEME_TERM_LOAN
+]
