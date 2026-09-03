@@ -20,6 +20,7 @@ ENV/
 # Environment Variables & Keys
 .env
 backend/.env
+backend/.users.json
 frontend/.env
 
 # IDE & OS Files

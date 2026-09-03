@@ -12,13 +12,13 @@ L.Icon.Default.mergeOptions({
 });
 
 // Component to dynamically pan/zoom map when coordinates change
-const MapRecenter = ({ lat, lng }) => {
+const MapRecenter = ({ lat, lng, zoom }) => {
   const map = useMap();
   useEffect(() => {
-    if (lat && lng) {
-      map.setView([lat, lng], 12);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+      map.setView([lat, lng], zoom);
     }
-  }, [lat, lng, map]);
+  }, [lat, lng, map, zoom]);
   return null;
 };
 
@@ -26,6 +26,9 @@ export const LocationMap = ({
   lat = 18.6984, 
   lng = 74.1236, 
   villageName = "Shikrapur",
+  zoom = 12,
+  showVillageMarker = true,
+  showCatchment = true,
   radiusKm = 10.0,
   competitors = []
 }) => {
@@ -34,29 +37,33 @@ export const LocationMap = ({
   return (
     <div className="space-y-2">
       <div className="h-72 w-full border border-gray-200 rounded-xl overflow-hidden shadow-xs relative">
-        <MapContainer center={position} zoom={12} scrollWheelZoom={false} className="h-full w-full">
+        <MapContainer center={position} zoom={zoom} scrollWheelZoom className="h-full w-full">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
-          <MapRecenter lat={lat} lng={lng} />
+          <MapRecenter lat={lat} lng={lng} zoom={zoom} />
 
           {/* Village Center Marker */}
-          <Marker position={position}>
-            <Popup>
-              <div className="text-xs font-semibold">
-                <strong>{villageName}</strong> (Selected Village Center)
-              </div>
-            </Popup>
-          </Marker>
+          {showVillageMarker && (
+            <Marker position={position}>
+              <Popup>
+                <div className="text-xs font-semibold">
+                  <strong>{villageName}</strong> (Selected Village Center)
+                </div>
+              </Popup>
+            </Marker>
+          )}
 
-          {/* 10km Radius Catchment Circle */}
-          <Circle
-            center={position}
-            radius={radiusKm * 1000}
-            pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15, weight: 2 }}
-          />
+          {/* Hierarchy-level catchment circle */}
+          {showCatchment && (
+            <Circle
+              center={position}
+              radius={radiusKm * 1000}
+              pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15, weight: 2 }}
+            />
+          )}
 
           {/* Render Competitor Points */}
           {competitors.map((comp, idx) => (
@@ -77,7 +84,7 @@ export const LocationMap = ({
           <div className="font-bold text-gray-800 uppercase tracking-wider text-[9px] mb-1">CATCHMENT LEGEND</div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
-            <span>10 km Radius Circle</span>
+            <span>{radiusKm} km Radius Circle</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
@@ -87,7 +94,7 @@ export const LocationMap = ({
       </div>
 
       <p className="text-[11px] text-gray-500 leading-snug">
-        We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.
+        We analyse nearby villages, local population, business density, and infrastructure within the selected radius. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.
       </p>
     </div>
   );

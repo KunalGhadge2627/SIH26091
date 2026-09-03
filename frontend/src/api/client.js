@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
 
 
@@ -34,7 +34,7 @@ export const api = {
   getStates: () => client.get('/locations/states'),
   getDistricts: (state) => client.get(`/locations/districts?state=${encodeURIComponent(state)}`),
   getBlocks: (district) => client.get(`/locations/blocks?district=${encodeURIComponent(district)}`),
-  getVillages: (block) => client.get(`/locations/villages?block=${encodeURIComponent(block)}`),
+  getVillages: (state, district, block) => client.get(`/locations/villages?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}&block=${encodeURIComponent(block)}`),
   getVillageById: (id) => client.get(`/locations/villages/${id}`),
 
   // Business Models
@@ -52,7 +52,7 @@ export const api = {
   getAlternatives: (id, lang = 'en') => client.get(`/assessments/${id}/alternatives?lang=${lang}`),
   getImprovementPlan: (id, lang = 'en') => client.get(`/assessments/${id}/improvement-plan?lang=${lang}`),
   updateImprovementAction: (id, actionId, status) => client.put(`/assessments/${id}/improvement-plan/${actionId}`, { status }),
-  getFinancialPlan: (id) => client.get(`/assessments/${id}/financial-plan`),
+  getFinancialPlan: (id, lang = 'en') => client.get(`/assessments/${id}/financial-plan?lang=${lang}`),
   getAssessmentLegalOffices: (id) => client.get(`/assessments/${id}/legal-offices`),
 
 

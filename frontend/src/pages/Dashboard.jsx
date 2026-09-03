@@ -7,9 +7,11 @@ import ScoreRing from '../components/common/ScoreRing';
 import ScoreBar from '../components/common/ScoreBar';
 import LocationMap from '../components/map/LocationMap';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 export const Dashboard = () => {
+  const { lang } = useLanguage();
   const [latestAssessment, setLatestAssessment] = useState(null);
   const [report, setReport] = useState(null);
   const [marketMap, setMarketMap] = useState(null);
@@ -27,7 +29,7 @@ export const Dashboard = () => {
           setLatestAssessment(latest);
 
           const [reportResp, mapResp] = await Promise.all([
-            api.getReport(latest.id),
+            api.getReport(latest.id, lang),
             api.getMarketMap(latest.id)
           ]);
 
@@ -41,7 +43,7 @@ export const Dashboard = () => {
       }
     };
     fetchDashboardData();
-  }, []);
+  }, [lang]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">

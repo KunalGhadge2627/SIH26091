@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const LanguageContext = createContext();
 
@@ -14,16 +15,280 @@ export const LANGUAGES_LIST = [
   { code: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ' }
 ];
 
+const HINDI_TRANSLATIONS = {
+  'Dashboard': 'डैशबोर्ड',
+  'New Assessment': 'नया मूल्यांकन',
+  'Reports History': 'रिपोर्ट इतिहास',
+  'Improvement Plan': 'सुधार योजना',
+  'Business Alternatives': 'व्यवसाय विकल्प',
+  'Financial Plan': 'वित्तीय योजना',
+  'Legal Advice': 'कानूनी सलाह',
+  'Profile': 'प्रोफ़ाइल',
+  'Rural Feasibility & Literacy': 'ग्रामीण व्यवहार्यता और वित्तीय साक्षरता',
+  'DECISION TOOLS': 'निर्णय उपकरण',
+  'PROTOTYPE DATA': 'प्रोटोटाइप डेटा',
+  'Recommendations use prototype data and do not guarantee business success.': 'सिफारिशें प्रोटोटाइप डेटा पर आधारित हैं और व्यावसायिक सफलता की गारंटी नहीं देतीं।',
+  'Sign Out': 'साइन आउट',
+  'Notifications': 'सूचनाएं',
+  'No new notifications': 'कोई नई सूचना नहीं',
+  'User': 'उपयोगकर्ता',
+  'Loading...': 'लोड हो रहा है...',
+  'Welcome back': 'वापसी पर स्वागत है',
+  'Log in to your account': 'अपने खाते में लॉग इन करें',
+  'Create account': 'खाता बनाएं',
+  'Email Address': 'ईमेल पता',
+  'Password': 'पासवर्ड',
+  'Remember me': 'मुझे याद रखें',
+  'Log in': 'लॉग इन',
+  'Logging in...': 'लॉग इन हो रहा है...',
+  'Forgot password?': 'पासवर्ड भूल गए?',
+  'Invalid email or password. Please try again.': 'ईमेल या पासवर्ड गलत है। कृपया फिर से प्रयास करें।',
+  "Don't have an account yet?": 'अभी तक खाता नहीं है?',
+  'Welcome': 'स्वागत है',
+  'Save': 'सहेजें',
+  'Cancel': 'रद्द करें',
+  'Submit': 'जमा करें',
+  'Next': 'आगे',
+  'Back': 'वापस',
+  'Continue': 'जारी रखें',
+  'Download Report': 'रिपोर्ट डाउनलोड करें',
+  'View Report': 'रिपोर्ट देखें',
+  'Search': 'खोजें',
+  'Legal offices': 'कानूनी कार्यालय',
+  'Market': 'बाजार',
+  'Readiness': 'तैयारी',
+  'Financial': 'वित्तीय',
+  'Feasibility': 'व्यवहार्यता',
+  'Risk': 'जोखिम',
+  'Demand': 'मांग',
+  'Supply': 'आपूर्ति',
+  'Low': 'कम',
+  'Medium': 'मध्यम',
+  'High': 'High'
+};
+
+const SHARED_UI_KEYS = {
+  'Decision Dashboard': 'Decision Dashboard', 'DECISION DASHBOARD': 'DECISION DASHBOARD', 'Your business assessment': 'Your business assessment', 'Pre-investment advisory overview and village catchment intelligence.': 'Pre-investment advisory overview and village catchment intelligence.', 'New assessment': 'New assessment', 'Loading dashboard intelligence...': 'Loading dashboard intelligence...', 'No completed assessments yet': 'No completed assessments yet', 'Start your first assessment': 'Start your first assessment', 'Full report': 'Full report', 'LATEST ASSESSMENT': 'LATEST ASSESSMENT', 'LOCAL CATCHMENT': 'LOCAL CATCHMENT', 'MAP VIEW': 'MAP VIEW', 'Market around': 'Market around', 'Nearby Villages in 10km:': 'Nearby Villages in 10km:', 'Total Population:': 'Total Population:', 'Local Market Fit (45%)': 'Local Market Fit (45%)', 'Business Readiness (30%)': 'Business Readiness (30%)', 'Financial Fit (25%)': 'Financial Fit (25%)', 'Proceed after preparation': 'Proceed after preparation', 'Promising': 'Promising', 'Verdict Band:': 'Verdict Band:', 'New Feasibility Assessment': 'New Feasibility Assessment', 'ASSESSMENT PROGRESS': 'ASSESSMENT PROGRESS', 'Draft saved': 'Draft saved', 'Step': 'Step', 'of 5': 'of 5', 'Business Feasibility Assessment': 'Business Feasibility Assessment', 'PRE-INVESTMENT ADVISORY': 'PRE-INVESTMENT ADVISORY', 'Begin assessment': 'Begin assessment', 'Personal Profile & Resources': 'Personal Profile & Resources', 'Business': 'Business', 'Review': 'Review', 'Feasibility Report': 'Feasibility Report', 'Download report': 'Download report', 'Why this score?': 'Why this score?', 'Supports This Business': 'Supports This Business', 'Needs Attention': 'Needs Attention', 'Hyper-local market picture': 'Hyper-local market picture', 'Financial Plan': 'Financial Plan', 'Print plan': 'Print plan', 'Back to results': 'Back to results', 'FINANCIAL FIT · DEMO ESTIMATE': 'FINANCIAL FIT · DEMO ESTIMATE', 'SCHEME MATCHING': 'SCHEME MATCHING', 'YOUR MARGIN': 'YOUR MARGIN', 'PROJECT COST': 'PROJECT COST', 'INDICATIVE LOAN': 'INDICATIVE LOAN', 'INDICATIVE SCHEME': 'INDICATIVE SCHEME', 'GOVERNMENT TIER': 'GOVERNMENT TIER', 'Interest Rate': 'Interest Rate', 'Tenure': 'Tenure', 'Moratorium Period': 'Moratorium Period', 'Monthly EMI': 'Monthly EMI', 'MONTHLY AFFORDABILITY': 'MONTHLY AFFORDABILITY', 'Good': 'Good', 'Safe (<40%)': 'Safe (<40%)', 'Moderate (40-60%)': 'Moderate (40-60%)', 'High Risk (>60%)': 'High Risk (>60%)', 'Estimated EMI:': 'Estimated EMI:', 'Household Expenses:': 'Household Expenses:'
+};
+
+Object.assign(HINDI_TRANSLATIONS, SHARED_UI_KEYS);
+
+const ENGLISH_TRANSLATIONS = Object.fromEntries(
+  Object.keys(HINDI_TRANSLATIONS).map((key) => [key, key])
+);
+
+const TRANSLATIONS = {
+  en: ENGLISH_TRANSLATIONS,
+  hi: {
+    ...ENGLISH_TRANSLATIONS,
+    ...HINDI_TRANSLATIONS,
+    'Dashboard': 'डैशबोर्ड', 'New Assessment': 'नया मूल्यांकन', 'Reports History': 'रिपोर्ट इतिहास', 'Improvement Plan': 'सुधार योजना', 'Business Alternatives': 'व्यवसाय विकल्प', 'Financial Plan': 'वित्तीय योजना', 'Legal Advice': 'कानूनी सलाह', 'Profile': 'प्रोफ़ाइल', 'DECISION TOOLS': 'निर्णय उपकरण', 'PROTOTYPE DATA': 'प्रोटोटाइप डेटा', 'Sign Out': 'साइन आउट', 'Notifications': 'सूचनाएं', 'No new notifications': 'कोई नई सूचना नहीं', 'User': 'उपयोगकर्ता', 'Loading...': 'लोड हो रहा है...', 'Welcome back': 'वापसी पर स्वागत है', 'Log in to your account': 'अपने खाते में लॉग इन करें', 'Create account': 'खाता बनाएं', 'Email Address': 'ईमेल पता', 'Password': 'पासवर्ड', 'Remember me': 'मुझे याद रखें', 'Log in': 'लॉग इन', 'Logging in...': 'लॉग इन हो रहा है...', 'Forgot password?': 'पासवर्ड भूल गए?', 'Welcome': 'स्वागत है', 'Save': 'सहेजें', 'Cancel': 'रद्द करें', 'Submit': 'जमा करें', 'Next': 'आगे', 'Back': 'वापस', 'Continue': 'जारी रखें', 'Download Report': 'रिपोर्ट डाउनलोड करें', 'View Report': 'रिपोर्ट देखें', 'Search': 'खोजें', 'Legal offices': 'कानूनी कार्यालय', 'Market': 'बाजार', 'Readiness': 'तैयारी', 'Financial': 'वित्तीय', 'Feasibility': 'व्यवहार्यता', 'Risk': 'जोखिम', 'Demand': 'मांग', 'Supply': 'आपूर्ति', 'Low': 'कम', 'Medium': 'मध्यम', 'High': 'अधिक', 'Decision Dashboard': 'निर्णय डैशबोर्ड', 'DECISION DASHBOARD': 'निर्णय डैशबोर्ड', 'Your business assessment': 'आपका व्यवसाय मूल्यांकन', 'New assessment': 'नया मूल्यांकन', 'Full report': 'पूरी रिपोर्ट', 'MAP VIEW': 'मानचित्र दृश्य', 'Market around': 'के आसपास का बाजार', 'Nearby Villages in 10km:': '10 किमी के गांव:', 'Total Population:': 'कुल जनसंख्या:', 'Local Market Fit (45%)': 'स्थानीय बाजार उपयुक्तता (45%)', 'Business Readiness (30%)': 'व्यवसाय तैयारी (30%)', 'Financial Fit (25%)': 'वित्तीय उपयुक्तता (25%)', 'Proceed after preparation': 'तैयारी के बाद आगे बढ़ें', 'Promising': 'आशाजनक', 'Verdict Band:': 'निर्णय श्रेणी:', 'New Feasibility Assessment': 'नया व्यवहार्यता मूल्यांकन', 'ASSESSMENT PROGRESS': 'मूल्यांकन प्रगति', 'Draft saved': 'ड्राफ्ट सहेजा गया', 'Step': 'चरण', 'Business Feasibility Assessment': 'व्यवसाय व्यवहार्यता मूल्यांकन', 'PRE-INVESTMENT ADVISORY': 'निवेश-पूर्व सलाह', 'Begin assessment': 'मूल्यांकन शुरू करें', 'Personal Profile & Resources': 'व्यक्तिगत प्रोफ़ाइल और संसाधन', 'Business': 'व्यवसाय', 'Review': 'समीक्षा', 'Download report': 'रिपोर्ट डाउनलोड करें', 'Why this score?': 'यह स्कोर क्यों?', 'Supports This Business': 'इस व्यवसाय का समर्थन करता है', 'Needs Attention': 'ध्यान देने योग्य', 'Hyper-local market picture': 'स्थानीय बाजार का चित्र', 'Print plan': 'योजना प्रिंट करें', 'Back to results': 'परिणामों पर वापस जाएं', 'FINANCIAL FIT · DEMO ESTIMATE': 'वित्तीय उपयुक्तता · डेमो अनुमान', 'SCHEME MATCHING': 'योजना मिलान', 'YOUR MARGIN': 'आपकी मार्जिन राशि', 'PROJECT COST': 'परियोजना लागत', 'INDICATIVE LOAN': 'संकेतात्मक ऋण', 'INDICATIVE SCHEME': 'संकेतात्मक योजना', 'GOVERNMENT TIER': 'सरकारी स्तर', 'Interest Rate': 'ब्याज दर', 'Tenure': 'अवधि', 'Moratorium Period': 'स्थगन अवधि', 'Monthly EMI': 'मासिक ईएमआई', 'MONTHLY AFFORDABILITY': 'मासिक भुगतान क्षमता', 'Good': 'अच्छा', 'Safe (<40%)': 'सुरक्षित (<40%)', 'Moderate (40-60%)': 'मध्यम (40-60%)', 'High Risk (>60%)': 'उच्च जोखिम (>60%)', 'Estimated EMI:': 'अनुमानित ईएमआई:', 'Household Expenses:': 'घरेलू खर्च:'
+  },
+  mr: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'डॅशबोर्ड', 'New Assessment': 'नवीन मूल्यांकन', 'Reports History': 'अहवाल इतिहास', 'Improvement Plan': 'सुधारणा योजना', 'Business Alternatives': 'व्यवसाय पर्याय', 'Financial Plan': 'आर्थिक योजना', 'Legal Advice': 'कायदेशीर सल्ला', 'Profile': 'प्रोफाइल', 'DECISION TOOLS': 'निर्णय साधने', 'PROTOTYPE DATA': 'प्रोटोटाइप डेटा', 'Sign Out': 'साइन आउट', 'Notifications': 'सूचना', 'No new notifications': 'नवीन सूचना नाहीत', 'User': 'वापरकर्ता', 'Loading...': 'लोड होत आहे...', 'Welcome back': 'पुन्हा स्वागत आहे', 'Log in to your account': 'तुमच्या खात्यात लॉग इन करा', 'Create account': 'खाते तयार करा', 'Email Address': 'ईमेल पत्ता', 'Password': 'पासवर्ड', 'Remember me': 'माझी आठवण ठेवा', 'Log in': 'लॉग इन', 'Logging in...': 'लॉग इन होत आहे...', 'Forgot password?': 'पासवर्ड विसरलात?', 'Welcome': 'स्वागत', 'Save': 'जतन करा', 'Cancel': 'रद्द करा', 'Submit': 'सबमिट करा', 'Next': 'पुढे', 'Back': 'मागे', 'Continue': 'सुरू ठेवा', 'Download Report': 'अहवाल डाउनलोड करा', 'View Report': 'अहवाल पहा', 'Search': 'शोधा', 'Legal offices': 'कायदेशीर कार्यालये', 'Market': 'बाजार', 'Readiness': 'तयारी', 'Financial': 'आर्थिक', 'Feasibility': 'व्यवहार्यता', 'Risk': 'जोखीम', 'Demand': 'मागणी', 'Supply': 'पुरवठा', 'Low': 'कमी', 'Medium': 'मध्यम', 'High': 'जास्त'
+  },
+  ta: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'டாஷ்போர்டு', 'New Assessment': 'புதிய மதிப்பீடு', 'Reports History': 'அறிக்கை வரலாறு', 'Improvement Plan': 'முன்னேற்றத் திட்டம்', 'Business Alternatives': 'வணிக மாற்றுகள்', 'Financial Plan': 'நிதித் திட்டம்', 'Legal Advice': 'சட்ட ஆலோசனை', 'Profile': 'சுயவிவரம்', 'DECISION TOOLS': 'முடிவு கருவிகள்', 'PROTOTYPE DATA': 'முன்மாதிரி தரவு', 'Sign Out': 'வெளியேறு', 'Notifications': 'அறிவிப்புகள்', 'No new notifications': 'புதிய அறிவிப்புகள் இல்லை', 'User': 'பயனர்', 'Loading...': 'ஏற்றப்படுகிறது...', 'Welcome back': 'மீண்டும் வரவேற்கிறோம்', 'Log in to your account': 'உங்கள் கணக்கில் உள்நுழைக', 'Create account': 'கணக்கை உருவாக்கு', 'Email Address': 'மின்னஞ்சல் முகவரி', 'Password': 'கடவுச்சொல்', 'Remember me': 'என்னை நினைவில் கொள்', 'Log in': 'உள்நுழை', 'Logging in...': 'உள்நுழைகிறது...', 'Forgot password?': 'கடவுச்சொல்லை மறந்துவிட்டீர்களா?', 'Welcome': 'வரவேற்பு', 'Save': 'சேமி', 'Cancel': 'ரத்து செய்', 'Submit': 'சமர்ப்பி', 'Next': 'அடுத்து', 'Back': 'பின்செல்', 'Continue': 'தொடர்', 'Download Report': 'அறிக்கையைப் பதிவிறக்கு', 'View Report': 'அறிக்கையைப் பார்', 'Search': 'தேடு', 'Legal offices': 'சட்ட அலுவலகங்கள்', 'Market': 'சந்தை', 'Readiness': 'தயார்நிலை', 'Financial': 'நிதி', 'Feasibility': 'சாத்தியம்', 'Risk': 'ஆபத்து', 'Demand': 'தேவை', 'Supply': 'வழங்கல்', 'Low': 'குறைவு', 'Medium': 'நடுத்தரம்', 'High': 'அதிகம்'
+  },
+  te: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'డాష్‌బోర్డ్', 'New Assessment': 'కొత్త అంచనా', 'Reports History': 'నివేదిక చరిత్ర', 'Improvement Plan': 'మెరుగుదల ప్రణాళిక', 'Business Alternatives': 'వ్యాపార ప్రత్యామ్నాయాలు', 'Financial Plan': 'ఆర్థిక ప్రణాళిక', 'Legal Advice': 'న్యాయ సలహా', 'Profile': 'ప్రొఫైల్', 'DECISION TOOLS': 'నిర్ణయ సాధనాలు', 'PROTOTYPE DATA': 'ప్రోటోటైప్ డేటా', 'Sign Out': 'సైన్ అవుట్', 'Notifications': 'నోటిఫికేషన్లు', 'No new notifications': 'కొత్త నోటిఫికేషన్లు లేవు', 'User': 'వినియోగదారు', 'Loading...': 'లోడ్ అవుతోంది...', 'Welcome back': 'తిరిగి స్వాగతం', 'Log in to your account': 'మీ ఖాతాలోకి లాగిన్ అవ్వండి', 'Create account': 'ఖాతా సృష్టించండి', 'Email Address': 'ఇమెయిల్ చిరునామా', 'Password': 'పాస్‌వర్డ్', 'Remember me': 'నన్ను గుర్తుంచుకో', 'Log in': 'లాగిన్', 'Logging in...': 'లాగిన్ అవుతోంది...', 'Forgot password?': 'పాస్‌వర్డ్ మర్చిపోయారా?', 'Welcome': 'స్వాగతం', 'Save': 'సేవ్ చేయండి', 'Cancel': 'రద్దు చేయండి', 'Submit': 'సమర్పించండి', 'Next': 'తదుపరి', 'Back': 'వెనుకకు', 'Continue': 'కొనసాగించండి', 'Download Report': 'నివేదిక డౌన్‌లోడ్ చేయండి', 'View Report': 'నివేదిక చూడండి', 'Search': 'వెతకండి', 'Legal offices': 'న్యాయ కార్యాలయాలు', 'Market': 'మార్కెట్', 'Readiness': 'సిద్ధత', 'Financial': 'ఆర్థిక', 'Feasibility': 'సాధ్యత', 'Risk': 'ప్రమాదం', 'Demand': 'డిమాండ్', 'Supply': 'సరఫరా', 'Low': 'తక్కువ', 'Medium': 'మధ్యస్థం', 'High': 'అధికం'
+  },
+  kn: {
+    'Takes 5–7 minutes': '5–7 ನಿಮಿಷಗಳು ಬೇಕಾಗುತ್ತವೆ', 'Answers stored securely': 'ಉತ್ತರಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಸಂಗ್ರಹಿಸಲಾಗುತ್ತದೆ', 'STEP 1 OF 5': 'ಹಂತ 1 / 5', 'STEP 2 OF 5': 'ಹಂತ 2 / 5', 'STEP 3 OF 5': 'ಹಂತ 3 / 5', 'STEP 4 OF 5': 'ಹಂತ 4 / 5', 'STEP 5 OF 5': 'ಹಂತ 5 / 5', 'Continue to Business': 'ವ್ಯವಹಾರಕ್ಕೆ ಮುಂದುವರಿಯಿರಿ', 'Select Business Category & Location': 'ವ್ಯವಹಾರ ವರ್ಗ ಮತ್ತು ಸ್ಥಳವನ್ನು ಆಯ್ಕೆಮಾಡಿ', 'Select Business Category': 'ವ್ಯವಹಾರ ವರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ', 'Capital': 'ಬಂಡವಾಳ', 'Target Village Location': 'ಗುರಿ ಗ್ರಾಮದ ಸ್ಥಳ', 'State': 'ರಾಜ್ಯ', 'District': 'ಜಿಲ್ಲೆ', 'Village': 'ಗ್ರಾಮ', 'Continue to Readiness': 'ಸಿದ್ಧತೆಗೆ ಮುಂದುವರಿಯಿರಿ', 'Readiness Questionnaire': 'ಸಿದ್ಧತೆ ಪ್ರಶ್ನಾವಳಿ', 'Readiness Advisory': 'ಸಿದ್ಧತೆ ಸಲಹೆ', 'Continue to Finance': 'ಹಣಕಾಸಿಗೆ ಮುಂದುವರಿಯಿರಿ', 'Understand Your Financial Fit': 'ನಿಮ್ಮ ಹಣಕಾಸಿನ ಹೊಂದಾಣಿಕೆಯನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ', 'Continue to Review': 'ಪರಿಶೀಲನೆಗೆ ಮುಂದುವರಿಯಿರಿ', 'Review Your Inputs': 'ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ', 'Edit': 'ಸಂಪಾದಿಸಿ', 'Run Feasibility Analysis': 'ಸಾಧ್ಯತಾ ವಿಶ್ಲೇಷಣೆ ನಡೆಸಿ', 'PROTOTYPE ANALYSIS': 'ಮಾದರಿ ವಿಶ್ಲೇಷಣೆ', 'Building your feasibility picture': 'ನಿಮ್ಮ ಸಾಧ್ಯತಾ ಚಿತ್ರವನ್ನು ರೂಪಿಸಲಾಗುತ್ತಿದೆ'
+  },
+  bn: {
+    'Takes 5–7 minutes': '৫–৭ মিনিট সময় লাগে', 'Answers stored securely': 'উত্তর নিরাপদে সংরক্ষিত হয়', 'STEP 1 OF 5': 'ধাপ ১ / ৫', 'STEP 2 OF 5': 'ধাপ ২ / ৫', 'STEP 3 OF 5': 'ধাপ ৩ / ৫', 'STEP 4 OF 5': 'ধাপ ৪ / ৫', 'STEP 5 OF 5': 'ধাপ ৫ / ৫', 'Continue to Business': 'ব্যবসায় এগিয়ে যান', 'Select Business Category & Location': 'ব্যবসার বিভাগ ও অবস্থান নির্বাচন করুন', 'Select Business Category': 'ব্যবসার বিভাগ নির্বাচন করুন', 'Capital': 'মূলধন', 'Target Village Location': 'লক্ষ্য গ্রামের অবস্থান', 'State': 'রাজ্য', 'District': 'জেলা', 'Village': 'গ্রাম', 'Continue to Readiness': 'প্রস্তুতিতে এগিয়ে যান', 'Readiness Questionnaire': 'প্রস্তুতি প্রশ্নাবলী', 'Readiness Advisory': 'প্রস্তুতি পরামর্শ', 'Continue to Finance': 'অর্থায়নে এগিয়ে যান', 'Understand Your Financial Fit': 'আপনার আর্থিক উপযুক্ততা বুঝুন', 'Continue to Review': 'পর্যালোচনায় এগিয়ে যান', 'Review Your Inputs': 'আপনার তথ্য পর্যালোচনা করুন', 'Edit': 'সম্পাদনা', 'Run Feasibility Analysis': 'সম্ভাব্যতা বিশ্লেষণ চালান', 'PROTOTYPE ANALYSIS': 'প্রোটোটাইপ বিশ্লেষণ', 'Building your feasibility picture': 'আপনার সম্ভাব্যতার ছবি তৈরি হচ্ছে'
+  },
+  gu: {
+    'Takes 5–7 minutes': '5–7 મિનિટ લાગે છે', 'Answers stored securely': 'જવાબો સુરક્ષિત રીતે સંગ્રહિત થાય છે', 'STEP 1 OF 5': 'પગલું 1 / 5', 'STEP 2 OF 5': 'પગલું 2 / 5', 'STEP 3 OF 5': 'પગલું 3 / 5', 'STEP 4 OF 5': 'પગલું 4 / 5', 'STEP 5 OF 5': 'પગલું 5 / 5', 'Continue to Business': 'વ્યવસાય તરફ આગળ વધો', 'Select Business Category & Location': 'વ્યવસાય શ્રેણી અને સ્થાન પસંદ કરો', 'Select Business Category': 'વ્યવસાય શ્રેણી પસંદ કરો', 'Capital': 'મૂડી', 'Target Village Location': 'લક્ષ્ય ગામનું સ્થાન', 'State': 'રાજ્ય', 'District': 'જિલ્લો', 'Village': 'ગામ', 'Continue to Readiness': 'તૈયારી તરફ આગળ વધો', 'Readiness Questionnaire': 'તૈયારી પ્રશ્નાવલી', 'Readiness Advisory': 'તૈયારી સલાહ', 'Continue to Finance': 'નાણાં તરફ આગળ વધો', 'Understand Your Financial Fit': 'તમારી નાણાકીય યોગ્યતા સમજો', 'Continue to Review': 'સમીક્ષા તરફ આગળ વધો', 'Review Your Inputs': 'તમારી માહિતીની સમીક્ષા કરો', 'Edit': 'ફેરફાર કરો', 'Run Feasibility Analysis': 'વ્યવહાર્યતા વિશ્લેષણ ચલાવો', 'PROTOTYPE ANALYSIS': 'પ્રોટોટાઇપ વિશ્લેષણ', 'Building your feasibility picture': 'તમારી વ્યવહાર્યતાનું ચિત્ર બની રહ્યું છે'
+  },
+  pa: {
+    'Takes 5–7 minutes': '5–7 ਮਿੰਟ ਲੱਗਦੇ ਹਨ', 'Answers stored securely': 'ਜਵਾਬ ਸੁਰੱਖਿਅਤ ਰੱਖੇ ਜਾਂਦੇ ਹਨ', 'STEP 1 OF 5': 'ਪੜਾਅ 1 / 5', 'STEP 2 OF 5': 'ਪੜਾਅ 2 / 5', 'STEP 3 OF 5': 'ਪੜਾਅ 3 / 5', 'STEP 4 OF 5': 'ਪੜਾਅ 4 / 5', 'STEP 5 OF 5': 'ਪੜਾਅ 5 / 5', 'Continue to Business': 'ਕਾਰੋਬਾਰ ਵੱਲ ਜਾਰੀ ਰੱਖੋ', 'Select Business Category & Location': 'ਕਾਰੋਬਾਰੀ ਸ਼੍ਰੇਣੀ ਅਤੇ ਸਥਾਨ ਚੁਣੋ', 'Select Business Category': 'ਕਾਰੋਬਾਰੀ ਸ਼੍ਰੇਣੀ ਚੁਣੋ', 'Capital': 'ਪੂੰਜੀ', 'Target Village Location': 'ਨਿਸ਼ਾਨਾ ਪਿੰਡ ਦਾ ਸਥਾਨ', 'State': 'ਰਾਜ', 'District': 'ਜ਼ਿਲ੍ਹਾ', 'Village': 'ਪਿੰਡ', 'Continue to Readiness': 'ਤਿਆਰੀ ਵੱਲ ਜਾਰੀ ਰੱਖੋ', 'Readiness Questionnaire': 'ਤਿਆਰੀ ਪ੍ਰਸ਼ਨਾਵਲੀ', 'Readiness Advisory': 'ਤਿਆਰੀ ਸਲਾਹ', 'Continue to Finance': 'ਵਿੱਤ ਵੱਲ ਜਾਰੀ ਰੱਖੋ', 'Understand Your Financial Fit': 'ਆਪਣੀ ਵਿੱਤੀ ਯੋਗਤਾ ਸਮਝੋ', 'Continue to Review': 'ਸਮੀਖਿਆ ਵੱਲ ਜਾਰੀ ਰੱਖੋ', 'Review Your Inputs': 'ਆਪਣੀ ਜਾਣਕਾਰੀ ਦੀ ਸਮੀਖਿਆ ਕਰੋ', 'Edit': 'ਸੋਧੋ', 'Run Feasibility Analysis': 'ਵਿਹਾਰਕਤਾ ਵਿਸ਼ਲੇਸ਼ਣ ਚਲਾਓ', 'PROTOTYPE ANALYSIS': 'ਪ੍ਰੋਟੋਟਾਈਪ ਵਿਸ਼ਲੇਸ਼ਣ', 'Building your feasibility picture': 'ਤੁਹਾਡੀ ਵਿਹਾਰਕਤਾ ਦੀ ਤਸਵੀਰ ਬਣ ਰਹੀ ਹੈ'
+  },
+  kn: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', 'New Assessment': 'ಹೊಸ ಮೌಲ್ಯಮಾಪನ', 'Reports History': 'ವರದಿ ಇತಿಹಾಸ', 'Improvement Plan': 'ಸುಧಾರಣಾ ಯೋಜನೆ', 'Business Alternatives': 'ವ್ಯಾಪಾರ ಪರ್ಯಾಯಗಳು', 'Financial Plan': 'ಹಣಕಾಸು ಯೋಜನೆ', 'Legal Advice': 'ಕಾನೂನು ಸಲಹೆ', 'Profile': 'ಪ್ರೊಫೈಲ್', 'DECISION TOOLS': 'ನಿರ್ಧಾರ ಸಾಧನಗಳು', 'PROTOTYPE DATA': 'ಮಾದರಿ ದತ್ತಾಂಶ', 'Sign Out': 'ಸೈನ್ ಔಟ್', 'Notifications': 'ಅಧಿಸೂಚನೆಗಳು', 'No new notifications': 'ಹೊಸ ಅಧಿಸೂಚನೆಗಳಿಲ್ಲ', 'User': 'ಬಳಕೆದಾರ', 'Loading...': 'ಲೋಡ್ ಆಗುತ್ತಿದೆ...', 'Welcome back': 'ಮತ್ತೆ ಸ್ವಾಗತ', 'Log in to your account': 'ನಿಮ್ಮ ಖಾತೆಗೆ ಲಾಗಿನ್ ಮಾಡಿ', 'Create account': 'ಖಾತೆ ರಚಿಸಿ', 'Email Address': 'ಇಮೇಲ್ ವಿಳಾಸ', 'Password': 'ಪಾಸ್‌ವರ್ಡ್', 'Remember me': 'ನನ್ನನ್ನು ನೆನಪಿಡಿ', 'Log in': 'ಲಾಗಿನ್', 'Logging in...': 'ಲಾಗಿನ್ ಆಗುತ್ತಿದೆ...', 'Forgot password?': 'ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿರಾ?', 'Welcome': 'ಸ್ವಾಗತ', 'Save': 'ಉಳಿಸಿ', 'Cancel': 'ರದ್ದುಮಾಡಿ', 'Submit': 'ಸಲ್ಲಿಸಿ', 'Next': 'ಮುಂದೆ', 'Back': 'ಹಿಂದೆ', 'Continue': 'ಮುಂದುವರಿಸಿ', 'Download Report': 'ವರದಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ', 'View Report': 'ವರದಿ ವೀಕ್ಷಿಸಿ', 'Search': 'ಹುಡುಕಿ', 'Legal offices': 'ಕಾನೂನು ಕಚೇರಿಗಳು', 'Market': 'ಮಾರುಕಟ್ಟೆ', 'Readiness': 'ಸಿದ್ಧತೆ', 'Financial': 'ಹಣಕಾಸು', 'Feasibility': 'ಸಾಧ್ಯತೆ', 'Risk': 'ಅಪಾಯ', 'Demand': 'ಬೇಡಿಕೆ', 'Supply': 'ಪೂರೈಕೆ', 'Low': 'ಕಡಿಮೆ', 'Medium': 'ಮಧ್ಯಮ', 'High': 'ಹೆಚ್ಚು'
+  },
+  bn: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'ড্যাশবোর্ড', 'New Assessment': 'নতুন মূল্যায়ন', 'Reports History': 'রিপোর্ট ইতিহাস', 'Improvement Plan': 'উন্নয়ন পরিকল্পনা', 'Business Alternatives': 'ব্যবসার বিকল্প', 'Financial Plan': 'আর্থিক পরিকল্পনা', 'Legal Advice': 'আইনি পরামর্শ', 'Profile': 'প্রোফাইল', 'DECISION TOOLS': 'সিদ্ধান্তের সরঞ্জাম', 'PROTOTYPE DATA': 'প্রোটোটাইপ ডেটা', 'Sign Out': 'সাইন আউট', 'Notifications': 'বিজ্ঞপ্তি', 'No new notifications': 'কোনও নতুন বিজ্ঞপ্তি নেই', 'User': 'ব্যবহারকারী', 'Loading...': 'লোড হচ্ছে...', 'Welcome back': 'আবার স্বাগতম', 'Log in to your account': 'আপনার অ্যাকাউন্টে লগ ইন করুন', 'Create account': 'অ্যাকাউন্ট তৈরি করুন', 'Email Address': 'ইমেল ঠিকানা', 'Password': 'পাসওয়ার্ড', 'Remember me': 'আমাকে মনে রাখুন', 'Log in': 'লগ ইন', 'Logging in...': 'লগ ইন হচ্ছে...', 'Forgot password?': 'পাসওয়ার্ড ভুলে গেছেন?', 'Welcome': 'স্বাগতম', 'Save': 'সংরক্ষণ করুন', 'Cancel': 'বাতিল করুন', 'Submit': 'জমা দিন', 'Next': 'পরবর্তী', 'Back': 'পিছনে', 'Continue': 'চালিয়ে যান', 'Download Report': 'রিপোর্ট ডাউনলোড করুন', 'View Report': 'রিপোর্ট দেখুন', 'Search': 'খুঁজুন', 'Legal offices': 'আইনি অফিস', 'Market': 'বাজার', 'Readiness': 'প্রস্তুতি', 'Financial': 'আর্থিক', 'Feasibility': 'সম্ভাব্যতা', 'Risk': 'ঝুঁকি', 'Demand': 'চাহিদা', 'Supply': 'সরবরাহ', 'Low': 'কম', 'Medium': 'মাঝারি', 'High': 'বেশি'
+  },
+  gu: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'ડેશબોર્ડ', 'New Assessment': 'નવું મૂલ્યાંકન', 'Reports History': 'રિપોર્ટ ઇતિહાસ', 'Improvement Plan': 'સુધારણા યોજના', 'Business Alternatives': 'વ્યવસાય વિકલ્પો', 'Financial Plan': 'નાણાકીય યોજના', 'Legal Advice': 'કાનૂની સલાહ', 'Profile': 'પ્રોફાઇલ', 'DECISION TOOLS': 'નિર્ણય સાધનો', 'PROTOTYPE DATA': 'પ્રોટોટાઇપ ડેટા', 'Sign Out': 'સાઇન આઉટ', 'Notifications': 'સૂચનાઓ', 'No new notifications': 'નવી સૂચનાઓ નથી', 'User': 'વપરાશકર્તા', 'Loading...': 'લોડ થઈ રહ્યું છે...', 'Welcome back': 'ફરી સ્વાગત છે', 'Log in to your account': 'તમારા ખાતામાં લૉગ ઇન કરો', 'Create account': 'ખાતું બનાવો', 'Email Address': 'ઇમેઇલ સરનામું', 'Password': 'પાસવર્ડ', 'Remember me': 'મને યાદ રાખો', 'Log in': 'લૉગ ઇન', 'Logging in...': 'લૉગ ઇન થઈ રહ્યું છે...', 'Forgot password?': 'પાસવર્ડ ભૂલી ગયા?', 'Welcome': 'સ્વાગત', 'Save': 'સાચવો', 'Cancel': 'રદ કરો', 'Submit': 'સબમિટ કરો', 'Next': 'આગળ', 'Back': 'પાછળ', 'Continue': 'ચાલુ રાખો', 'Download Report': 'રિપોર્ટ ડાઉનલોડ કરો', 'View Report': 'રિપોર્ટ જુઓ', 'Search': 'શોધો', 'Legal offices': 'કાનૂની કચેરીઓ', 'Market': 'બજાર', 'Readiness': 'તૈયારી', 'Financial': 'નાણાકીય', 'Feasibility': 'વ્યવહાર્યતા', 'Risk': 'જોખમ', 'Demand': 'માંગ', 'Supply': 'પુરવઠો', 'Low': 'ઓછું', 'Medium': 'મધ્યમ', 'High': 'વધુ'
+  },
+  pa: {
+    ...ENGLISH_TRANSLATIONS,
+    'Dashboard': 'ਡੈਸ਼ਬੋਰਡ', 'New Assessment': 'ਨਵਾਂ ਮੁਲਾਂਕਣ', 'Reports History': 'ਰਿਪੋਰਟ ਇਤਿਹਾਸ', 'Improvement Plan': 'ਸੁਧਾਰ ਯੋਜਨਾ', 'Business Alternatives': 'ਕਾਰੋਬਾਰੀ ਵਿਕਲਪ', 'Financial Plan': 'ਵਿੱਤੀ ਯੋਜਨਾ', 'Legal Advice': 'ਕਾਨੂੰਨੀ ਸਲਾਹ', 'Profile': 'ਪ੍ਰੋਫਾਈਲ', 'DECISION TOOLS': 'ਫੈਸਲਾ ਸਾਧਨ', 'PROTOTYPE DATA': 'ਪ੍ਰੋਟੋਟਾਈਪ ਡੇਟਾ', 'Sign Out': 'ਸਾਈਨ ਆਊਟ', 'Notifications': 'ਸੂਚਨਾਵਾਂ', 'No new notifications': 'ਕੋਈ ਨਵੀਂ ਸੂਚਨਾ ਨਹੀਂ', 'User': 'ਉਪਭੋਗਤਾ', 'Loading...': 'ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...', 'Welcome back': 'ਵਾਪਸ ਸੁਆਗਤ ਹੈ', 'Log in to your account': 'ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਲੌਗ ਇਨ ਕਰੋ', 'Create account': 'ਖਾਤਾ ਬਣਾਓ', 'Email Address': 'ਈਮੇਲ ਪਤਾ', 'Password': 'ਪਾਸਵਰਡ', 'Remember me': 'ਮੈਨੂੰ ਯਾਦ ਰੱਖੋ', 'Log in': 'ਲੌਗ ਇਨ', 'Logging in...': 'ਲੌਗ ਇਨ ਹੋ ਰਿਹਾ ਹੈ...', 'Forgot password?': 'ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?', 'Welcome': 'ਸੁਆਗਤ', 'Save': 'ਸੇਵ ਕਰੋ', 'Cancel': 'ਰੱਦ ਕਰੋ', 'Submit': 'ਜਮ੍ਹਾਂ ਕਰੋ', 'Next': 'ਅੱਗੇ', 'Back': 'ਪਿੱਛੇ', 'Continue': 'ਜਾਰੀ ਰੱਖੋ', 'Download Report': 'ਰਿਪੋਰਟ ਡਾਊਨਲੋਡ ਕਰੋ', 'View Report': 'ਰਿਪੋਰਟ ਵੇਖੋ', 'Search': 'ਖੋਜੋ', 'Legal offices': 'ਕਾਨੂੰਨੀ ਦਫ਼ਤਰ', 'Market': 'ਮਾਰਕੀਟ', 'Readiness': 'ਤਿਆਰੀ', 'Financial': 'ਵਿੱਤੀ', 'Feasibility': 'ਵਿਹਾਰਕਤਾ', 'Risk': 'ਜੋਖਮ', 'Demand': 'ਮੰਗ', 'Supply': 'ਸਪਲਾਈ', 'Low': 'ਘੱਟ', 'Medium': 'ਦਰਮਿਆਨਾ', 'High': 'ਵੱਧ'
+  }
+};
+
+const MARATHI_EXTRA = {
+  'Decision Dashboard': 'निर्णय डॅशबोर्ड',
+  'DECISION DASHBOARD': 'निर्णय डॅशबोर्ड',
+  'Your business assessment': 'तुमचे व्यवसाय मूल्यांकन',
+  'New assessment': 'नवीन मूल्यांकन',
+  'Full report': 'संपूर्ण अहवाल',
+  'MAP VIEW': 'नकाशा दृश्य',
+  'Market around': 'याच्या आसपासचा बाजार',
+  'Nearby Villages in 10km:': '10 किमी परिसरातील गावे:',
+  'Total Population:': 'एकूण लोकसंख्या:',
+  'Local Market Fit (45%)': 'स्थानिक बाजार योग्यतेचा स्कोअर (45%)',
+  'Business Readiness (30%)': 'व्यवसाय तयारी (30%)',
+  'Financial Fit (25%)': 'आर्थिक योग्यतेचा स्कोअर (25%)',
+  'Proceed after preparation': 'तयारीनंतर पुढे जा',
+  'Promising': 'आशादायक',
+  'Verdict Band:': 'निर्णय श्रेणी:',
+  'New Feasibility Assessment': 'नवीन व्यवहार्यता मूल्यांकन',
+  'ASSESSMENT PROGRESS': 'मूल्यांकन प्रगती',
+  'Draft saved': 'मसुदा जतन केला',
+  'Step': 'पायरी',
+  'Business Feasibility Assessment': 'व्यवसाय व्यवहार्यता मूल्यांकन',
+  'PRE-INVESTMENT ADVISORY': 'गुंतवणुकीपूर्वीचा सल्ला',
+  'Begin assessment': 'मूल्यांकन सुरू करा',
+  'Personal Profile & Resources': 'वैयक्तिक प्रोफाइल आणि संसाधने',
+  'Review': 'पुनरावलोकन',
+  'Why this score?': 'हा स्कोअर का?',
+  'Supports This Business': 'या व्यवसायाला समर्थन',
+  'Needs Attention': 'लक्ष देणे आवश्यक',
+  'Hyper-local market picture': 'स्थानिक बाजाराचे चित्र',
+  'Back to results': 'निकालांकडे परत जा',
+  'Interest Rate': 'व्याज दर',
+  'Tenure': 'मुदत',
+  'Moratorium Period': 'स्थगिती कालावधी',
+  'Monthly EMI': 'मासिक ईएमआय',
+  'MONTHLY AFFORDABILITY': 'मासिक परवडण्याची क्षमता',
+  'Good': 'चांगले',
+  'Estimated EMI:': 'अंदाजे ईएमआय:',
+  'Household Expenses:': 'घरगुती खर्च:',
+  'FEASIBILITY': 'व्यवहार्यता',
+  'CATCHMENT LEGEND': 'परिसराची माहिती',
+  '10 km Radius Circle': '10 किमी त्रिज्या वर्तुळ',
+  'Competitor Shops': 'स्पर्धक दुकाने',
+  '[Marathi] Proceed after preparation — Good Feasibility': 'तयारीनंतर पुढे जा — चांगली व्यवहार्यता'
+};
+
+Object.assign(TRANSLATIONS.mr, MARATHI_EXTRA);
+
+const LANGUAGE_EXTRA_TRANSLATIONS = {
+  hi: {
+    'Takes 5–7 minutes': '5–7 मिनट लगते हैं', 'Answers stored securely': 'उत्तर सुरक्षित रूप से संग्रहीत हैं', '1. Market Feasibility': '1. बाजार व्यवहार्यता', '2. Entrepreneur Readiness': '2. उद्यमी तैयारी', '3. Financial Fit': '3. वित्तीय उपयुक्तता', 'STEP 1 OF 5': 'चरण 1 / 5', 'STEP 2 OF 5': 'चरण 2 / 5', 'STEP 3 OF 5': 'चरण 3 / 5', 'STEP 4 OF 5': 'चरण 4 / 5', 'STEP 5 OF 5': 'चरण 5 / 5', 'Continue to Business': 'व्यवसाय पर जाएं', 'Select Business Category & Location': 'व्यवसाय श्रेणी और स्थान चुनें', 'Select Business Category': 'व्यवसाय श्रेणी चुनें', 'Capital': 'पूंजी', 'Target Village Location': 'लक्षित गांव का स्थान', 'Use current location (Mock)': 'वर्तमान स्थान उपयोग करें (डेमो)', 'State': 'राज्य', 'District': 'जिला', 'Block / Sub-District': 'ब्लॉक / उप-जिला', 'Village': 'गांव', 'Continue to Readiness': 'तैयारी पर जाएं', 'Readiness Questionnaire': 'तैयारी प्रश्नावली', 'Readiness Advisory': 'तैयारी सलाह', 'Continue to Finance': 'वित्त पर जाएं', 'Understand Your Financial Fit': 'अपनी वित्तीय उपयुक्तता समझें', 'Continue to Review': 'समीक्षा पर जाएं', 'Review Your Inputs': 'अपने इनपुट की समीक्षा करें', '1. Personal Profile': '1. व्यक्तिगत प्रोफ़ाइल', '2. Business & Location': '2. व्यवसाय और स्थान', '4. Financial Setup': '4. वित्तीय व्यवस्था', 'Edit': 'संपादित करें', 'Run Feasibility Analysis': 'व्यवहार्यता विश्लेषण चलाएं', 'PROTOTYPE ANALYSIS': 'प्रोटोटाइप विश्लेषण', 'Building your feasibility picture': 'आपकी व्यवहार्यता तस्वीर तैयार हो रही है'
+  },
+  mr: {
+    'Takes 5–7 minutes': '5–7 मिनिटे लागतात', 'Answers stored securely': 'उत्तरे सुरक्षितपणे जतन केली जातात', '1. Market Feasibility': '1. बाजार व्यवहार्यता', '2. Entrepreneur Readiness': '2. उद्योजक तयारी', '3. Financial Fit': '3. आर्थिक योग्यता', 'STEP 1 OF 5': 'पायरी 1 / 5', 'STEP 2 OF 5': 'पायरी 2 / 5', 'STEP 3 OF 5': 'पायरी 3 / 5', 'STEP 4 OF 5': 'पायरी 4 / 5', 'STEP 5 OF 5': 'पायरी 5 / 5', 'Continue to Business': 'व्यवसायाकडे जा', 'Select Business Category & Location': 'व्यवसाय श्रेणी आणि स्थान निवडा', 'Select Business Category': 'व्यवसाय श्रेणी निवडा', 'Capital': 'भांडवल', 'Target Village Location': 'लक्षित गावाचे स्थान', 'Use current location (Mock)': 'सध्याचे स्थान वापरा (डेमो)', 'State': 'राज्य', 'District': 'जिल्हा', 'Block / Sub-District': 'ब्लॉक / उपजिल्हा', 'Village': 'गाव', 'Continue to Readiness': 'तयारीकडे जा', 'Readiness Questionnaire': 'तयारी प्रश्नावली', 'Readiness Advisory': 'तयारी सल्ला', 'Continue to Finance': 'आर्थिक विभागाकडे जा', 'Understand Your Financial Fit': 'तुमची आर्थिक योग्यता समजून घ्या', 'Continue to Review': 'पुनरावलोकनाकडे जा', 'Review Your Inputs': 'तुमच्या माहितीचे पुनरावलोकन करा', '1. Personal Profile': '1. वैयक्तिक प्रोफाइल', '2. Business & Location': '2. व्यवसाय आणि स्थान', '4. Financial Setup': '4. आर्थिक व्यवस्था', 'Edit': 'संपादित करा', 'Run Feasibility Analysis': 'व्यवहार्यता विश्लेषण चालवा', 'PROTOTYPE ANALYSIS': 'प्रोटोटाइप विश्लेषण', 'Building your feasibility picture': 'तुमची व्यवहार्यता तयार होत आहे'
+  },
+  ta: {
+    'Takes 5–7 minutes': '5–7 நிமிடங்கள் ஆகும்', 'Answers stored securely': 'பதில்கள் பாதுகாப்பாக சேமிக்கப்படும்', 'STEP 1 OF 5': 'படி 1 / 5', 'STEP 2 OF 5': 'படி 2 / 5', 'STEP 3 OF 5': 'படி 3 / 5', 'STEP 4 OF 5': 'படி 4 / 5', 'STEP 5 OF 5': 'படி 5 / 5', 'Continue to Business': 'வணிகத்திற்குத் தொடரவும்', 'Select Business Category & Location': 'வணிக வகை மற்றும் இடத்தைத் தேர்ந்தெடுக்கவும்', 'Select Business Category': 'வணிக வகையைத் தேர்ந்தெடுக்கவும்', 'Capital': 'மூலதனம்', 'Target Village Location': 'இலக்கு கிராம இடம்', 'State': 'மாநிலம்', 'District': 'மாவட்டம்', 'Village': 'கிராமம்', 'Continue to Readiness': 'தயார்நிலைக்குத் தொடரவும்', 'Readiness Questionnaire': 'தயார்நிலை கேள்வித்தாள்', 'Readiness Advisory': 'தயார்நிலை ஆலோசனை', 'Continue to Finance': 'நிதிக்குத் தொடரவும்', 'Understand Your Financial Fit': 'உங்கள் நிதிப் பொருத்தத்தைப் புரிந்துகொள்ளுங்கள்', 'Continue to Review': 'மதிப்பாய்வுக்குத் தொடரவும்', 'Review Your Inputs': 'உங்கள் உள்ளீடுகளை மதிப்பாய்வு செய்யவும்', 'Edit': 'திருத்து', 'Run Feasibility Analysis': 'சாத்தியக்கூறு பகுப்பாய்வை இயக்கவும்', 'PROTOTYPE ANALYSIS': 'முன்மாதிரி பகுப்பாய்வு', 'Building your feasibility picture': 'உங்கள் சாத்தியக்கூறு படம் உருவாக்கப்படுகிறது'
+  },
+  te: {
+    'Takes 5–7 minutes': '5–7 నిమిషాలు పడుతుంది', 'Answers stored securely': 'సమాధానాలు సురక్షితంగా నిల్వ చేయబడతాయి', 'STEP 1 OF 5': 'దశ 1 / 5', 'STEP 2 OF 5': 'దశ 2 / 5', 'STEP 3 OF 5': 'దశ 3 / 5', 'STEP 4 OF 5': 'దశ 4 / 5', 'STEP 5 OF 5': 'దశ 5 / 5', 'Continue to Business': 'వ్యాపారానికి కొనసాగండి', 'Select Business Category & Location': 'వ్యాపార వర్గం మరియు స్థలాన్ని ఎంచుకోండి', 'Select Business Category': 'వ్యాపార వర్గాన్ని ఎంచుకోండి', 'Capital': 'మూలధనం', 'Target Village Location': 'లక్ష్య గ్రామ స్థానం', 'State': 'రాష్ట్రం', 'District': 'జిల్లా', 'Village': 'గ్రామం', 'Continue to Readiness': 'సిద్ధతకు కొనసాగండి', 'Readiness Questionnaire': 'సిద్ధత ప్రశ్నావళి', 'Readiness Advisory': 'సిద్ధత సలహా', 'Continue to Finance': 'ఆర్థిక విభాగానికి కొనసాగండి', 'Understand Your Financial Fit': 'మీ ఆర్థిక సరిపోలికను అర్థం చేసుకోండి', 'Continue to Review': 'సమీక్షకు కొనసాగండి', 'Review Your Inputs': 'మీ ఇన్‌పుట్‌లను సమీక్షించండి', 'Edit': 'సవరించండి', 'Run Feasibility Analysis': 'సాధ్యత విశ్లేషణను అమలు చేయండి', 'PROTOTYPE ANALYSIS': 'ప్రోటోటైప్ విశ్లేషణ', 'Building your feasibility picture': 'మీ సాధ్యత చిత్రాన్ని రూపొందిస్తోంది'
+  },
+  ta: {
+    'Decision Dashboard': 'முடிவு டாஷ்போர்டு', 'DECISION DASHBOARD': 'முடிவு டாஷ்போர்டு', 'Your business assessment': 'உங்கள் வணிக மதிப்பீடு', 'New assessment': 'புதிய மதிப்பீடு', 'Full report': 'முழு அறிக்கை', 'MAP VIEW': 'வரைபடக் காட்சி', 'Market around': 'சுற்றியுள்ள சந்தை', 'Nearby Villages in 10km:': '10 கிமீ சுற்றியுள்ள கிராமங்கள்:', 'Total Population:': 'மொத்த மக்கள் தொகை:', 'Local Market Fit (45%)': 'உள்ளூர் சந்தை பொருத்தம் (45%)', 'Business Readiness (30%)': 'வணிகத் தயார்நிலை (30%)', 'Financial Fit (25%)': 'நிதிப் பொருத்தம் (25%)', 'Proceed after preparation': 'தயாரான பிறகு தொடரவும்', 'Verdict Band:': 'முடிவு வகை:', 'New Feasibility Assessment': 'புதிய சாத்தியக்கூறு மதிப்பீடு', 'Begin assessment': 'மதிப்பீட்டைத் தொடங்கு', 'Personal Profile & Resources': 'தனிப்பட்ட சுயவிவரம் மற்றும் வளங்கள்', 'Why this score?': 'இந்த மதிப்பெண் ஏன்?', 'Supports This Business': 'இந்த வணிகத்திற்கு ஆதரவு', 'Needs Attention': 'கவனம் தேவை', 'Interest Rate': 'வட்டி விகிதம்', 'Tenure': 'கால அளவு', 'Monthly EMI': 'மாதாந்திர EMI', 'Good': 'நல்லது', 'FEASIBILITY': 'சாத்தியக்கூறு', 'CATCHMENT LEGEND': 'சுற்றுப்பகுதி விளக்கம்', '10 km Radius Circle': '10 கிமீ சுற்றளவு', 'Competitor Shops': 'போட்டி கடைகள்'
+  },
+  te: {
+    'Decision Dashboard': 'నిర్ణయ డాష్‌బోర్డ్', 'DECISION DASHBOARD': 'నిర్ణయ డాష్‌బోర్డ్', 'Your business assessment': 'మీ వ్యాపార అంచనా', 'New assessment': 'కొత్త అంచనా', 'Full report': 'పూర్తి నివేదిక', 'MAP VIEW': 'మ్యాప్ వీక్షణ', 'Market around': 'చుట్టుపక్కల మార్కెట్', 'Nearby Villages in 10km:': '10 కి.మీ పరిధిలోని గ్రామాలు:', 'Total Population:': 'మొత్తం జనాభా:', 'Local Market Fit (45%)': 'స్థానిక మార్కెట్ సరిపోలిక (45%)', 'Business Readiness (30%)': 'వ్యాపార సిద్ధత (30%)', 'Financial Fit (25%)': 'ఆర్థిక సరిపోలిక (25%)', 'Proceed after preparation': 'సిద్ధమైన తర్వాత కొనసాగండి', 'Verdict Band:': 'తీర్పు వర్గం:', 'New Feasibility Assessment': 'కొత్త సాధ్యత అంచనా', 'Begin assessment': 'అంచనాను ప్రారంభించండి', 'Personal Profile & Resources': 'వ్యక్తిగత ప్రొఫైల్ మరియు వనరులు', 'Why this score?': 'ఈ స్కోరు ఎందుకు?', 'Supports This Business': 'ఈ వ్యాపారానికి మద్దతు', 'Needs Attention': 'శ్రద్ధ అవసరం', 'Interest Rate': 'వడ్డీ రేటు', 'Tenure': 'కాలవ్యవధి', 'Monthly EMI': 'నెలవారీ EMI', 'Good': 'మంచిది', 'FEASIBILITY': 'సాధ్యత', 'CATCHMENT LEGEND': 'పరిసరాల వివరణ', '10 km Radius Circle': '10 కి.మీ పరిధి', 'Competitor Shops': 'పోటీ దుకాణాలు'
+  },
+  kn: {
+    'Decision Dashboard': 'ನಿರ್ಧಾರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', 'DECISION DASHBOARD': 'ನಿರ್ಧಾರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', 'Your business assessment': 'ನಿಮ್ಮ ವ್ಯವಹಾರ ಮೌಲ್ಯಮಾಪನ', 'New assessment': 'ಹೊಸ ಮೌಲ್ಯಮಾಪನ', 'Full report': 'ಪೂರ್ಣ ವರದಿ', 'MAP VIEW': 'ನಕ್ಷೆ ವೀಕ್ಷಣೆ', 'Market around': 'ಸುತ್ತಮುತ್ತಲಿನ ಮಾರುಕಟ್ಟೆ', 'Nearby Villages in 10km:': '10 ಕಿಮೀ ವ್ಯಾಪ್ತಿಯ ಗ್ರಾಮಗಳು:', 'Total Population:': 'ಒಟ್ಟು ಜನಸಂಖ್ಯೆ:', 'Local Market Fit (45%)': 'ಸ್ಥಳೀಯ ಮಾರುಕಟ್ಟೆ ಹೊಂದಾಣಿಕೆ (45%)', 'Business Readiness (30%)': 'ವ್ಯವಹಾರ ಸಿದ್ಧತೆ (30%)', 'Financial Fit (25%)': 'ಹಣಕಾಸು ಹೊಂದಾಣಿಕೆ (25%)', 'Proceed after preparation': 'ಸಿದ್ಧತೆಯ ನಂತರ ಮುಂದುವರಿಯಿರಿ', 'Verdict Band:': 'ತೀರ್ಪಿನ ವರ್ಗ:', 'New Feasibility Assessment': 'ಹೊಸ ಸಾಧ್ಯತಾ ಮೌಲ್ಯಮಾಪನ', 'Begin assessment': 'ಮೌಲ್ಯಮಾಪನ ಪ್ರಾರಂಭಿಸಿ', 'Personal Profile & Resources': 'ವೈಯಕ್ತಿಕ ಪ್ರೊಫೈಲ್ ಮತ್ತು ಸಂಪನ್ಮೂಲಗಳು', 'Why this score?': 'ಈ ಅಂಕ ಏಕೆ?', 'Supports This Business': 'ಈ ವ್ಯವಹಾರಕ್ಕೆ ಬೆಂಬಲ', 'Needs Attention': 'ಗಮನ ಅಗತ್ಯ', 'Interest Rate': 'ಬಡ್ಡಿ ದರ', 'Tenure': 'ಅವಧಿ', 'Monthly EMI': 'ಮಾಸಿಕ EMI', 'Good': 'ಉತ್ತಮ', 'FEASIBILITY': 'ಸಾಧ್ಯತೆ', 'CATCHMENT LEGEND': 'ಪರಿಸರ ವಿವರಣೆ', '10 km Radius Circle': '10 ಕಿಮೀ ವ್ಯಾಪ್ತಿ', 'Competitor Shops': 'ಸ್ಪರ್ಧಿ ಅಂಗಡಿಗಳು'
+  },
+  bn: {
+    'Decision Dashboard': 'সিদ্ধান্ত ড্যাশবোর্ড', 'DECISION DASHBOARD': 'সিদ্ধান্ত ড্যাশবোর্ড', 'Your business assessment': 'আপনার ব্যবসার মূল্যায়ন', 'New assessment': 'নতুন মূল্যায়ন', 'Full report': 'সম্পূর্ণ রিপোর্ট', 'MAP VIEW': 'মানচিত্র দৃশ্য', 'Market around': 'চারপাশের বাজার', 'Nearby Villages in 10km:': '১০ কিমি এলাকার গ্রাম:', 'Total Population:': 'মোট জনসংখ্যা:', 'Local Market Fit (45%)': 'স্থানীয় বাজারের উপযুক্ততা (৪৫%)', 'Business Readiness (30%)': 'ব্যবসার প্রস্তুতি (৩০%)', 'Financial Fit (25%)': 'আর্থিক উপযুক্ততা (২৫%)', 'Proceed after preparation': 'প্রস্তুতির পরে এগিয়ে যান', 'Verdict Band:': 'রায়ের বিভাগ:', 'New Feasibility Assessment': 'নতুন সম্ভাব্যতা মূল্যায়ন', 'Begin assessment': 'মূল্যায়ন শুরু করুন', 'Personal Profile & Resources': 'ব্যক্তিগত প্রোফাইল ও সম্পদ', 'Why this score?': 'এই স্কোর কেন?', 'Supports This Business': 'এই ব্যবসাকে সমর্থন করে', 'Needs Attention': 'মনোযোগ প্রয়োজন', 'Interest Rate': 'সুদের হার', 'Tenure': 'মেয়াদ', 'Monthly EMI': 'মাসিক EMI', 'Good': 'ভালো', 'FEASIBILITY': 'সম্ভাব্যতা', 'CATCHMENT LEGEND': 'এলাকার বিবরণ', '10 km Radius Circle': '১০ কিমি ব্যাসার্ধ', 'Competitor Shops': 'প্রতিযোগী দোকান'
+  },
+  gu: {
+    'Decision Dashboard': 'નિર્ણય ડેશબોર્ડ', 'DECISION DASHBOARD': 'નિર્ણય ડેશબોર્ડ', 'Your business assessment': 'તમારું વ્યવસાય મૂલ્યાંકન', 'New assessment': 'નવું મૂલ્યાંકન', 'Full report': 'સંપૂર્ણ રિપોર્ટ', 'MAP VIEW': 'નકશો જુઓ', 'Market around': 'આસપાસનું બજાર', 'Nearby Villages in 10km:': '10 કિમી વિસ્તારમાં ગામો:', 'Total Population:': 'કુલ વસ્તી:', 'Local Market Fit (45%)': 'સ્થાનિક બજાર યોગ્યતા (45%)', 'Business Readiness (30%)': 'વ્યવસાયની તૈયારી (30%)', 'Financial Fit (25%)': 'નાણાકીય યોગ્યતા (25%)', 'Proceed after preparation': 'તૈયારી પછી આગળ વધો', 'Verdict Band:': 'નિર્ણય શ્રેણી:', 'New Feasibility Assessment': 'નવું વ્યવહાર્યતા મૂલ્યાંકન', 'Begin assessment': 'મૂલ્યાંકન શરૂ કરો', 'Personal Profile & Resources': 'વ્યક્તિગત પ્રોફાઇલ અને સંસાધનો', 'Why this score?': 'આ સ્કોર શા માટે?', 'Supports This Business': 'આ વ્યવસાયને સમર્થન', 'Needs Attention': 'ધ્યાન જરૂરી', 'Interest Rate': 'વ્યાજ દર', 'Tenure': 'મુદત', 'Monthly EMI': 'માસિક EMI', 'Good': 'સારું', 'FEASIBILITY': 'વ્યવહાર્યતા', 'CATCHMENT LEGEND': 'વિસ્તારની માહિતી', '10 km Radius Circle': '10 કિમી ત્રિજ્યા', 'Competitor Shops': 'સ્પર્ધક દુકાનો'
+  },
+  pa: {
+    'Decision Dashboard': 'ਫੈਸਲਾ ਡੈਸ਼ਬੋਰਡ', 'DECISION DASHBOARD': 'ਫੈਸਲਾ ਡੈਸ਼ਬੋਰਡ', 'Your business assessment': 'ਤੁਹਾਡਾ ਕਾਰੋਬਾਰੀ ਮੁਲਾਂਕਣ', 'New assessment': 'ਨਵਾਂ ਮੁਲਾਂਕਣ', 'Full report': 'ਪੂਰੀ ਰਿਪੋਰਟ', 'MAP VIEW': 'ਨਕਸ਼ਾ ਦ੍ਰਿਸ਼', 'Market around': 'ਆਲੇ-ਦੁਆਲੇ ਦਾ ਬਾਜ਼ਾਰ', 'Nearby Villages in 10km:': '10 ਕਿਲੋਮੀਟਰ ਦੇ ਪਿੰਡ:', 'Total Population:': 'ਕੁੱਲ ਆਬਾਦੀ:', 'Local Market Fit (45%)': 'ਸਥਾਨਕ ਬਾਜ਼ਾਰ ਯੋਗਤਾ (45%)', 'Business Readiness (30%)': 'ਕਾਰੋਬਾਰੀ ਤਿਆਰੀ (30%)', 'Financial Fit (25%)': 'ਵਿੱਤੀ ਯੋਗਤਾ (25%)', 'Proceed after preparation': 'ਤਿਆਰੀ ਤੋਂ ਬਾਅਦ ਅੱਗੇ ਵਧੋ', 'Verdict Band:': 'ਫੈਸਲਾ ਸ਼੍ਰੇਣੀ:', 'New Feasibility Assessment': 'ਨਵਾਂ ਵਿਹਾਰਕਤਾ ਮੁਲਾਂਕਣ', 'Begin assessment': 'ਮੁਲਾਂਕਣ ਸ਼ੁਰੂ ਕਰੋ', 'Personal Profile & Resources': 'ਨਿੱਜੀ ਪ੍ਰੋਫਾਈਲ ਅਤੇ ਸਰੋਤ', 'Why this score?': 'ਇਹ ਸਕੋਰ ਕਿਉਂ?', 'Supports This Business': 'ਇਸ ਕਾਰੋਬਾਰ ਲਈ ਸਹਾਇਕ', 'Needs Attention': 'ਧਿਆਨ ਦੀ ਲੋੜ', 'Interest Rate': 'ਵਿਆਜ ਦਰ', 'Tenure': 'ਮਿਆਦ', 'Monthly EMI': 'ਮਹੀਨਾਵਾਰ EMI', 'Good': 'ਚੰਗਾ', 'FEASIBILITY': 'ਵਿਹਾਰਕਤਾ', 'CATCHMENT LEGEND': 'ਇਲਾਕੇ ਦੀ ਜਾਣਕਾਰੀ', '10 km Radius Circle': '10 ਕਿਲੋਮੀਟਰ ਘੇਰਾ', 'Competitor Shops': 'ਮੁਕਾਬਲੇ ਵਾਲੀਆਂ ਦੁਕਾਨਾਂ'
+  }
+};
+
+Object.entries(LANGUAGE_EXTRA_TRANSLATIONS).forEach(([language, translations]) => {
+  Object.assign(TRANSLATIONS[language], translations);
+});
+
+const READINESS_TRANSLATIONS = {
+  hi: { Yes: 'हाँ', No: 'नहीं', 'Readiness Advisory': 'तैयारी सलाह', 'Do you currently own cattle?': 'क्या आपके पास वर्तमान में मवेशी हैं?', 'How many cattle can you start with?': 'आप कितने मवेशियों के साथ शुरुआत कर सकते हैं?', 'Do you have a reliable fodder source?': 'क्या आपके पास चारे का भरोसेमंद स्रोत है?', 'Is adequate water available year-round?': 'क्या पूरे वर्ष पर्याप्त पानी उपलब्ध है?', 'Do you have access to refrigeration?': 'क्या आपके पास प्रशीतन की सुविधा है?', 'Is there a milk collection centre nearby?': 'क्या पास में दूध संग्रह केंद्र है?', 'How many reliable buyers have you identified?': 'आपने कितने भरोसेमंद खरीदारों की पहचान की है?' },
+  mr: { Yes: 'होय', No: 'नाही', 'Readiness Advisory': 'तयारी सल्ला', 'Do you currently own cattle?': 'तुमच्याकडे सध्या गुरे आहेत का?', 'How many cattle can you start with?': 'तुम्ही किती गुरांपासून सुरुवात करू शकता?', 'Do you have a reliable fodder source?': 'तुमच्याकडे चाऱ्याचा विश्वासार्ह स्रोत आहे का?', 'Is adequate water available year-round?': 'वर्षभर पुरेसे पाणी उपलब्ध आहे का?', 'Do you have access to refrigeration?': 'तुमच्याकडे शीतकरणाची सुविधा आहे का?', 'Is there a milk collection centre nearby?': 'जवळपास दूध संकलन केंद्र आहे का?', 'How many reliable buyers have you identified?': 'तुम्ही किती विश्वासार्ह खरेदीदार ओळखले आहेत?' },
+  ta: { Yes: 'ஆம்', No: 'இல்லை', 'Readiness Advisory': 'தயார்நிலை ஆலோசனை', 'Do you currently own cattle?': 'தற்போது உங்களிடம் கால்நடைகள் உள்ளனவா?', 'How many cattle can you start with?': 'எத்தனை கால்நடைகளுடன் தொடங்க முடியும்?', 'Do you have a reliable fodder source?': 'நம்பகமான தீவன ஆதாரம் உள்ளதா?', 'Is adequate water available year-round?': 'ஆண்டு முழுவதும் போதுமான நீர் கிடைக்கிறதா?', 'Do you have access to refrigeration?': 'குளிர்பதன வசதி உள்ளதா?', 'Is there a milk collection centre nearby?': 'அருகில் பால் சேகரிப்பு மையம் உள்ளதா?', 'How many reliable buyers have you identified?': 'எத்தனை நம்பகமான வாங்குபவர்களை அடையாளம் கண்டுள்ளீர்கள்?', 'Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.': 'நேர்மையான பதில்கள் தயாரிப்பு வழிகாட்டுதலை மிகவும் பயனுள்ளதாக மாற்றும். தொழில்முனைவோர் தயார்நிலை கிராம சந்தை சாத்தியக்கூறிலிருந்து தனியாக மதிப்பிடப்படுகிறது.' },
+  te: { Yes: 'అవును', No: 'కాదు', 'Readiness Advisory': 'సిద్ధత సలహా', 'Do you currently own cattle?': 'ప్రస్తుతం మీ వద్ద పశువులు ఉన్నాయా?', 'How many cattle can you start with?': 'ఎన్ని పశువులతో ప్రారంభించగలరు?', 'Do you have a reliable fodder source?': 'నమ్మకమైన మేత వనరు ఉందా?', 'Is adequate water available year-round?': 'ఏడాది పొడవునా తగినంత నీరు అందుబాటులో ఉందా?', 'Do you have access to refrigeration?': 'శీతలీకరణ సౌకర్యం ఉందా?', 'Is there a milk collection centre nearby?': 'సమీపంలో పాల సేకరణ కేంద్రం ఉందా?', 'How many reliable buyers have you identified?': 'ఎంతమంది నమ్మకమైన కొనుగోలుదారులను గుర్తించారు?', 'Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.': 'నిజాయితీ సమాధానాలు సిద్ధత మార్గదర్శకాన్ని మరింత ఉపయోగకరంగా చేస్తాయి. వ్యాపారవేత్త సిద్ధత గ్రామ మార్కెట్ సాధ్యత నుండి విడిగా స్కోర్ చేయబడుతుంది.' },
+  kn: { Yes: 'ಹೌದು', No: 'ಇಲ್ಲ', 'Readiness Advisory': 'ಸಿದ್ಧತೆ ಸಲಹೆ', 'Do you currently own cattle?': 'ನಿಮ್ಮ ಬಳಿ ಪ್ರಸ್ತುತ ಜಾನುವಾರುಗಳಿವೆಯೇ?', 'How many cattle can you start with?': 'ಎಷ್ಟು ಜಾನುವಾರುಗಳೊಂದಿಗೆ ಪ್ರಾರಂಭಿಸಬಹುದು?', 'Do you have a reliable fodder source?': 'ವಿಶ್ವಾಸಾರ್ಹ ಮೇವು ಮೂಲವಿದೆಯೇ?', 'Is adequate water available year-round?': 'ವರ್ಷವಿಡೀ ಸಾಕಷ್ಟು ನೀರು ಲಭ್ಯವಿದೆಯೇ?', 'Do you have access to refrigeration?': 'ಶೀತಲೀಕರಣ ಸೌಲಭ್ಯವಿದೆಯೇ?', 'Is there a milk collection centre nearby?': 'ಹತ್ತಿರದಲ್ಲಿ ಹಾಲು ಸಂಗ್ರಹ ಕೇಂದ್ರವಿದೆಯೇ?', 'How many reliable buyers have you identified?': 'ಎಷ್ಟು ವಿಶ್ವಾಸಾರ್ಹ ಖರೀದಿದಾರರನ್ನು ಗುರುತಿಸಿದ್ದೀರಿ?', 'Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.': 'ಪ್ರಾಮಾಣಿಕ ಉತ್ತರಗಳು ಸಿದ್ಧತಾ ಮಾರ್ಗದರ್ಶನವನ್ನು ಹೆಚ್ಚು ಉಪಯುಕ್ತವಾಗಿಸುತ್ತವೆ. ಉದ್ಯಮಿಯ ಸಿದ್ಧತೆಯನ್ನು ಗ್ರಾಮ ಮಾರುಕಟ್ಟೆ ಸಾಧ್ಯತೆಯಿಂದ ಪ್ರತ್ಯೇಕವಾಗಿ ಅಳೆಯಲಾಗುತ್ತದೆ.' },
+  bn: { Yes: 'হ্যাঁ', No: 'না', 'Readiness Advisory': 'প্রস্তুতি পরামর্শ', 'Do you currently own cattle?': 'আপনার কি বর্তমানে গবাদি পশু আছে?', 'How many cattle can you start with?': 'কতগুলি গবাদি পশু দিয়ে শুরু করতে পারেন?', 'Do you have a reliable fodder source?': 'আপনার কি নির্ভরযোগ্য পশুখাদ্যের উৎস আছে?', 'Is adequate water available year-round?': 'সারা বছর কি পর্যাপ্ত জল পাওয়া যায়?', 'Do you have access to refrigeration?': 'আপনার কি হিমায়ন সুবিধা আছে?', 'Is there a milk collection centre nearby?': 'কাছাকাছি কি দুধ সংগ্রহ কেন্দ্র আছে?', 'How many reliable buyers have you identified?': 'কতজন নির্ভরযোগ্য ক্রেতাকে চিহ্নিত করেছেন?', 'Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.': 'সৎ উত্তর প্রস্তুতির নির্দেশনাকে আরও কার্যকর করে। উদ্যোক্তার প্রস্তুতি গ্রামের বাজারের সম্ভাব্যতা থেকে আলাদাভাবে মূল্যায়ন করা হয়।' },
+  gu: { Yes: 'હા', No: 'ના', 'Readiness Advisory': 'તૈયારી સલાહ', 'Do you currently own cattle?': 'શું તમારી પાસે હાલમાં પશુઓ છે?', 'How many cattle can you start with?': 'તમે કેટલા પશુઓથી શરૂઆત કરી શકો છો?', 'Do you have a reliable fodder source?': 'શું તમારી પાસે વિશ્વસનીય ઘાસચારાનો સ્રોત છે?', 'Is adequate water available year-round?': 'શું આખું વર્ષ પૂરતું પાણી ઉપલબ્ધ છે?', 'Do you have access to refrigeration?': 'શું તમારી પાસે ઠંડકની સુવિધા છે?', 'Is there a milk collection centre nearby?': 'શું નજીકમાં દૂધ સંગ્રહ કેન્દ્ર છે?', 'How many reliable buyers have you identified?': 'તમે કેટલા વિશ્વસનીય ખરીદદારો ઓળખ્યા છે?', 'Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.': 'પ્રામાણિક જવાબો તૈયારી માર્ગદર્શનને વધુ ઉપયોગી બનાવે છે. ઉદ્યોગસાહસિકની તૈયારીનું મૂલ્યાંકન ગામની બજાર વ્યવહાર્યતાથી અલગ કરવામાં આવે છે.' },
+  pa: { Yes: 'ਹਾਂ', No: 'ਨਹੀਂ', 'Readiness Advisory': 'ਤਿਆਰੀ ਸਲਾਹ', 'Do you currently own cattle?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਇਸ ਸਮੇਂ ਪਸ਼ੂ ਹਨ?', 'How many cattle can you start with?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਪਸ਼ੂਆਂ ਨਾਲ ਸ਼ੁਰੂ ਕਰ ਸਕਦੇ ਹੋ?', 'Do you have a reliable fodder source?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਭਰੋਸੇਯੋਗ ਚਾਰੇ ਦਾ ਸਰੋਤ ਹੈ?', 'Is adequate water available year-round?': 'ਕੀ ਸਾਰਾ ਸਾਲ ਲੋੜੀਂਦਾ ਪਾਣੀ ਉਪਲਬਧ ਹੈ?', 'Do you have access to refrigeration?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਠੰਢਕ ਦੀ ਸਹੂਲਤ ਹੈ?', 'Is there a milk collection centre nearby?': 'ਕੀ ਨੇੜੇ ਦੁੱਧ ਇਕੱਠਾ ਕਰਨ ਦਾ ਕੇਂਦਰ ਹੈ?', 'How many reliable buyers have you identified?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਭਰੋਸੇਯੋਗ ਖਰੀਦਦਾਰ ਪਛਾਣੇ ਹਨ?', 'Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.': 'ਇਮਾਨਦਾਰ ਜਵਾਬ ਤਿਆਰੀ ਮਾਰਗਦਰਸ਼ਨ ਨੂੰ ਹੋਰ ਲਾਭਦਾਇਕ ਬਣਾਉਂਦੇ ਹਨ। ਉਦਮੀ ਦੀ ਤਿਆਰੀ ਦਾ ਮੁਲਾਂਕਣ ਪਿੰਡ ਦੀ ਮੰਡੀ ਦੀ ਵਿਹਾਰਕਤਾ ਤੋਂ ਵੱਖਰੇ ਤੌਰ ਤੇ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।' }
+};
+
+const ASSESSMENT_INTRO_TRANSLATIONS = {
+  hi: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'अपने अनुभव, प्रस्तावित व्यवसाय और गांव के स्थान के बारे में कुछ प्रश्नों के उत्तर दें। ऋण लेने से पहले हम बाजार व्यवहार्यता, उद्यमी तैयारी और वित्तीय उपयुक्तता के आधार पर आपके प्रस्ताव का मूल्यांकन करते हैं।', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 किमी गांव की मांग, प्रतिस्पर्धी घनत्व और बुनियादी ढांचे का मूल्यांकन करता है।', 'Assesses your skills, workspace, supplier contacts & customers.': 'आपके कौशल, कार्यस्थल, आपूर्तिकर्ता संपर्क और ग्राहकों का आकलन करता है।', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'मार्जिन की पर्याप्तता और मासिक ईएमआई क्षमता की पुष्टि करता है।', 'Education Guarantee': 'शिक्षा गारंटी' },
+  mr: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'तुमच्या अनुभवाबद्दल, प्रस्तावित व्यवसायाबद्दल आणि गावाच्या स्थानाबद्दल काही प्रश्नांची उत्तरे द्या. कर्ज घेण्यापूर्वी आम्ही बाजार व्यवहार्यता, उद्योजक तयारी आणि आर्थिक योग्यतेच्या आधारे तुमच्या प्रस्तावाचे मूल्यांकन करतो.', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 किमी गावातील मागणी, स्पर्धेची घनता आणि पायाभूत सुविधांचे मूल्यांकन करते.', 'Assesses your skills, workspace, supplier contacts & customers.': 'तुमची कौशल्ये, कार्यस्थळ, पुरवठादार संपर्क आणि ग्राहकांचे मूल्यांकन करते.', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'भांडवलाची पर्याप्तता आणि मासिक ईएमआय क्षमता तपासते.', 'Education Guarantee': 'शिक्षण हमी' },
+  ta: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'உங்கள் பின்னணி, திட்டமிட்ட வணிகம் மற்றும் கிராம இடம் பற்றி சில கேள்விகளுக்கு பதிலளிக்கவும். கடன் பெறுவதற்கு முன் சந்தை சாத்தியம், தொழில்முனைவோர் தயார்நிலை மற்றும் நிதிப் பொருத்தத்தின் அடிப்படையில் உங்கள் திட்டத்தை மதிப்பிடுகிறோம்.', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 கிமீ கிராமத் தேவை, போட்டி அடர்த்தி மற்றும் உள்கட்டமைப்பை மதிப்பிடுகிறது.', 'Assesses your skills, workspace, supplier contacts & customers.': 'உங்கள் திறன்கள், பணியிடம், சப்ளையர் தொடர்புகள் மற்றும் வாடிக்கையாளர்களை மதிப்பிடுகிறது.', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'மார்ஜின் போதுமானதையும் மாதாந்திர EMI திறனையும் சரிபார்க்கிறது.', 'Education Guarantee': 'கல்வி உத்தரவாதம்' },
+  te: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'మీ నేపథ్యం, ప్రారంభించాలనుకున్న వ్యాపారం మరియు గ్రామ స్థానం గురించి కొన్ని ప్రశ్నలకు సమాధానం ఇవ్వండి. రుణం తీసుకునే ముందు మార్కెట్ సాధ్యత, వ్యాపారవేత్త సిద్ధత మరియు ఆర్థిక సరిపోలిక ఆధారంగా మీ ప్రతిపాదనను అంచనా వేస్తాము.', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 కి.మీ గ్రామ డిమాండ్, పోటీ సాంద్రత మరియు మౌలిక సదుపాయాలను అంచనా వేస్తుంది.', 'Assesses your skills, workspace, supplier contacts & customers.': 'మీ నైపుణ్యాలు, పని స్థలం, సరఫరాదారు పరిచయాలు మరియు కస్టమర్లను అంచనా వేస్తుంది.', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'మార్జిన్ సరిపోతుందో మరియు నెలవారీ EMI సామర్థ్యాన్ని నిర్ధారిస్తుంది.', 'Education Guarantee': 'విద్యా హామీ' },
+  kn: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'ನಿಮ್ಮ ಹಿನ್ನೆಲೆ, ಉದ್ದೇಶಿತ ವ್ಯವಹಾರ ಮತ್ತು ಗ್ರಾಮದ ಸ್ಥಳದ ಕುರಿತು ಕೆಲವು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ. ಸಾಲ ಪಡೆಯುವ ಮೊದಲು ಮಾರುಕಟ್ಟೆ ಸಾಧ್ಯತೆ, ಉದ್ಯಮಿ ಸಿದ್ಧತೆ ಮತ್ತು ಹಣಕಾಸಿನ ಹೊಂದಾಣಿಕೆಯ ಆಧಾರದ ಮೇಲೆ ನಿಮ್ಮ ಪ್ರಸ್ತಾವನೆಯನ್ನು ಮೌಲ್ಯಮಾಪನ ಮಾಡುತ್ತೇವೆ.', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 ಕಿಮೀ ಗ್ರಾಮದ ಬೇಡಿಕೆ, ಸ್ಪರ್ಧೆಯ ಸಾಂದ್ರತೆ ಮತ್ತು ಮೂಲಸೌಕರ್ಯವನ್ನು ಮೌಲ್ಯಮಾಪನ ಮಾಡುತ್ತದೆ.', 'Assesses your skills, workspace, supplier contacts & customers.': 'ನಿಮ್ಮ ಕೌಶಲ್ಯ, ಕೆಲಸದ ಸ್ಥಳ, ಪೂರೈಕೆದಾರ ಸಂಪರ್ಕ ಮತ್ತು ಗ್ರಾಹಕರನ್ನು ಅಳೆಯುತ್ತದೆ.', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'ಮಾರ್ಜಿನ್ ಸಾಕಷ್ಟಿದೆಯೇ ಮತ್ತು ಮಾಸಿಕ EMI ಸಾಮರ್ಥ್ಯವನ್ನು ಪರಿಶೀಲಿಸುತ್ತದೆ.', 'Education Guarantee': 'ಶಿಕ್ಷಣ ಖಾತರಿ' },
+  bn: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'আপনার পটভূমি, প্রস্তাবিত ব্যবসা এবং গ্রামের অবস্থান সম্পর্কে কয়েকটি প্রশ্নের উত্তর দিন। ঋণ নেওয়ার আগে আমরা বাজারের সম্ভাব্যতা, উদ্যোক্তার প্রস্তুতি এবং আর্থিক উপযুক্ততার ভিত্তিতে আপনার প্রস্তাব মূল্যায়ন করি।', 'Evaluates 10km village demand, competitor density & infrastructure.': '১০ কিমি গ্রামের চাহিদা, প্রতিযোগিতার ঘনত্ব ও পরিকাঠামো মূল্যায়ন করে।', 'Assesses your skills, workspace, supplier contacts & customers.': 'আপনার দক্ষতা, কাজের জায়গা, সরবরাহকারী যোগাযোগ ও গ্রাহকদের মূল্যায়ন করে।', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'মার্জিনের যথেষ্টতা ও মাসিক EMI ক্ষমতা যাচাই করে।', 'Education Guarantee': 'শিক্ষার নিশ্চয়তা' },
+  gu: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'તમારા અનુભવ, સૂચિત વ્યવસાય અને ગામના સ્થાન વિશે થોડા પ્રશ્નોના જવાબ આપો. લોન લેતા પહેલાં અમે બજાર વ્યવહાર્યતા, ઉદ્યોગસાહસિકની તૈયારી અને નાણાકીય યોગ્યતાના આધારે તમારા પ્રસ્તાવનું મૂલ્યાંકન કરીએ છીએ.', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 કિમી ગામની માંગ, સ્પર્ધાની ઘનતા અને માળખાનું મૂલ્યાંકન કરે છે.', 'Assesses your skills, workspace, supplier contacts & customers.': 'તમારી કુશળતા, કાર્યસ્થળ, સપ્લાયર સંપર્કો અને ગ્રાહકોનું મૂલ્યાંકન કરે છે.', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'માર્જિનની પર્યાપ્તતા અને માસિક EMI ક્ષમતાની ખાતરી કરે છે.', 'Education Guarantee': 'શિક્ષણની ખાતરી' },
+  pa: { 'Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.': 'ਆਪਣੇ ਪਿਛੋਕੜ, ਪ੍ਰਸਤਾਵਿਤ ਕਾਰੋਬਾਰ ਅਤੇ ਪਿੰਡ ਦੇ ਸਥਾਨ ਬਾਰੇ ਕੁਝ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦਿਓ। ਕਰਜ਼ਾ ਲੈਣ ਤੋਂ ਪਹਿਲਾਂ ਅਸੀਂ ਬਾਜ਼ਾਰ ਦੀ ਵਿਹਾਰਕਤਾ, ਉਦਮੀ ਦੀ ਤਿਆਰੀ ਅਤੇ ਵਿੱਤੀ ਯੋਗਤਾ ਦੇ ਆਧਾਰ ਤੇ ਤੁਹਾਡੇ ਪ੍ਰਸਤਾਵ ਦਾ ਮੁਲਾਂਕਣ ਕਰਦੇ ਹਾਂ।', 'Evaluates 10km village demand, competitor density & infrastructure.': '10 ਕਿਲੋਮੀਟਰ ਪਿੰਡ ਦੀ ਮੰਗ, ਮੁਕਾਬਲੇ ਦੀ ਘਣਤਾ ਅਤੇ ਬੁਨਿਆਦੀ ਢਾਂਚੇ ਦਾ ਮੁਲਾਂਕਣ ਕਰਦਾ ਹੈ।', 'Assesses your skills, workspace, supplier contacts & customers.': 'ਤੁਹਾਡੇ ਹੁਨਰ, ਕੰਮ ਦੀ ਥਾਂ, ਸਪਲਾਇਰ ਸੰਪਰਕ ਅਤੇ ਗਾਹਕਾਂ ਦਾ ਮੁਲਾਂਕਣ ਕਰਦਾ ਹੈ।', 'Verifies margin sufficiency & monthly disposable EMI capacity.': 'ਮਾਰਜਿਨ ਦੀ ਪੂਰਤੀ ਅਤੇ ਮਹੀਨਾਵਾਰ EMI ਸਮਰੱਥਾ ਦੀ ਜਾਂਚ ਕਰਦਾ ਹੈ।', 'Education Guarantee': 'ਸਿੱਖਿਆ ਦੀ ਗਾਰੰਟੀ' }
+};
+
+Object.entries(ASSESSMENT_INTRO_TRANSLATIONS).forEach(([language, translations]) => {
+  Object.assign(TRANSLATIONS[language], translations);
+});
+
+Object.entries(READINESS_TRANSLATIONS).forEach(([language, translations]) => {
+  Object.assign(TRANSLATIONS[language], translations);
+});
+
+const ENGLISH_BY_TRANSLATION = Object.fromEntries(
+  Object.entries(TRANSLATIONS).flatMap(([language, dictionary]) => language === 'en' ? [] : Object.entries(dictionary).map(([english, translated]) => [translated, english]))
+);
+
+const translatePage = (language) => {
+  const translations = TRANSLATIONS[language] || ENGLISH_TRANSLATIONS;
+
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  let node;
+  while ((node = walker.nextNode())) textNodes.push(node);
+
+  textNodes.forEach((textNode) => {
+    const source = textNode.textContent.trim();
+    const englishKey = ENGLISH_BY_TRANSLATION[source] || source;
+    if (translations[englishKey] && translations[englishKey] !== source) {
+      textNode.textContent = textNode.textContent.replace(source, translations[englishKey]);
+    }
+  });
+
+  document.querySelectorAll('[title], [aria-label], [placeholder]').forEach((element) => {
+    ['title', 'aria-label', 'placeholder'].forEach((attribute) => {
+      const value = element.getAttribute(attribute);
+      const englishKey = ENGLISH_BY_TRANSLATION[value] || value;
+      if (value && translations[englishKey] && translations[englishKey] !== value) element.setAttribute(attribute, translations[englishKey]);
+    });
+  });
+};
+
 export const LanguageProvider = ({ children }) => {
-  const [lang, setLangState] = useState(localStorage.getItem('preferred_language') || 'en');
+  const { pathname } = useLocation();
+  const [lang, setLangState] = useState('en');
 
   const setLang = (code) => {
-    localStorage.setItem('preferred_language', code);
     setLangState(code);
   };
 
+  useEffect(() => {
+    const isAuthenticatedScreen = pathname.startsWith('/dashboard') || pathname.startsWith('/assessment') || pathname.startsWith('/assessments') || pathname.startsWith('/improvement-plan') || pathname.startsWith('/alternatives') || pathname.startsWith('/financial-plan') || pathname.startsWith('/reports') || pathname.startsWith('/legal-advice') || pathname.startsWith('/profile');
+    if (!isAuthenticatedScreen && lang !== 'en') setLangState('en');
+    const activeLanguage = isAuthenticatedScreen ? lang : 'en';
+    translatePage(activeLanguage);
+    const observer = new MutationObserver(() => translatePage(activeLanguage));
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [lang, pathname]);
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, languagesList: LANGUAGES_LIST }}>
+    <LanguageContext.Provider value={{ lang, setLang, languagesList: LANGUAGES_LIST, translate: (key) => TRANSLATIONS[lang]?.[key] || key }}>
       {children}
     </LanguageContext.Provider>
   );

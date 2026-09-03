@@ -19,7 +19,7 @@ export const FinancialPlanPage = () => {
     const fetchPlan = async () => {
       setLoading(true);
       try {
-        const resp = await api.getFinancialPlan(assessmentId);
+        const resp = await api.getFinancialPlan(assessmentId, lang);
         setFinPlan(resp.data);
       } catch (err) {
         console.error("Financial plan fetch error:", err);
@@ -28,7 +28,7 @@ export const FinancialPlanPage = () => {
       }
     };
     if (assessmentId) fetchPlan();
-  }, [assessmentId]);
+  }, [assessmentId, lang]);
 
   const handlePrint = () => {
     window.print();
