@@ -12,6 +12,26 @@ def test_health_check_endpoint():
     assert data["status"] == "online"
     assert "Udyam Gram" in data["app_name"]
 
+def test_location_directory_uses_named_blocks_and_villages():
+    blocks = client.get("/locations/blocks", params={
+        "state": "Maharashtra",
+        "district": "Nashik",
+    })
+    villages = client.get("/locations/villages", params={
+        "state": "Maharashtra",
+        "district": "Nashik",
+        "block": "Nashik",
+    })
+
+    assert blocks.status_code == 200
+    assert blocks.json() == ["Nashik", "Dindori", "Igatpuri", "Sinnar", "Yeola"]
+    assert villages.status_code == 200
+    assert [v["name"] for v in villages.json()] == [
+        "Gangapur", "Makhmalabad", "Adgaon", "Pathardi", "Deolali"
+    ]
+    assert not any("Block " in block or "Village " in village["name"]
+                   for block in blocks.json() for village in villages.json())
+
 def test_auth_signup_login_flow():
     test_email = "testuser_phase1@example.com"
     test_password = "password123"

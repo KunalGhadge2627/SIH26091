@@ -114,7 +114,7 @@ export const AssessmentWizard = () => {
 
   useEffect(() => {
     if (selectedDistrict) {
-      api.getBlocks(selectedDistrict).then(res => {
+      api.getBlocks(selectedState, selectedDistrict).then(res => {
         setBlocks(res.data);
       });
     } else {

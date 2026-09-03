@@ -11,7 +11,7 @@ import api from '../api/client';
 export const BusinessAlternativesPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
-  const { lang } = useLanguage();
+  const { lang, translate: t } = useLanguage();
 
   const [alternatives, setAlternatives] = useState([]);
   const [selectedCategoryModal, setSelectedCategoryModal] = useState(null);
@@ -44,23 +44,23 @@ export const BusinessAlternativesPage = () => {
           <div className="flex items-center justify-between border-b border-gray-200 pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="eyebrow !mb-0">BUSINESS ↔ PERSON ↔ LOCATION</span>
-                <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">DEMO ESTIMATES</span>
+                <span className="eyebrow !mb-0">{t('BUSINESS ↔ PERSON ↔ LOCATION')}</span>
+                <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{t('DEMO ESTIMATES')}</span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Business Alternatives</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Ranked comparison of 5 business categories for your village location and capital.</p>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Business Alternatives')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('Ranked comparison of 5 business categories for your village location and capital.')}</p>
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
               className="text-xs font-bold text-primary-600 hover:underline flex items-center gap-1"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to results</span>
+              <span>{t('Back to results')}</span>
             </Link>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-gray-400">Evaluating 5 business alternatives...</div>
+            <div className="py-12 text-center text-xs text-gray-400">{t('Evaluating 5 business alternatives...')}</div>
           ) : (
             <div className="space-y-6">
               {/* Ranked #1..#5 Cards */}
@@ -88,7 +88,7 @@ export const BusinessAlternativesPage = () => {
                               <h3 className="text-base font-bold text-gray-900">{alt.display_name}</h3>
                               {isBestFit && (
                                 <span className="text-[10px] font-extrabold text-white bg-primary-600 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                  BEST FIT
+                                  {t('BEST FIT')}
                                 </span>
                               )}
                               <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
@@ -105,15 +105,15 @@ export const BusinessAlternativesPage = () => {
                         {/* 3-Part Sub-Scores */}
                         <div className="grid grid-cols-3 gap-3 text-[11px] pt-1">
                           <div className="bg-white/80 border border-gray-100 rounded-xl p-2 text-center">
-                            <span className="text-gray-500 block text-[9px] uppercase font-bold">Market Fit</span>
+                            <span className="text-gray-500 block text-[9px] uppercase font-bold">{t('Market Fit')}</span>
                             <span className="font-bold text-gray-900">{alt.market_fit_score}/100</span>
                           </div>
                           <div className="bg-white/80 border border-gray-100 rounded-xl p-2 text-center">
-                            <span className="text-gray-500 block text-[9px] uppercase font-bold">Capital Fit</span>
+                            <span className="text-gray-500 block text-[9px] uppercase font-bold">{t('Capital Fit')}</span>
                             <span className="font-bold text-gray-900">{alt.capital_fit_score}/100</span>
                           </div>
                           <div className="bg-white/80 border border-gray-100 rounded-xl p-2 text-center">
-                            <span className="text-gray-500 block text-[9px] uppercase font-bold">Resource Fit</span>
+                            <span className="text-gray-500 block text-[9px] uppercase font-bold">{t('Resource Fit')}</span>
                             <span className="font-bold text-gray-900">{alt.resource_fit_score}/100</span>
                           </div>
                         </div>
@@ -123,14 +123,14 @@ export const BusinessAlternativesPage = () => {
                       <div className="flex md:flex-col items-center justify-between md:justify-center gap-4 shrink-0 border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6">
                         <div className="text-center">
                           <div className="text-3xl font-black text-primary-700">{alt.alternative_score}</div>
-                          <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">FIT SCORE</div>
+                          <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{t('FIT SCORE')}</div>
                         </div>
 
                         <button
                           onClick={() => setSelectedCategoryModal(alt.category)}
                           className="px-4 py-2 bg-white hover:bg-gray-50 text-primary-600 font-bold text-xs rounded-xl border border-primary-200 transition-colors shadow-xs"
                         >
-                          Explore This Business →
+                          {t('Explore This Business')} →
                         </button>
                       </div>
                     </div>

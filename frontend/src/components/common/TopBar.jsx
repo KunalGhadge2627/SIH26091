@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 
 export const TopBar = ({ title = "Dashboard" }) => {
   const { user } = useAuth();
-  const { lang, setLang, languagesList } = useLanguage();
+  const { lang, setLang, languagesList, translate: t } = useLanguage();
   const [showBellMenu, setShowBellMenu] = useState(false);
 
   const getInitials = (name) => {
@@ -17,7 +17,7 @@ export const TopBar = ({ title = "Dashboard" }) => {
   return (
     <header className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between sticky top-0 z-30">
       {/* Current Page Title */}
-      <h1 className="text-lg font-bold text-gray-900">{title}</h1>
+      <h1 className="text-lg font-bold text-gray-900">{t(title)}</h1>
 
       {/* Right Controls */}
       <div className="flex items-center gap-4">
@@ -42,7 +42,7 @@ export const TopBar = ({ title = "Dashboard" }) => {
           <button 
             onClick={() => setShowBellMenu(!showBellMenu)}
             className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors relative"
-            title="Notifications"
+            title={t('Notifications')}
           >
             <Bell className="w-5 h-5" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary-600"></span>
@@ -50,8 +50,8 @@ export const TopBar = ({ title = "Dashboard" }) => {
 
           {showBellMenu && (
             <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-50 text-xs text-gray-500">
-              <div className="font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-2">Notifications</div>
-              <div className="text-center py-4 text-gray-400">No new notifications</div>
+              <div className="font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-2">{t('Notifications')}</div>
+              <div className="text-center py-4 text-gray-400">{t('No new notifications')}</div>
             </div>
           )}
         </div>
@@ -62,7 +62,7 @@ export const TopBar = ({ title = "Dashboard" }) => {
             {getInitials(user?.full_name)}
           </div>
           <span className="text-xs font-semibold text-gray-800 hidden md:inline-block">
-            {user?.full_name || 'User'}
+            {user?.full_name || t('User')}
           </span>
         </Link>
       </div>

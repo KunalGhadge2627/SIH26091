@@ -6,9 +6,11 @@ import {
 } from 'lucide-react';
 import Logo from './Logo';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const Sidebar = () => {
   const { logout } = useAuth();
+  const { translate: t } = useLanguage();
 
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -27,12 +29,12 @@ export const Sidebar = () => {
         {/* Brand Header */}
         <div className="p-6 border-b border-gray-100">
           <Logo />
-          <p className="text-[11px] text-gray-500 mt-1">Rural Feasibility & Literacy</p>
+          <p className="text-[11px] text-gray-500 mt-1">{t('Rural Feasibility & Literacy')}</p>
         </div>
 
         {/* Section Eyebrow */}
         <div className="px-6 pt-5 pb-2">
-          <span className="eyebrow">DECISION TOOLS</span>
+          <span className="eyebrow">{t('DECISION TOOLS')}</span>
         </div>
 
         {/* Nav Links */}
@@ -54,7 +56,7 @@ export const Sidebar = () => {
                 }
               >
                 <Icon className={`w-4 h-4 ${item.highlight ? 'text-primary-600' : ''}`} />
-                <span>{item.label}</span>
+                <span>{t(item.label)}</span>
               </NavLink>
             );
           })}
@@ -66,10 +68,10 @@ export const Sidebar = () => {
         <div className="bg-amber-50/80 border border-amber-200/80 rounded-xl p-3 text-[11px] text-amber-900">
           <div className="flex items-center gap-1.5 font-bold text-amber-800 uppercase tracking-wider mb-1">
             <Info className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-            <span>PROTOTYPE DATA</span>
+            <span>{t('PROTOTYPE DATA')}</span>
           </div>
           <p className="leading-tight text-[10.5px] text-amber-800">
-            Recommendations use prototype data and do not guarantee business success.
+            {t('Recommendations use prototype data and do not guarantee business success.')}
           </p>
         </div>
 
@@ -78,7 +80,7 @@ export const Sidebar = () => {
           className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
         >
           <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <span>{t('Sign Out')}</span>
         </button>
       </div>
     </aside>

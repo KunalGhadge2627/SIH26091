@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Circle, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Fix default Leaflet marker icon path in React/Vite
 delete L.Icon.Default.prototype._getIconUrl;
@@ -32,6 +33,7 @@ export const LocationMap = ({
   radiusKm = 10.0,
   competitors = []
 }) => {
+  const { translate: t } = useLanguage();
   const position = [lat, lng];
 
   return (
@@ -50,7 +52,7 @@ export const LocationMap = ({
             <Marker position={position}>
               <Popup>
                 <div className="text-xs font-semibold">
-                  <strong>{villageName}</strong> (Selected Village Center)
+                  <strong>{villageName}</strong> ({t('Selected Village Center')})
                 </div>
               </Popup>
             </Marker>
@@ -81,20 +83,20 @@ export const LocationMap = ({
 
         {/* Map Legend Overlay */}
         <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-gray-200 rounded-lg p-2.5 shadow-md text-[10.5px] z-[1000] space-y-1">
-          <div className="font-bold text-gray-800 uppercase tracking-wider text-[9px] mb-1">CATCHMENT LEGEND</div>
+          <div className="font-bold text-gray-800 uppercase tracking-wider text-[9px] mb-1">{t('CATCHMENT LEGEND')}</div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
-            <span>{radiusKm} km Radius Circle</span>
+            <span>{radiusKm} {t('km Radius Circle')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-            <span>Competitor Shops</span>
+            <span>{t('Competitor Shops')}</span>
           </div>
         </div>
       </div>
 
       <p className="text-[11px] text-gray-500 leading-snug">
-        We analyse nearby villages, local population, business density, and infrastructure within the selected radius. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.
+        {t('We analyse nearby villages, local population, business density, and infrastructure within the selected radius. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.')}
       </p>
     </div>
   );

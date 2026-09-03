@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import { useAuth } from '../context/AuthContext';
-import { LANGUAGES_LIST } from '../context/LanguageContext';
+import { LANGUAGES_LIST, useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 const DEFAULT_STATES = [
@@ -25,6 +25,7 @@ const DEFAULT_DISTRICTS = {
 };
 
 export const SignupPage = () => {
+  const { translate: t } = useLanguage();
   const { signup } = useAuth();
   const navigate = useNavigate();
 
@@ -147,21 +148,21 @@ export const SignupPage = () => {
           
           <div className="mt-16 space-y-6">
             <h2 className="text-2xl font-bold leading-snug text-blue-50">
-              Create your account to start evaluating business ideas.
+              {t('Create your account to start evaluating business ideas.')}
             </h2>
 
             <div className="space-y-3 text-xs text-blue-100 font-medium">
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Instant village-level demand analysis</span>
+                <span>{t('Instant village-level demand analysis')}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Readiness preparation action plan</span>
+                <span>{t('Readiness preparation action plan')}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Local legal office directory & checklists</span>
+                <span>{t('Local legal office directory & checklists')}</span>
               </div>
             </div>
           </div>
@@ -177,10 +178,10 @@ export const SignupPage = () => {
       <div className="md:col-span-7 p-6 sm:p-12 bg-white flex flex-col justify-center overflow-y-auto">
         <div className="max-w-lg w-full mx-auto space-y-6">
           <div>
-            <span className="eyebrow">GET STARTED</span>
-            <h2 className="text-2xl font-bold text-gray-900">Create your account</h2>
+            <span className="eyebrow">{t('GET STARTED')}</span>
+            <h2 className="text-2xl font-bold text-gray-900">{t('Create your account')}</h2>
             <p className="text-xs text-gray-500 mt-1">
-              Enter your details to generate personalized feasibility reports.
+              {t('Enter your details to generate personalized feasibility reports.')}
             </p>
           </div>
 
@@ -194,7 +195,7 @@ export const SignupPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Full Name')}</label>
                 <input
                   type="text"
                   required
@@ -207,7 +208,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Mobile Number</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Mobile Number')}</label>
                 <input
                   type="tel"
                   required
@@ -221,7 +222,7 @@ export const SignupPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Email Address')}</label>
               <input
                 type="email"
                 required
@@ -235,7 +236,7 @@ export const SignupPage = () => {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Password</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Password')}</label>
                 <input
                   type="password"
                   required
@@ -248,7 +249,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Confirm Password</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Confirm Password')}</label>
                 <input
                   type="password"
                   required
@@ -263,7 +264,7 @@ export const SignupPage = () => {
 
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Preferred Language</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Preferred Language')}</label>
                 <select
                   name="preferred_language"
                   value={formData.preferred_language}
@@ -277,7 +278,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">State</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('State')}</label>
                 <select
                   name="state"
                   value={formData.state}
@@ -289,7 +290,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">District</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">{t('District')}</label>
                 <select
                   name="district"
                   value={formData.district}
@@ -306,14 +307,14 @@ export const SignupPage = () => {
               disabled={loading}
               className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors disabled:opacity-50 mt-2"
             >
-              {loading ? "Creating account..." : "Create account"}
+              {loading ? t('Creating account...') : t('Create account')}
             </button>
           </form>
 
           <p className="text-center text-xs text-gray-500">
-            Already have an account?{" "}
+            {t('Already have an account?')} {" "}
             <Link to="/login" className="font-bold text-primary-600 hover:underline">
-              Log in
+              {t('Log in')}
             </Link>
           </p>
         </div>

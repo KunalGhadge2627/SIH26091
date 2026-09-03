@@ -11,7 +11,7 @@ import api from '../api/client';
 export const ImprovementPlanPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
-  const { lang } = useLanguage();
+  const { lang, translate: t } = useLanguage();
 
   const [actions, setActions] = useState([]);
   const [baseReadinessScore, setBaseReadinessScore] = useState(65);
@@ -80,31 +80,31 @@ export const ImprovementPlanPage = () => {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-200 pb-4">
             <div>
-              <span className="eyebrow">PREPARATION BEFORE LAUNCH</span>
-              <h1 className="text-2xl font-bold text-gray-900">Improvement Plan</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Concrete action items to strengthen your entrepreneur readiness before starting.</p>
+              <span className="eyebrow">{t('PREPARATION BEFORE LAUNCH')}</span>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Improvement Plan')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('Concrete action items to strengthen your entrepreneur readiness before starting.')}</p>
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
               className="text-xs font-bold text-primary-600 hover:underline flex items-center gap-1"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to results</span>
+              <span>{t('Back to results')}</span>
             </Link>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-gray-400">Loading readiness action items...</div>
+            <div className="py-12 text-center text-xs text-gray-400">{t('Loading readiness action items...')}</div>
           ) : (
             <div className="space-y-6">
               {/* Summary Strip (Current -> Potential Preparedness) */}
               <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label="CURRENT" />
+                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label={t('CURRENT')} />
                   <ArrowRight className="w-6 h-6 text-gray-300 hidden sm:block" />
-                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label="POTENTIAL" />
+                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label={t('POTENTIAL')} />
                   <div>
-                    <h3 className="text-sm font-bold text-gray-900">Potential Preparedness</h3>
+                    <h3 className="text-sm font-bold text-gray-900">{t('Potential Preparedness')}</h3>
                     <p className="text-xs text-emerald-700 font-semibold mt-0.5">
                       +{completedPoints} points gained from completed actions
                     </p>
@@ -112,13 +112,13 @@ export const ImprovementPlanPage = () => {
                 </div>
 
                 <div className="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl text-xs font-bold border border-blue-100 shrink-0">
-                  {completedCount} of {actions.length} Actions Completed
+                  {completedCount} {t('of')} {actions.length} {t('Actions Completed')}
                 </div>
               </div>
 
               {/* Numbered Action Cards */}
               <div className="space-y-4">
-                <h2 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Recommended Action Items</h2>
+                <h2 className="text-xs font-bold text-gray-800 uppercase tracking-wider">{t('Recommended Action Items')}</h2>
 
                 {actions.map((act, idx) => {
                   const actKey = act.dimension.toLowerCase().replace(/ /g, '_');
@@ -146,12 +146,12 @@ export const ImprovementPlanPage = () => {
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-sm text-gray-900">{act.title}</span>
                             <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
-                              +{act.impact_points} Readiness
+                              +{act.impact_points} {t('Readiness')}
                             </span>
                           </div>
                           <p className="text-xs text-gray-600 leading-relaxed">{act.description}</p>
                           <span className="text-[10px] font-semibold text-gray-400 block uppercase tracking-wider pt-1">
-                            Dimension: {act.dimension}
+                            {t('Dimension:')} {act.dimension}
                           </span>
                         </div>
                       </div>

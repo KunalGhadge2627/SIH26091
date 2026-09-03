@@ -1,12 +1,14 @@
 import React from 'react';
 import { Store, UserCheck, Wallet, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const ThreeWayFitCard = () => {
+  const { translate: t } = useLanguage();
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm relative overflow-hidden">
       <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
-        <span className="eyebrow !mb-0">THREE-WAY FIT ANALYSIS</span>
-        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-gray-100 px-2 py-0.5 rounded">PROTOTYPE DATA</span>
+        <span className="eyebrow !mb-0">{t('THREE-WAY FIT ANALYSIS')}</span>
+        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-gray-100 px-2 py-0.5 rounded">{t('PROTOTYPE DATA')}</span>
       </div>
 
       <div className="space-y-3">
@@ -16,8 +18,8 @@ export const ThreeWayFitCard = () => {
             <Store className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-blue-900">1. Business ↔ Location</div>
-            <div className="text-[11px] text-blue-700">Market Feasibility & Local Demand</div>
+            <div className="text-xs font-semibold text-blue-900">{t('1. Business ↔ Location')}</div>
+            <div className="text-[11px] text-blue-700">{t('Market Feasibility & Local Demand')}</div>
           </div>
         </div>
 
@@ -27,8 +29,8 @@ export const ThreeWayFitCard = () => {
             <UserCheck className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-emerald-900">2. Person ↔ Business</div>
-            <div className="text-[11px] text-emerald-700">Entrepreneur Readiness & Resources</div>
+            <div className="text-xs font-semibold text-emerald-900">{t('2. Person ↔ Business')}</div>
+            <div className="text-[11px] text-emerald-700">{t('Entrepreneur Readiness & Resources')}</div>
           </div>
         </div>
 
@@ -38,17 +40,17 @@ export const ThreeWayFitCard = () => {
             <Wallet className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-amber-900">3. Person ↔ Finance</div>
-            <div className="text-[11px] text-amber-700">Financial Fit & Debt Capacity</div>
+            <div className="text-xs font-semibold text-amber-900">{t('3. Person ↔ Finance')}</div>
+            <div className="text-[11px] text-amber-700">{t('Financial Fit & Debt Capacity')}</div>
           </div>
         </div>
       </div>
 
       {/* Converging Result */}
       <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between bg-gray-900 text-white p-3.5 rounded-xl">
-        <div className="text-xs font-medium">Converges Into</div>
+        <div className="text-xs font-medium">{t('Converges Into')}</div>
         <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
-          <span>Better Decision</span>
+          <span>{t('Better Decision')}</span>
           <ArrowRight className="w-4 h-4" />
         </div>
       </div>

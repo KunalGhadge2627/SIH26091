@@ -4,9 +4,11 @@ import { FileText, PlusCircle, ArrowRight, Eye, Download, Layers, CheckCircle2 }
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import CompareModal from '../components/modals/CompareModal';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 export const ReportsHistoryPage = () => {
+  const { translate: t } = useLanguage();
   const [assessments, setAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,9 +54,9 @@ export const ReportsHistoryPage = () => {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-4">
             <div>
-              <span className="eyebrow">ASSESSMENT HISTORY</span>
-              <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
-              <p className="text-xs text-gray-500 mt-0.5">All your saved and completed business feasibility assessments.</p>
+              <span className="eyebrow">{t('ASSESSMENT HISTORY')}</span>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Reports')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('All your saved and completed business feasibility assessments.')}</p>
             </div>
 
             <div className="flex items-center gap-3">
@@ -64,7 +66,7 @@ export const ReportsHistoryPage = () => {
                   className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
                 >
                   <Layers className="w-4 h-4" />
-                  <span>Compare Selected (2)</span>
+                  <span>{t('Compare Selected (2)')}</span>
                 </button>
               )}
 
@@ -73,27 +75,27 @@ export const ReportsHistoryPage = () => {
                 className="px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>New assessment</span>
+                <span>{t('New assessment')}</span>
               </Link>
             </div>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-gray-400">Loading assessment history...</div>
+            <div className="py-12 text-center text-xs text-gray-400">{t('Loading assessment history...')}</div>
           ) : assessments.length === 0 ? (
             <div className="bg-white border border-gray-200 rounded-3xl p-12 text-center space-y-4 max-w-md mx-auto my-8">
               <FileText className="w-12 h-12 text-gray-300 mx-auto" />
-              <h3 className="text-base font-bold text-gray-900">No reports generated yet</h3>
-              <p className="text-xs text-gray-500">Run a feasibility assessment to save and compare reports.</p>
+              <h3 className="text-base font-bold text-gray-900">{t('No reports generated yet')}</h3>
+              <p className="text-xs text-gray-500">{t('Run a feasibility assessment to save and compare reports.')}</p>
               <Link to="/assessment/new" className="inline-block px-5 py-2.5 bg-primary-600 text-white font-bold text-xs rounded-xl">
-                Start Assessment
+                {t('Start Assessment')}
               </Link>
             </div>
           ) : (
             <div className="bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-xs">
               <div className="p-4 bg-gray-50/50 border-b border-gray-100 text-xs text-gray-500 flex items-center justify-between">
-                <span>Select any 2 assessments to compare side-by-side.</span>
-                <span className="font-semibold text-primary-700">{assessments.length} Total Assessments</span>
+                <span>{t('Select any 2 assessments to compare side-by-side.')}</span>
+                <span className="font-semibold text-primary-700">{assessments.length} {t('Total Assessments')}</span>
               </div>
 
               <div className="overflow-x-auto">

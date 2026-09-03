@@ -18,8 +18,13 @@ async def get_districts(state: Optional[str] = Query(None)):
     return []
 
 @router.get("/blocks", response_model=List[str])
-async def get_blocks(district: Optional[str] = Query(None)):
-    filtered = [v for v in MOCK_LOCATION_VILLAGES if not district or v["district"] == district]
+async def get_blocks(
+    state: Optional[str] = Query(None),
+    district: Optional[str] = Query(None),
+):
+    filtered = [v for v in MOCK_LOCATION_VILLAGES
+                if (not state or v["state"] == state)
+                and (not district or v["district"] == district)]
     return list(dict.fromkeys([v["block"] for v in filtered]))
 
 @router.get("/villages", response_model=List[VillageModel])

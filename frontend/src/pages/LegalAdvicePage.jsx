@@ -5,9 +5,11 @@ import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import LocationMap from '../components/map/LocationMap';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 export const LegalAdvicePage = () => {
+  const { translate: t } = useLanguage();
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
 
@@ -56,21 +58,21 @@ export const LegalAdvicePage = () => {
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
           <div className="border-b border-gray-200 pb-4">
-            <span className="eyebrow">REGULATORY & AID DIRECTORY</span>
-            <h1 className="text-2xl font-bold text-gray-900">Legal Advice & Registration Support</h1>
-            <p className="text-xs text-gray-500 mt-0.5">Find nearby District Legal Services Authorities and required business registration documents.</p>
+            <span className="eyebrow">{t('REGULATORY & AID DIRECTORY')}</span>
+            <h1 className="text-2xl font-bold text-gray-900">{t('Legal Advice & Registration Support')}</h1>
+            <p className="text-xs text-gray-500 mt-0.5">{t('Find nearby District Legal Services Authorities and required business registration documents.')}</p>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-gray-400">Loading nearest legal offices and document checklists...</div>
+            <div className="py-12 text-center text-xs text-gray-400">{t('Loading nearest legal offices and document checklists...')}</div>
           ) : (
             <div className="space-y-8">
               {/* Section 1: Nearest Legal Offices */}
               <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
                 <div>
-                  <span className="eyebrow">DISTRICT AID CENTRES</span>
-                  <h2 className="text-xl font-bold text-gray-900">Legal & registration support near you</h2>
-                  <p className="text-xs text-gray-500 mt-0.5">Contact official legal services authorities for MSME registration and report review.</p>
+                  <span className="eyebrow">{t('DISTRICT AID CENTRES')}</span>
+                  <h2 className="text-xl font-bold text-gray-900">{t('Legal & registration support near you')}</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">{t('Contact official legal services authorities for MSME registration and report review.')}</p>
                 </div>
 
                 {/* Map */}
@@ -120,11 +122,11 @@ export const LegalAdvicePage = () => {
               {/* Section 2: Document Checklist */}
               <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
                 <div>
-                  <span className="eyebrow">REGULATORY COMPLIANCE</span>
+                  <span className="eyebrow">{t('REGULATORY COMPLIANCE')}</span>
                   <h2 className="text-xl font-bold text-gray-900">
-                    Documents you'll need to register {checklist.category || 'Business'}
+                    {t("Documents you'll need to register")} {checklist.category || t('Business')}
                   </h2>
-                  <p className="text-xs text-gray-500 mt-0.5">Required identity documents and local government trade licenses.</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{t('Required identity documents and local government trade licenses.')}</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -132,7 +134,7 @@ export const LegalAdvicePage = () => {
                   <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
                     <div className="flex items-center gap-2 font-bold text-xs text-gray-900 uppercase tracking-wider">
                       <FileCheck className="w-4 h-4 text-primary-600" />
-                      <span>Required Identity & Bank Documents</span>
+                      <span>{t('Required Identity & Bank Documents')}</span>
                     </div>
 
                     <ul className="space-y-2 text-xs text-gray-700 font-medium">
@@ -149,7 +151,7 @@ export const LegalAdvicePage = () => {
                   <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
                     <div className="flex items-center gap-2 font-bold text-xs text-amber-900 uppercase tracking-wider">
                       <ShieldCheck className="w-4 h-4 text-amber-600" />
-                      <span>Regulatory & Trade Requirements</span>
+                      <span>{t('Regulatory & Trade Requirements')}</span>
                     </div>
 
                     <ul className="space-y-2 text-xs text-amber-950 font-medium">

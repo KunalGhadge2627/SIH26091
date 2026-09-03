@@ -33,7 +33,7 @@ export const api = {
   // Locations
   getStates: () => client.get('/locations/states'),
   getDistricts: (state) => client.get(`/locations/districts?state=${encodeURIComponent(state)}`),
-  getBlocks: (district) => client.get(`/locations/blocks?district=${encodeURIComponent(district)}`),
+  getBlocks: (state, district) => client.get(`/locations/blocks?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}`),
   getVillages: (state, district, block) => client.get(`/locations/villages?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}&block=${encodeURIComponent(block)}`),
   getVillageById: (id) => client.get(`/locations/villages/${id}`),
 

@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export const LoginPage = () => {
   const { login } = useAuth();
+  const { translate: t } = useLanguage();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -39,21 +41,21 @@ export const LoginPage = () => {
           
           <div className="mt-16 space-y-6">
             <h2 className="text-2xl font-bold leading-snug text-blue-50">
-              Understand the opportunity before you commit your savings or take a loan.
+              {t('Understand the opportunity before you commit your savings or take a loan.')}
             </h2>
 
             <div className="space-y-3 text-xs text-blue-100 font-medium">
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Deterministic 3-way fit scoring</span>
+                <span>{t('Deterministic 3-way fit scoring')}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Village-level market & competition mapping</span>
+                <span>{t('Village-level market & competition mapping')}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Reducing-balance EMI & scheme matching</span>
+                <span>{t('Reducing-balance EMI & scheme matching')}</span>
               </div>
             </div>
           </div>
@@ -69,17 +71,17 @@ export const LoginPage = () => {
       <div className="md:col-span-7 p-6 sm:p-12 flex flex-col justify-center bg-white">
         <div className="max-w-md w-full mx-auto space-y-6">
           <div>
-            <span className="eyebrow">WELCOME BACK</span>
-            <h2 className="text-2xl font-bold text-gray-900">Log in to your account</h2>
+            <span className="eyebrow">{t('WELCOME BACK')}</span>
+            <h2 className="text-2xl font-bold text-gray-900">{t('Log in to your account')}</h2>
             <p className="text-xs text-gray-500 mt-1">
-              Access your saved assessments, improvement plans, and legal advice.
+              {t('Access your saved assessments, improvement plans, and legal advice.')}
             </p>
           </div>
 
           {/* Demo Hint Banner */}
           <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-900 leading-relaxed">
-            <span className="font-bold block mb-0.5">Demo Tip:</span>
-            Create a new account via Signup, or log in with any existing registered user credentials.
+            <span className="font-bold block mb-0.5">{t('Demo Tip:')}</span>
+            {t('Create a new account via Signup, or log in with any existing registered user credentials.')}
           </div>
 
           {error && (
@@ -91,7 +93,7 @@ export const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+              <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Email Address')}</label>
               <input
                 type="email"
                 required
@@ -104,9 +106,9 @@ export const LoginPage = () => {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-semibold text-gray-700">Password</label>
+                <label className="text-xs font-semibold text-gray-700">{t('Password')}</label>
                 <a href="#forgot" onClick={(e) => { e.preventDefault(); alert("Password reset link available in production."); }} className="text-xs font-medium text-primary-600 hover:underline">
-                  Forgot password?
+                  {t('Forgot password?')}
                 </a>
               </div>
               <div className="relative">
@@ -136,7 +138,7 @@ export const LoginPage = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="rounded text-primary-600 focus:ring-primary-500"
               />
-              <label htmlFor="remember" className="text-xs text-gray-600 font-medium">Remember me</label>
+              <label htmlFor="remember" className="text-xs text-gray-600 font-medium">{t('Remember me')}</label>
             </div>
 
             <button
@@ -144,14 +146,14 @@ export const LoginPage = () => {
               disabled={loading}
               className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors disabled:opacity-50"
             >
-              {loading ? "Logging in..." : "Log in"}
+              {loading ? t('Logging in...') : t('Log in')}
             </button>
           </form>
 
           <p className="text-center text-xs text-gray-500">
-            Don't have an account yet?{" "}
+            {t("Don't have an account yet?")} {" "}
             <Link to="/signup" className="font-bold text-primary-600 hover:underline">
-              Create account
+              {t('Create account')}
             </Link>
           </p>
         </div>
