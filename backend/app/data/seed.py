@@ -7,6 +7,7 @@ from app.data.mock_business_stats import MOCK_VILLAGE_BUSINESS_STATS
 from app.data.mock_legal_offices import MOCK_LEGAL_OFFICES
 from app.data.mock_schemes import MOCK_SCHEMES
 from app.data.document_checklists import DOCUMENT_CHECKLISTS_DATA
+from app.data.archive_loader import load_mock_archive
 
 
 def compute_derived_village_fields(village: dict) -> dict:
@@ -86,6 +87,9 @@ async def seed_database():
     await db["legal_offices"].delete_many({})
     await db["schemes"].delete_many({})
     await db["document_checklists"].delete_many({})
+    archive_data = load_mock_archive()
+    for collection_name in archive_data:
+        await db[f"archive_{collection_name}"].delete_many({})
     
     # 1. Process and insert villages
     print("Seeding 10 real villages with derived metrics ...")
@@ -118,6 +122,14 @@ async def seed_database():
     print("Seeding 5 category document checklists ...")
     await db["document_checklists"].insert_many(DOCUMENT_CHECKLISTS_DATA)
 
+    # Keep the supplied CSV dataset available for analytics and future routes
+    # without changing the established assessment fixture schema.
+    archive_counts = {}
+    for collection_name, rows in archive_data.items():
+        if rows:
+            await db[f"archive_{collection_name}"].insert_many(rows)
+        archive_counts[collection_name] = len(rows)
+
     
     print("\nDatabase Seeding Completed Successfully!")
     print(f"Summary:")
@@ -127,6 +139,7 @@ async def seed_database():
     print(f" - Business Establishments: {len(competitors)}")
     print(f" - Legal Offices: {len(MOCK_LEGAL_OFFICES)}")
     print(f" - Government Schemes: {len(MOCK_SCHEMES)}")
+    print(f" - Supplied CSV archive: {archive_counts}")
     
     client.close()
 
