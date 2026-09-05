@@ -7,22 +7,28 @@ import DisclaimerBanner from '../components/common/DisclaimerBanner';
 import BusinessDetailModal from '../components/modals/BusinessDetailModal';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
+import { getCachedRequest, readCachedData } from '../api/requestCache';
 
 export const BusinessAlternativesPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
   const { lang, translate: t } = useLanguage();
 
-  const [alternatives, setAlternatives] = useState([]);
+  const cacheKey = `alternatives:${assessmentId}`;
+  const languageCacheKey = `${cacheKey}:${lang}`;
+  const [alternatives, setAlternatives] = useState(() => readCachedData(cacheKey) || []);
   const [selectedCategoryModal, setSelectedCategoryModal] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !readCachedData(cacheKey));
 
   useEffect(() => {
     const fetchAlternatives = async () => {
-      setLoading(true);
+      if (!readCachedData(cacheKey)) setLoading(true);
       try {
-        const resp = await api.getAlternatives(assessmentId, lang);
-        setAlternatives(resp.data);
+        const alternativesData = await getCachedRequest(languageCacheKey, async () => {
+          const resp = await api.getAlternatives(assessmentId, lang);
+          return resp.data;
+        });
+        setAlternatives(alternativesData);
       } catch (err) {
         console.error("Alternatives fetch error:", err);
       } finally {
@@ -85,21 +91,21 @@ export const BusinessAlternativesPage = () => {
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="text-base font-bold text-gray-900">{alt.display_name}</h3>
+                              <h3 className="text-base font-bold text-gray-900">{t(alt.display_name)}</h3>
                               {isBestFit && (
                                 <span className="text-[10px] font-extrabold text-white bg-primary-600 px-2 py-0.5 rounded-full uppercase tracking-wider">
                                   {t('BEST FIT')}
                                 </span>
                               )}
                               <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
-                                {alt.status_label}
+                                {t(alt.status_label)}
                               </span>
                             </div>
                           </div>
                         </div>
 
                         <p className="text-xs text-gray-600 leading-relaxed italic">
-                          "{alt.explanation_blurb}"
+                          "{t(alt.explanation_blurb)}"
                         </p>
 
                         {/* 3-Part Sub-Scores */}

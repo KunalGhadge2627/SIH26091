@@ -12,15 +12,90 @@ import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 import { INDIA_CENTER, STATE_CENTERS, getBlockCenter, getDistrictCenter } from '../data/locationCenters';
 
+const DEFAULT_BUSINESS_MODELS = [
+  { category: 'Dairy', display_name: 'Dairy Farming & Milk Collection', description: 'Small-scale dairy unit supplying milk to nearby households and collection centres.', capital_min: 300000, capital_max: 700000 },
+  { category: 'Poultry', display_name: 'Small-scale Poultry Unit', description: 'Broiler or layer poultry farm supplying local markets and eateries.', capital_min: 150000, capital_max: 400000 },
+  { category: 'Tailoring', display_name: 'Tailoring & Garment Shop', description: 'Custom tailoring, stitching, alterations, and garment sales for local households.', capital_min: 50000, capital_max: 200000 },
+  { category: 'Flour Mill', display_name: 'Flour Mill (Atta Chakki)', description: 'Grain grinding mill serving village households with flour and spice processing.', capital_min: 200000, capital_max: 600000 },
+  { category: 'Two-Wheeler Repair', display_name: 'Two-Wheeler Workshop & Spare Parts', description: 'Motorcycle and scooter servicing, repairs, tyres, and spare-parts retail.', capital_min: 100000, capital_max: 300000 }
+];
+
+const BUSINESS_CARD_COPY = {
+  hi: {
+    Dairy: ['डेयरी फार्मिंग और दूध संग्रह', 'पास के घरों और दूध संग्रह केंद्रों को दूध उपलब्ध कराने वाली छोटी डेयरी इकाई।'], Poultry: ['छोटा पोल्ट्री यूनिट', 'स्थानीय बाजारों और भोजनालयों को आपूर्ति करने वाला ब्रॉयलर या लेयर फार्म।'], Tailoring: ['सिलाई और परिधान की दुकान', 'स्थानीय परिवारों के लिए सिलाई, कपड़ों की मरम्मत और परिधान बिक्री।'], 'Flour Mill': ['आटा चक्की', 'गांव के परिवारों के लिए आटा और मसाले पीसने वाली मिल।'], 'Two-Wheeler Repair': ['दुपहिया वाहन कार्यशाला और स्पेयर पार्ट्स', 'मोटरसाइकिल और स्कूटर की सर्विस, मरम्मत और स्पेयर पार्ट्स की बिक्री।']
+  },
+  mr: {
+    Dairy: ['दुग्ध व्यवसाय आणि दूध संकलन', 'जवळच्या कुटुंबांना आणि दूध संकलन केंद्रांना दूध पुरवणारी लघु डेअरी युनिट.'], Poultry: ['लघु कुक्कुटपालन युनिट', 'स्थानिक बाजारपेठा आणि खाद्यगृहांना पुरवठा करणारे ब्रॉयलर किंवा लेयर फार्म.'], Tailoring: ['शिंपीकाम आणि वस्त्र दुकान', 'स्थानिक कुटुंबांसाठी शिंपीकाम, दुरुस्ती आणि वस्त्र विक्री.'], 'Flour Mill': ['पिठाची गिरणी', 'गावातील कुटुंबांसाठी पीठ आणि मसाले दळणारी गिरणी.'], 'Two-Wheeler Repair': ['दुचाकी कार्यशाळा आणि सुटे भाग', 'मोटरसायकल व स्कूटरची सर्व्हिस, दुरुस्ती आणि सुटे भाग विक्री.']
+  },
+  ta: {
+    Dairy: ['பால் பண்ணை மற்றும் பால் சேகரிப்பு', 'அருகிலுள்ள குடும்பங்கள் மற்றும் சேகரிப்பு மையங்களுக்கு பால் வழங்கும் சிறிய பால் பண்ணை.'], Poultry: ['சிறிய கோழிப்பண்ணை', 'உள்ளூர் சந்தைகள் மற்றும் உணவகங்களுக்கு வழங்கும் பிராய்லர் அல்லது லேயர் பண்ணை.'], Tailoring: ['தையல் மற்றும் ஆடை கடை', 'உள்ளூர் குடும்பங்களுக்கான தையல், திருத்தம் மற்றும் ஆடை விற்பனை.'], 'Flour Mill': ['மாவு ஆலை', 'கிராமக் குடும்பங்களுக்கு மாவு மற்றும் மசாலா அரைக்கும் ஆலை.'], 'Two-Wheeler Repair': ['இருசக்கர வாகன பணிமனை மற்றும் உதிரிபாகங்கள்', 'மோட்டார் சைக்கிள் மற்றும் ஸ்கூட்டர் சேவை, பழுது மற்றும் உதிரிபாக விற்பனை.']
+  },
+  te: {
+    Dairy: ['పాల పశుపోషణ మరియు పాల సేకరణ', 'సమీప కుటుంబాలు మరియు సేకరణ కేంద్రాలకు పాలు అందించే చిన్న డెయిరీ యూనిట్.'], Poultry: ['చిన్న కోళ్ల పెంపకం యూనిట్', 'స్థానిక మార్కెట్లు మరియు ఆహారశాలలకు సరఫరా చేసే బ్రాయిలర్ లేదా లేయర్ ఫారం.'], Tailoring: ['టైలరింగ్ మరియు వస్త్ర దుకాణం', 'స్థానిక కుటుంబాల కోసం కుట్టుపని, మార్పులు మరియు వస్త్రాల విక్రయం.'], 'Flour Mill': ['పిండి మిల్లు', 'గ్రామ కుటుంబాలకు పిండి మరియు మసాలాలు తయారు చేసే మిల్లు.'], 'Two-Wheeler Repair': ['ద్విచక్ర వాహన వర్క్‌షాప్ మరియు విడిభాగాలు', 'మోటార్‌సైకిల్ మరియు స్కూటర్ సర్వీసింగ్, మరమ్మతులు, విడిభాగాల విక్రయం.']
+  },
+  kn: {
+    Dairy: ['ಹೈನುಗಾರಿಕೆ ಮತ್ತು ಹಾಲು ಸಂಗ್ರಹ', 'ಹತ್ತಿರದ ಕುಟುಂಬಗಳು ಮತ್ತು ಸಂಗ್ರಹ ಕೇಂದ್ರಗಳಿಗೆ ಹಾಲು ನೀಡುವ ಸಣ್ಣ ಹೈನುಗಾರಿಕಾ ಘಟಕ.'], Poultry: ['ಸಣ್ಣ ಕೋಳಿ ಸಾಕಾಣಿಕೆ ಘಟಕ', 'ಸ್ಥಳೀಯ ಮಾರುಕಟ್ಟೆಗಳು ಮತ್ತು ಆಹಾರ ಮಳಿಗೆಗಳಿಗೆ ಪೂರೈಸುವ ಬ್ರಾಯ್ಲರ್ ಅಥವಾ ಲೇಯರ್ ಫಾರ್ಮ್.'], Tailoring: ['ಹೊಲಿಗೆ ಮತ್ತು ಬಟ್ಟೆ ಅಂಗಡಿ', 'ಸ್ಥಳೀಯ ಕುಟುಂಬಗಳಿಗೆ ಹೊಲಿಗೆ, ಬಟ್ಟೆ ಬದಲಾವಣೆ ಮತ್ತು ಉಡುಪು ಮಾರಾಟ.'], 'Flour Mill': ['ಹಿಟ್ಟು ಗಿರಣಿ', 'ಗ್ರಾಮದ ಕುಟುಂಬಗಳಿಗೆ ಹಿಟ್ಟು ಮತ್ತು ಮಸಾಲೆಗಳನ್ನು ತಯಾರಿಸುವ ಗಿರಣಿ.'], 'Two-Wheeler Repair': ['ದ್ವಿಚಕ್ರ ವಾಹನ ಕಾರ್ಯಾಗಾರ ಮತ್ತು ಬಿಡಿಭಾಗಗಳು', 'ಮೋಟಾರ್‌ಸೈಕಲ್ ಮತ್ತು ಸ್ಕೂಟರ್ ಸೇವೆ, ದುರಸ್ತಿ ಮತ್ತು ಬಿಡಿಭಾಗಗಳ ಮಾರಾಟ.']
+  },
+  bn: {
+    Dairy: ['ডেইরি খামার ও দুধ সংগ্রহ', 'কাছাকাছি পরিবার ও সংগ্রহ কেন্দ্রে দুধ সরবরাহকারী ছোট ডেইরি ইউনিট।'], Poultry: ['ছোট পোলট্রি ইউনিট', 'স্থানীয় বাজার ও খাবারের দোকানে সরবরাহকারী ব্রয়লার বা লেয়ার খামার।'], Tailoring: ['সেলাই ও পোশাকের দোকান', 'স্থানীয় পরিবারের জন্য সেলাই, পরিবর্তন ও পোশাক বিক্রি।'], 'Flour Mill': ['আটা কল', 'গ্রামের পরিবারের জন্য আটা ও মশলা পেষাইয়ের কল।'], 'Two-Wheeler Repair': ['দুই চাকার গাড়ির ওয়ার্কশপ ও যন্ত্রাংশ', 'মোটরসাইকেল ও স্কুটারের সার্ভিস, মেরামত এবং যন্ত্রাংশ বিক্রি।']
+  },
+  gu: {
+    Dairy: ['ડેરી ફાર્મિંગ અને દૂધ સંગ્રહ', 'નજીકના પરિવારો અને સંગ્રહ કેન્દ્રોને દૂધ આપતું નાનું ડેરી એકમ.'], Poultry: ['નાનું પોલ્ટ્રી યુનિટ', 'સ્થાનિક બજારો અને ભોજનાલયો માટે બ્રોઇલર અથવા લેયર ફાર્મ.'], Tailoring: ['ટેલરિંગ અને કપડાંની દુકાન', 'સ્થાનિક પરિવારો માટે સીવણ, ફેરફાર અને કપડાંનું વેચાણ.'], 'Flour Mill': ['લોટની ઘંટી', 'ગામના પરિવારો માટે લોટ અને મસાલા પીસતી મિલ.'], 'Two-Wheeler Repair': ['ટુ-વ્હીલર વર્કશોપ અને સ્પેર પાર્ટ્સ', 'મોટરસાઇકલ અને સ્કૂટરની સર્વિસ, સમારકામ અને સ્પેર પાર્ટ્સનું વેચાણ.']
+  },
+  pa: {
+    Dairy: ['ਡੇਅਰੀ ਫਾਰਮਿੰਗ ਅਤੇ ਦੁੱਧ ਇਕੱਠਾ ਕਰਨਾ', 'ਨੇੜਲੇ ਪਰਿਵਾਰਾਂ ਅਤੇ ਦੁੱਧ ਕੇਂਦਰਾਂ ਨੂੰ ਦੁੱਧ ਦੇਣ ਵਾਲੀ ਛੋਟੀ ਡੇਅਰੀ ਇਕਾਈ।'], Poultry: ['ਛੋਟੀ ਪੋਲਟਰੀ ਇਕਾਈ', 'ਸਥਾਨਕ ਬਾਜ਼ਾਰਾਂ ਅਤੇ ਖਾਣ-ਪੀਣ ਦੀਆਂ ਥਾਵਾਂ ਨੂੰ ਸਪਲਾਈ ਕਰਨ ਵਾਲਾ ਬਰੌਇਲਰ ਜਾਂ ਲੇਅਰ ਫਾਰਮ।'], Tailoring: ['ਸਿਲਾਈ ਅਤੇ ਕੱਪੜਿਆਂ ਦੀ ਦੁਕਾਨ', 'ਸਥਾਨਕ ਪਰਿਵਾਰਾਂ ਲਈ ਸਿਲਾਈ, ਸੋਧ ਅਤੇ ਕੱਪੜਿਆਂ ਦੀ ਵਿਕਰੀ।'], 'Flour Mill': ['ਆਟਾ ਚੱਕੀ', 'ਪਿੰਡ ਦੇ ਪਰਿਵਾਰਾਂ ਲਈ ਆਟਾ ਅਤੇ ਮਸਾਲੇ ਪੀਸਣ ਵਾਲੀ ਮਿੱਲ।'], 'Two-Wheeler Repair': ['ਦੋ-ਪਹੀਆ ਵਰਕਸ਼ਾਪ ਅਤੇ ਸਪੇਅਰ ਪਾਰਟਸ', 'ਮੋਟਰਸਾਈਕਲ ਅਤੇ ਸਕੂਟਰ ਦੀ ਸਰਵਿਸ, ਮੁਰੰਮਤ ਅਤੇ ਪਾਰਟਸ ਦੀ ਵਿਕਰੀ।']
+  }
+};
+
+const ASSESSMENT_HEADING_COPY = {
+  hi: {
+    'STEP 1 OF 5': 'चरण 1 / 5', 'Personal Profile & Resources': 'व्यक्तिगत प्रोफ़ाइल और संसाधन', 'Tell us about your background and available operational assets.': 'अपनी पृष्ठभूमि और उपलब्ध संचालन संसाधनों के बारे में बताएं।', 'Personal Background': 'व्यक्तिगत पृष्ठभूमि', 'Resources You Can Use (Multi-Select)': 'उपलब्ध संसाधन (एक से अधिक चुनें)', 'Time Commitment': 'समय प्रतिबद्धता', 'Age Group': 'आयु वर्ग', 'Education Level': 'शिक्षा स्तर', 'Current Occupation': 'वर्तमान व्यवसाय', 'Prior Business Experience': 'पिछला व्यावसायिक अनुभव', 'Existing Monthly Loan EMI (₹)': 'मौजूदा मासिक ऋण EMI (₹)', 'Own land': 'अपनी भूमि', 'Shop/workspace': 'दुकान/कार्यस्थल', 'Vehicle': 'वाहन', 'Electricity': 'बिजली', 'Storage': 'भंडारण', 'Machinery/equipment': 'मशीनरी/उपकरण', 'Family labour': 'पारिवारिक श्रम', 'Existing customers': 'मौजूदा ग्राहक'
+  },
+  mr: {
+    'STEP 1 OF 5': 'पायरी 1 / 5', 'Personal Profile & Resources': 'वैयक्तिक प्रोफाइल आणि संसाधने', 'Tell us about your background and available operational assets.': 'तुमची पार्श्वभूमी आणि उपलब्ध कार्यकारी संसाधनांबद्दल सांगा.', 'Personal Background': 'वैयक्तिक पार्श्वभूमी', 'Resources You Can Use (Multi-Select)': 'तुम्ही वापरू शकता अशी संसाधने (अनेक निवडा)', 'Time Commitment': 'वेळेची बांधिलकी', 'Age Group': 'वयोगट', 'Education Level': 'शिक्षणाची पातळी', 'Current Occupation': 'सध्याचा व्यवसाय', 'Prior Business Experience': 'मागील व्यावसायिक अनुभव', 'Existing Monthly Loan EMI (₹)': 'सध्याचा मासिक कर्ज EMI (₹)', 'Own land': 'स्वतःची जमीन', 'Shop/workspace': 'दुकान/कार्यस्थळ', 'Vehicle': 'वाहन', 'Electricity': 'वीज', 'Storage': 'साठवणूक', 'Machinery/equipment': 'यंत्रसामग्री/उपकरणे', 'Family labour': 'कौटुंबिक श्रम', 'Existing customers': 'विद्यमान ग्राहक'
+  },
+  ta: {
+    'STEP 1 OF 5': 'படி 1 / 5', 'Personal Profile & Resources': 'தனிப்பட்ட சுயவிவரம் மற்றும் வளங்கள்', 'Tell us about your background and available operational assets.': 'உங்கள் பின்னணி மற்றும் கிடைக்கும் செயல்பாட்டு வளங்களைப் பற்றி கூறுங்கள்.', 'Personal Background': 'தனிப்பட்ட பின்னணி', 'Resources You Can Use (Multi-Select)': 'நீங்கள் பயன்படுத்தக்கூடிய வளங்கள் (பல தேர்வு)', 'Time Commitment': 'நேர ஒதுக்கீடு', 'Age Group': 'வயது குழு', 'Education Level': 'கல்வி நிலை', 'Current Occupation': 'தற்போதைய தொழில்', 'Prior Business Experience': 'முந்தைய வணிக அனுபவம்', 'Existing Monthly Loan EMI (₹)': 'தற்போதைய மாதாந்திர கடன் EMI (₹)', 'Own land': 'சொந்த நிலம்', 'Shop/workspace': 'கடை/பணியிடம்', 'Vehicle': 'வாகனம்', 'Electricity': 'மின்சாரம்', 'Storage': 'சேமிப்பு', 'Machinery/equipment': 'இயந்திரங்கள்/உபகரணங்கள்', 'Family labour': 'குடும்ப உழைப்பு', 'Existing customers': 'தற்போதைய வாடிக்கையாளர்கள்'
+  },
+  te: {
+    'STEP 1 OF 5': 'దశ 1 / 5', 'Personal Profile & Resources': 'వ్యక్తిగత ప్రొఫైల్ మరియు వనరులు', 'Tell us about your background and available operational assets.': 'మీ నేపథ్యం మరియు అందుబాటులో ఉన్న నిర్వహణ వనరుల గురించి చెప్పండి.', 'Personal Background': 'వ్యక్తిగత నేపథ్యం', 'Resources You Can Use (Multi-Select)': 'మీరు ఉపయోగించగల వనరులు (బహుళ ఎంపిక)', 'Time Commitment': 'సమయ నిబద్ధత', 'Age Group': 'వయస్సు వర్గం', 'Education Level': 'విద్యా స్థాయి', 'Current Occupation': 'ప్రస్తుత వృత్తి', 'Prior Business Experience': 'మునుపటి వ్యాపార అనుభవం', 'Existing Monthly Loan EMI (₹)': 'ప్రస్తుత నెలవారీ రుణ EMI (₹)', 'Own land': 'సొంత భూమి', 'Shop/workspace': 'దుకాణం/పని స్థలం', 'Vehicle': 'వాహనం', 'Electricity': 'విద్యుత్', 'Storage': 'నిల్వ', 'Machinery/equipment': 'యంత్రాలు/పరికరాలు', 'Family labour': 'కుటుంబ శ్రమ', 'Existing customers': 'ప్రస్తుత కస్టమర్లు'
+  },
+  kn: {
+    'STEP 1 OF 5': 'ಹಂತ 1 / 5', 'Personal Profile & Resources': 'ವೈಯಕ್ತಿಕ ಪ್ರೊಫೈಲ್ ಮತ್ತು ಸಂಪನ್ಮೂಲಗಳು', 'Tell us about your background and available operational assets.': 'ನಿಮ್ಮ ಹಿನ್ನೆಲೆ ಮತ್ತು ಲಭ್ಯವಿರುವ ಕಾರ್ಯಾಚರಣಾ ಸಂಪನ್ಮೂಲಗಳ ಬಗ್ಗೆ ತಿಳಿಸಿ.', 'Personal Background': 'ವೈಯಕ್ತಿಕ ಹಿನ್ನೆಲೆ', 'Resources You Can Use (Multi-Select)': 'ನೀವು ಬಳಸಬಹುದಾದ ಸಂಪನ್ಮೂಲಗಳು (ಹಲವು ಆಯ್ಕೆ)', 'Time Commitment': 'ಸಮಯದ ಬದ್ಧತೆ', 'Age Group': 'ವಯೋಮಾನದ ಗುಂಪು', 'Education Level': 'ಶಿಕ್ಷಣದ ಮಟ್ಟ', 'Current Occupation': 'ಪ್ರಸ್ತುತ ಉದ್ಯೋಗ', 'Prior Business Experience': 'ಹಿಂದಿನ ವ್ಯವಹಾರ ಅನುಭವ', 'Existing Monthly Loan EMI (₹)': 'ಪ್ರಸ್ತುತ ಮಾಸಿಕ ಸಾಲ EMI (₹)', 'Own land': 'ಸ್ವಂತ ಭೂಮಿ', 'Shop/workspace': 'ಅಂಗಡಿ/ಕೆಲಸದ ಸ್ಥಳ', 'Vehicle': 'ವಾಹನ', 'Electricity': 'ವಿದ್ಯುತ್', 'Storage': 'ಸಂಗ್ರಹಣೆ', 'Machinery/equipment': 'ಯಂತ್ರೋಪಕರಣಗಳು', 'Family labour': 'ಕುಟುಂಬ ಕಾರ್ಮಿಕರು', 'Existing customers': 'ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಗ್ರಾಹಕರು'
+  },
+  bn: {
+    'STEP 1 OF 5': 'ধাপ ১ / ৫', 'Personal Profile & Resources': 'ব্যক্তিগত প্রোফাইল ও সম্পদ', 'Tell us about your background and available operational assets.': 'আপনার পটভূমি এবং উপলব্ধ পরিচালন সম্পদ সম্পর্কে বলুন।', 'Personal Background': 'ব্যক্তিগত পটভূমি', 'Resources You Can Use (Multi-Select)': 'আপনি ব্যবহার করতে পারেন এমন সম্পদ (একাধিক নির্বাচন)', 'Time Commitment': 'সময়ের প্রতিশ্রুতি', 'Age Group': 'বয়সের বিভাগ', 'Education Level': 'শিক্ষার স্তর', 'Current Occupation': 'বর্তমান পেশা', 'Prior Business Experience': 'পূর্ববর্তী ব্যবসায়িক অভিজ্ঞতা', 'Existing Monthly Loan EMI (₹)': 'বর্তমান মাসিক ঋণের EMI (₹)', 'Own land': 'নিজস্ব জমি', 'Shop/workspace': 'দোকান/কাজের জায়গা', 'Vehicle': 'যানবাহন', 'Electricity': 'বিদ্যুৎ', 'Storage': 'সংরক্ষণ', 'Machinery/equipment': 'যন্ত্রপাতি/সরঞ্জাম', 'Family labour': 'পরিবারের শ্রম', 'Existing customers': 'বর্তমান গ্রাহক'
+  },
+  gu: {
+    'STEP 1 OF 5': 'પગલું 1 / 5', 'Personal Profile & Resources': 'વ્યક્તિગત પ્રોફાઇલ અને સંસાધનો', 'Tell us about your background and available operational assets.': 'તમારી પૃષ્ઠભૂમિ અને ઉપલબ્ધ કાર્યકારી સંસાધનો વિશે જણાવો.', 'Personal Background': 'વ્યક્તિગત પૃષ્ઠભૂમિ', 'Resources You Can Use (Multi-Select)': 'તમે ઉપયોગ કરી શકો તે સંસાધનો (એકથી વધુ પસંદ કરો)', 'Time Commitment': 'સમયની પ્રતિબદ્ધતા', 'Age Group': 'ઉંમર જૂથ', 'Education Level': 'શિક્ષણનું સ્તર', 'Current Occupation': 'વર્તમાન વ્યવસાય', 'Prior Business Experience': 'અગાઉનો વ્યવસાય અનુભવ', 'Existing Monthly Loan EMI (₹)': 'વર્તમાન માસિક લોન EMI (₹)', 'Own land': 'પોતાની જમીન', 'Shop/workspace': 'દુકાન/કાર્યસ્થળ', 'Vehicle': 'વાહન', 'Electricity': 'વીજળી', 'Storage': 'સંગ્રહ', 'Machinery/equipment': 'મશીનરી/સાધનો', 'Family labour': 'કુટુંબ શ્રમ', 'Existing customers': 'હાલના ગ્રાહકો'
+  },
+  pa: {
+    'STEP 1 OF 5': 'ਪੜਾਅ 1 / 5', 'Personal Profile & Resources': 'ਨਿੱਜੀ ਪ੍ਰੋਫਾਈਲ ਅਤੇ ਸਰੋਤ', 'Tell us about your background and available operational assets.': 'ਆਪਣੀ ਪਿਛੋਕੜ ਅਤੇ ਉਪਲਬਧ ਕਾਰਜਕਾਰੀ ਸਰੋਤਾਂ ਬਾਰੇ ਦੱਸੋ।', 'Personal Background': 'ਨਿੱਜੀ ਪਿਛੋਕੜ', 'Resources You Can Use (Multi-Select)': 'ਤੁਸੀਂ ਵਰਤ ਸਕਦੇ ਸਰੋਤ (ਇੱਕ ਤੋਂ ਵੱਧ ਚੁਣੋ)', 'Time Commitment': 'ਸਮੇਂ ਦੀ ਵਚਨਬੱਧਤਾ', 'Age Group': 'ਉਮਰ ਸਮੂਹ', 'Education Level': 'ਸਿੱਖਿਆ ਪੱਧਰ', 'Current Occupation': 'ਮੌਜੂਦਾ ਕਿੱਤਾ', 'Prior Business Experience': 'ਪਿਛਲਾ ਕਾਰੋਬਾਰੀ ਤਜਰਬਾ', 'Existing Monthly Loan EMI (₹)': 'ਮੌਜੂਦਾ ਮਹੀਨਾਵਾਰ ਕਰਜ਼ਾ EMI (₹)', 'Own land': 'ਆਪਣੀ ਜ਼ਮੀਨ', 'Shop/workspace': 'ਦੁਕਾਨ/ਕੰਮ ਦੀ ਜਗ੍ਹਾ', 'Vehicle': 'ਵਾਹਨ', 'Electricity': 'ਬਿਜਲੀ', 'Storage': 'ਸਟੋਰੇਜ', 'Machinery/equipment': 'ਮਸ਼ੀਨਰੀ/ਉਪਕਰਨ', 'Family labour': 'ਪਰਿਵਾਰਕ ਮਜ਼ਦੂਰੀ', 'Existing customers': 'ਮੌਜੂਦਾ ਗਾਹਕ'
+  }
+};
+
+const PROFILE_OPTION_COPY = {
+  hi: { 'Select age group': 'आयु वर्ग चुनें', '18–24 years': '18–24 वर्ष', '25–34 years': '25–34 वर्ष', '35–44 years': '35–44 वर्ष', '45+ years': '45+ वर्ष', 'Select education level': 'शिक्षा स्तर चुनें', 'Primary School': 'प्राथमिक विद्यालय', 'Secondary (Class 10/12)': 'माध्यमिक (कक्षा 10/12)', 'Graduate / Higher': 'स्नातक / उच्च', 'No Formal Education': 'कोई औपचारिक शिक्षा नहीं', 'e.g. Agriculture / Self-employed': 'जैसे कृषि / स्व-रोज़गार', 'Select experience': 'अनुभव चुनें', 'None (First-time)': 'कोई नहीं (पहली बार)', '0–2 years': '0–2 वर्ष', '3–5 years': '3–5 वर्ष', '5+ years': '5+ वर्ष' },
+  mr: { 'Select age group': 'वयोगट निवडा', '18–24 years': '18–24 वर्षे', '25–34 years': '25–34 वर्षे', '35–44 years': '35–44 वर्षे', '45+ years': '45+ वर्षे', 'Select education level': 'शिक्षणाची पातळी निवडा', 'Primary School': 'प्राथमिक शाळा', 'Secondary (Class 10/12)': 'माध्यमिक (इयत्ता 10/12)', 'Graduate / Higher': 'पदवीधर / उच्च', 'No Formal Education': 'औपचारिक शिक्षण नाही', 'e.g. Agriculture / Self-employed': 'उदा. शेती / स्वयंरोजगार', 'Select experience': 'अनुभव निवडा', 'None (First-time)': 'काही नाही (पहिल्यांदा)', '0–2 years': '0–2 वर्षे', '3–5 years': '3–5 वर्षे', '5+ years': '5+ वर्षे' },
+  ta: { 'Select age group': 'வயது குழுவைத் தேர்ந்தெடுக்கவும்', '18–24 years': '18–24 வயது', '25–34 years': '25–34 வயது', '35–44 years': '35–44 வயது', '45+ years': '45+ வயது', 'Select education level': 'கல்வி நிலையைத் தேர்ந்தெடுக்கவும்', 'Primary School': 'தொடக்கப் பள்ளி', 'Secondary (Class 10/12)': 'இடைநிலை (வகுப்பு 10/12)', 'Graduate / Higher': 'பட்டதாரி / உயர்', 'No Formal Education': 'முறையான கல்வி இல்லை', 'e.g. Agriculture / Self-employed': 'எ.கா. விவசாயம் / சுயதொழில்', 'Select experience': 'அனுபவத்தைத் தேர்ந்தெடுக்கவும்', 'None (First-time)': 'எதுவுமில்லை (முதல் முறை)', '0–2 years': '0–2 ஆண்டுகள்', '3–5 years': '3–5 ஆண்டுகள்', '5+ years': '5+ ஆண்டுகள்' },
+  te: { 'Select age group': 'వయస్సు వర్గాన్ని ఎంచుకోండి', '18–24 years': '18–24 సంవత్సరాలు', '25–34 years': '25–34 సంవత్సరాలు', '35–44 years': '35–44 సంవత్సరాలు', '45+ years': '45+ సంవత్సరాలు', 'Select education level': 'విద్యా స్థాయిని ఎంచుకోండి', 'Primary School': 'ప్రాథమిక పాఠశాల', 'Secondary (Class 10/12)': 'మాధ్యమిక (10/12 తరగతి)', 'Graduate / Higher': 'గ్రాడ్యుయేట్ / ఉన్నత', 'No Formal Education': 'సాంప్రదాయిక విద్య లేదు', 'e.g. Agriculture / Self-employed': 'ఉదా. వ్యవసాయం / స్వయం ఉపాధి', 'Select experience': 'అనుభవాన్ని ఎంచుకోండి', 'None (First-time)': 'ఏదీ లేదు (మొదటిసారి)', '0–2 years': '0–2 సంవత్సరాలు', '3–5 years': '3–5 సంవత్సరాలు', '5+ years': '5+ సంవత్సరాలు' },
+  kn: { 'Select age group': 'ವಯೋಮಾನದ ಗುಂಪನ್ನು ಆಯ್ಕೆಮಾಡಿ', '18–24 years': '18–24 ವರ್ಷಗಳು', '25–34 years': '25–34 ವರ್ಷಗಳು', '35–44 years': '35–44 ವರ್ಷಗಳು', '45+ years': '45+ ವರ್ಷಗಳು', 'Select education level': 'ಶಿಕ್ಷಣದ ಮಟ್ಟವನ್ನು ಆಯ್ಕೆಮಾಡಿ', 'Primary School': 'ಪ್ರಾಥಮಿಕ ಶಾಲೆ', 'Secondary (Class 10/12)': 'ಮಾಧ್ಯಮಿಕ (ತರಗತಿ 10/12)', 'Graduate / Higher': 'ಪದವೀಧರ / ಉನ್ನತ', 'No Formal Education': 'ಔಪಚಾರಿಕ ಶಿಕ್ಷಣವಿಲ್ಲ', 'e.g. Agriculture / Self-employed': 'ಉದಾ. ಕೃಷಿ / ಸ್ವಯಂ ಉದ್ಯೋಗ', 'Select experience': 'ಅನುಭವವನ್ನು ಆಯ್ಕೆಮಾಡಿ', 'None (First-time)': 'ಯಾವುದೂ ಇಲ್ಲ (ಮೊದಲ ಬಾರಿ)', '0–2 years': '0–2 ವರ್ಷಗಳು', '3–5 years': '3–5 ವರ್ಷಗಳು', '5+ years': '5+ ವರ್ಷಗಳು' },
+  bn: { 'Select age group': 'বয়সের বিভাগ নির্বাচন করুন', '18–24 years': '১৮–২৪ বছর', '25–34 years': '২৫–৩৪ বছর', '35–44 years': '৩৫–৪৪ বছর', '45+ years': '৪৫+ বছর', 'Select education level': 'শিক্ষার স্তর নির্বাচন করুন', 'Primary School': 'প্রাথমিক বিদ্যালয়', 'Secondary (Class 10/12)': 'মাধ্যমিক (দশম/দ্বাদশ শ্রেণি)', 'Graduate / Higher': 'স্নাতক / উচ্চতর', 'No Formal Education': 'প্রাতিষ্ঠানিক শিক্ষা নেই', 'e.g. Agriculture / Self-employed': 'যেমন কৃষি / স্বনিয়োজিত', 'Select experience': 'অভিজ্ঞতা নির্বাচন করুন', 'None (First-time)': 'কোনও অভিজ্ঞতা নেই (প্রথমবার)', '0–2 years': '০–২ বছর', '3–5 years': '৩–৫ বছর', '5+ years': '৫+ বছর' },
+  gu: { 'Select age group': 'ઉંમર જૂથ પસંદ કરો', '18–24 years': '18–24 વર્ષ', '25–34 years': '25–34 વર્ષ', '35–44 years': '35–44 વર્ષ', '45+ years': '45+ વર્ષ', 'Select education level': 'શિક્ષણનું સ્તર પસંદ કરો', 'Primary School': 'પ્રાથમિક શાળા', 'Secondary (Class 10/12)': 'માધ્યમિક (ધોરણ 10/12)', 'Graduate / Higher': 'સ્નાતક / ઉચ્ચ', 'No Formal Education': 'ઔપચારિક શિક્ષણ નથી', 'e.g. Agriculture / Self-employed': 'દા.ત. ખેતી / સ્વરોજગાર', 'Select experience': 'અનુભવ પસંદ કરો', 'None (First-time)': 'કોઈ નહીં (પ્રથમ વખત)', '0–2 years': '0–2 વર્ષ', '3–5 years': '3–5 વર્ષ', '5+ years': '5+ વર્ષ' },
+  pa: { 'Select age group': 'ਉਮਰ ਸਮੂਹ ਚੁਣੋ', '18–24 years': '18–24 ਸਾਲ', '25–34 years': '25–34 ਸਾਲ', '35–44 years': '35–44 ਸਾਲ', '45+ years': '45+ ਸਾਲ', 'Select education level': 'ਸਿੱਖਿਆ ਪੱਧਰ ਚੁਣੋ', 'Primary School': 'ਪ੍ਰਾਇਮਰੀ ਸਕੂਲ', 'Secondary (Class 10/12)': 'ਸੈਕੰਡਰੀ (ਜਮਾਤ 10/12)', 'Graduate / Higher': 'ਗ੍ਰੈਜੂਏਟ / ਉੱਚ', 'No Formal Education': 'ਕੋਈ ਰਸਮੀ ਸਿੱਖਿਆ ਨਹੀਂ', 'e.g. Agriculture / Self-employed': 'ਜਿਵੇਂ ਖੇਤੀਬਾੜੀ / ਸਵੈ-ਰੋਜ਼ਗਾਰ', 'Select experience': 'ਤਜਰਬਾ ਚੁਣੋ', 'None (First-time)': 'ਕੋਈ ਨਹੀਂ (ਪਹਿਲੀ ਵਾਰ)', '0–2 years': '0–2 ਸਾਲ', '3–5 years': '3–5 ਸਾਲ', '5+ years': '5+ ਸਾਲ' }
+};
+
 export const AssessmentWizard = () => {
   const navigate = useNavigate();
-  const { translate: t } = useLanguage();
+  const { translate: t, lang } = useLanguage();
+  const at = (key) => ASSESSMENT_HEADING_COPY[lang]?.[key] || PROFILE_OPTION_COPY[lang]?.[key] || t(key);
 
   // Assessment & Wizard State
   const [assessmentId, setAssessmentId] = useState(null);
   const [currentStep, setCurrentStep] = useState(0); // 0 = Intro, 1..5 = Steps, 6 = Processing
   const [saving, setSaving] = useState(false);
   const [savedIndicator, setSavedIndicator] = useState(false);
+  const [validationMessage, setValidationMessage] = useState('');
 
   // Step 1 State (Profile & Resources)
   const [profile, setProfile] = useState({
@@ -57,26 +132,26 @@ export const AssessmentWizard = () => {
 
   // Step 3 State (Category-Specific Readiness)
   const [readinessAnswers, setReadinessAnswers] = useState({
-    experience_years: 1.0,
-    has_relevant_skill: true,
-    has_workspace: true,
+    experience_years: '',
+    has_relevant_skill: '',
+    has_workspace: '',
     has_supplier_contacts: false,
-    has_committed_customers: true,
-    emergency_savings: 15000.0,
+    has_committed_customers: '',
+    emergency_savings: '',
     category_specific_answers: {
-      q1: 'Yes', q2: '3', q3: 'Yes', q4: 'Yes', q5: 'No', q6: 'Yes', q7: '5'
+      q1: '', q2: '', q3: '', q4: '', q5: '', q6: '', q7: ''
     }
   });
 
   // Step 4 State (Finance)
   const [finance, setFinance] = useState({
-    project_cost: 350000.0,
-    available_margin: 50000.0,
+    project_cost: '',
+    available_margin: '',
     scale: 'Micro',
-    household_expenses: 12000.0,
-    working_capital: 20000.0,
-    understands_emi: 'Yes',
-    understands_risk: 'Yes'
+    household_expenses: '',
+    working_capital: '',
+    understands_emi: '',
+    understands_risk: ''
   });
 
   // Processing Animation State
@@ -90,11 +165,57 @@ export const AssessmentWizard = () => {
     "Two-Wheeler Repair": "🔧"
   };
 
+  const validateStep = (step) => {
+    if (step === 1) {
+      const fields = [
+        [profile.age_group, 'Age Group'],
+        [profile.education, 'Education Level'],
+        [profile.occupation.trim(), 'Current Occupation'],
+        [profile.business_experience, 'Prior Business Experience'],
+        [profile.time_commitment, 'Time Commitment']
+      ];
+      const missing = fields.find(([value]) => !value);
+      if (missing) return `${t('Please complete this required field before continuing:')} ${t(missing[1])}`;
+    }
+    if (step === 2) {
+      const fields = [
+        [selectedCategory, 'Select Business Category'],
+        [selectedState, 'State'],
+        [selectedDistrict, 'District'],
+        [selectedBlock, 'Block / Sub-District'],
+        [selectedVillageId, 'Village']
+      ];
+      const missing = fields.find(([value]) => !value);
+      if (missing) return `${t('Please complete this required field before continuing:')} ${t(missing[1])}`;
+    }
+    if (step === 3) {
+      const answers = readinessAnswers.category_specific_answers;
+      const missingIndex = Object.values(answers).findIndex(value => value === '' || value === null || value === undefined);
+      if (missingIndex !== -1) return `${t('Please answer readiness question')} ${missingIndex + 1} ${t('before continuing.')}`;
+      if ([answers.q2, answers.q7].some(value => Number.isNaN(Number(value)))) return t('Please enter valid numbers for the numeric readiness questions.');
+    }
+    if (step === 4) {
+      const fields = [
+        [finance.project_cost, 'Project Cost Estimate (₹)'],
+        [finance.available_margin, 'Available Entrepreneur Margin Capital (₹)'],
+        [finance.household_expenses, 'Monthly Household Expenses (₹)'],
+        [finance.understands_emi, 'Do you understand how EMI works?']
+      ];
+      const missing = fields.find(([value]) => value === '' || value === null || value === undefined);
+      if (missing) return `${t('Please complete this required field before continuing:')} ${t(missing[1])}`;
+      if ([finance.project_cost, finance.available_margin, finance.household_expenses].some(value => Number(value) < 0)) return t('Financial amounts cannot be negative.');
+    }
+    return '';
+  };
+
   // Load initial data
   useEffect(() => {
     api.getBusinessModels()
-      .then(res => setBusinessModels(res.data))
-      .catch(err => console.error("Failed to load business models:", err));
+      .then(res => setBusinessModels(res.data?.length ? res.data : DEFAULT_BUSINESS_MODELS))
+      .catch(err => {
+        console.error("Failed to load business models:", err);
+        setBusinessModels(DEFAULT_BUSINESS_MODELS);
+      });
 
     api.getStates()
       .then(res => setStates(res.data))
@@ -142,6 +263,12 @@ export const AssessmentWizard = () => {
 
   // Save Draft Helper
   const triggerAutosave = async (newStep) => {
+    const message = validateStep(currentStep);
+    if (message) {
+      setValidationMessage(message);
+      return;
+    }
+    setValidationMessage('');
     setSaving(true);
     try {
       if (!assessmentId) {
@@ -150,7 +277,7 @@ export const AssessmentWizard = () => {
           category: selectedCategory,
           project_cost: finance.project_cost,
           available_margin: finance.available_margin,
-          existing_emi: profile.existing_emi,
+          existing_emi: parseFloat(profile.existing_emi) || 0,
           household_expenses: finance.household_expenses
         });
         setAssessmentId(resp.data.id);
@@ -160,7 +287,7 @@ export const AssessmentWizard = () => {
           category: selectedCategory,
           project_cost: finance.project_cost,
           available_margin: finance.available_margin,
-          existing_emi: profile.existing_emi,
+          existing_emi: parseFloat(profile.existing_emi) || 0,
           household_expenses: finance.household_expenses,
           questionnaire_answers: {
             experience_years: parseFloat(readinessAnswers.experience_years),
@@ -185,6 +312,13 @@ export const AssessmentWizard = () => {
 
   // Run Feasibility Engine
   const handleRunAnalysis = async () => {
+    const firstInvalidStep = [1, 2, 3, 4].find(step => validateStep(step));
+    if (firstInvalidStep) {
+      setValidationMessage(validateStep(firstInvalidStep));
+      setCurrentStep(firstInvalidStep);
+      return;
+    }
+    setValidationMessage('');
     setCurrentStep(6); // Processing screen
     
     // Animate stages sequentially
@@ -260,18 +394,19 @@ export const AssessmentWizard = () => {
         {questions.map((qText, qIdx) => {
           const key = `q${qIdx + 1}`;
           const isNumeric = qIdx === 1 || qIdx === 6;
-          const currentVal = readinessAnswers.category_specific_answers[key] || (isNumeric ? "3" : "Yes");
+          const currentVal = readinessAnswers.category_specific_answers[key];
 
           return (
             <div key={key} className="p-4 rounded-xl bg-gray-50 border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <span className="text-xs font-medium text-gray-800">
                 <strong className="text-primary-600 mr-2">{qIdx + 1}.</strong>
-                {t(qText)}
+                {t(qText)} <span className="text-red-600" aria-hidden="true">*</span>
               </span>
 
               {isNumeric ? (
                 <input
                   type="number"
+                  required
                   value={currentVal}
                   onChange={(e) => setReadinessAnswers({
                     ...readinessAnswers,
@@ -336,6 +471,11 @@ export const AssessmentWizard = () => {
                 </div>
                 <span className="text-xs font-bold text-gray-500">{t('Step')} {currentStep} {t('of 5')}</span>
               </div>
+              {validationMessage && (
+                <div role="alert" aria-live="assertive" className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+                  {validationMessage}
+                </div>
+              )}
 
               {/* 5-Step Indicators */}
               <div className="grid grid-cols-5 gap-2">
@@ -422,71 +562,75 @@ export const AssessmentWizard = () => {
           {currentStep === 1 && (
             <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
               <div>
-                <span className="eyebrow">{t('STEP 1 OF 5')}</span>
-                <h2 className="text-2xl font-bold text-gray-900">{t('Personal Profile & Resources')}</h2>
-                <p className="text-xs text-gray-500 mt-1">{t('Tell us about your background and available operational assets.')}</p>
+                <span className="eyebrow">{at('STEP 1 OF 5')}</span>
+                <h2 className="text-2xl font-bold text-gray-900">{at('Personal Profile & Resources')}</h2>
+                <p className="text-xs text-gray-500 mt-1">{at('Tell us about your background and available operational assets.')}</p>
               </div>
 
               {/* Sub-Section 1: Personal Profile */}
               <div className="space-y-4 pt-2">
                 <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider border-b border-gray-100 pb-2">
-                  {t('Personal Background')}
+                  {at('Personal Background')}
                 </h3>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Age Group')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Age Group')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={profile.age_group}
                       onChange={(e) => setProfile({ ...profile, age_group: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
                     >
-                      <option value="">Select age group</option>
-                      <option value="18-24">18–24 years</option>
-                      <option value="25-34">25–34 years</option>
-                      <option value="35-44">35–44 years</option>
-                      <option value="45+">45+ years</option>
+                      <option value="">{at('Select age group')}</option>
+                      <option value="18-24">{at('18–24 years')}</option>
+                      <option value="25-34">{at('25–34 years')}</option>
+                      <option value="35-44">{at('35–44 years')}</option>
+                      <option value="45+">{at('45+ years')}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Education Level')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Education Level')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={profile.education}
                       onChange={(e) => setProfile({ ...profile, education: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
                     >
-                      <option value="">Select education level</option>
-                      <option value="Primary">Primary School</option>
-                      <option value="Secondary">Secondary (Class 10/12)</option>
-                      <option value="Graduate">Graduate / Higher</option>
-                      <option value="No Formal">No Formal Education</option>
+                      <option value="">{at('Select education level')}</option>
+                      <option value="Primary">{at('Primary School')}</option>
+                      <option value="Secondary">{at('Secondary (Class 10/12)')}</option>
+                      <option value="Graduate">{at('Graduate / Higher')}</option>
+                      <option value="No Formal">{at('No Formal Education')}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Current Occupation')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Current Occupation')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="text"
+                      required
                       value={profile.occupation}
                       onChange={(e) => setProfile({ ...profile, occupation: e.target.value })}
-                      placeholder="e.g. Agriculture / Self-employed"
+                      placeholder={at('e.g. Agriculture / Self-employed')}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Prior Business Experience')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Prior Business Experience')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={profile.business_experience}
                       onChange={(e) => setProfile({ ...profile, business_experience: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
                     >
-                      <option value="">Select experience</option>
-                      <option value="None">None (First-time)</option>
-                      <option value="0-2 years">0–2 years</option>
-                      <option value="3-5 years">3–5 years</option>
-                      <option value="5+ years">5+ years</option>
+                      <option value="">{at('Select experience')}</option>
+                      <option value="None">{at('None (First-time)')}</option>
+                      <option value="0-2 years">{at('0–2 years')}</option>
+                      <option value="3-5 years">{at('3–5 years')}</option>
+                      <option value="5+ years">{at('5+ years')}</option>
                     </select>
                   </div>
                 </div>
@@ -503,7 +647,7 @@ export const AssessmentWizard = () => {
               {/* Sub-Section 2: Resources You Can Use */}
               <div className="space-y-4 pt-2">
                 <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider border-b border-gray-100 pb-2">
-                  {t('Resources You Can Use (Multi-Select)')}
+                  {at('Resources You Can Use (Multi-Select)')}
                 </h3>
 
                 <div className="flex flex-wrap gap-2.5">
@@ -529,7 +673,7 @@ export const AssessmentWizard = () => {
                         }`}
                       >
                         {isSelected && <Check className="w-3.5 h-3.5" />}
-                        <span>{res}</span>
+                        <span>{at(res)}</span>
                       </button>
                     );
                   })}
@@ -539,8 +683,9 @@ export const AssessmentWizard = () => {
               {/* Time Commitment & Financial Resilience */}
               <div className="grid sm:grid-cols-2 gap-4 pt-2">
                 <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Time Commitment')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Time Commitment')} <span className="text-red-600" aria-hidden="true">*</span></label>
                   <select
+                    required
                     value={profile.time_commitment}
                     onChange={(e) => setProfile({ ...profile, time_commitment: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white"
@@ -554,7 +699,7 @@ export const AssessmentWizard = () => {
                 </div>
 
                 <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Existing Monthly Loan EMI (₹)')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Existing Monthly Loan EMI (₹)')}</label>
                   <input
                     type="number"
                     value={profile.existing_emi}
@@ -596,11 +741,12 @@ export const AssessmentWizard = () => {
               {/* 5 Radio-Selectable Category Cards */}
               <div className="space-y-3">
                 <label className="block text-xs font-bold text-gray-800 uppercase tracking-wider">
-                  {t('Select Business Category')}
+                  {t('Select Business Category')} <span className="text-red-600" aria-hidden="true">*</span>
                 </label>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {businessModels.map((bm) => {
                     const isSelected = selectedCategory === bm.category;
+                    const localizedCard = BUSINESS_CARD_COPY[lang]?.[bm.category];
                     return (
                       <div
                         key={bm.category}
@@ -616,8 +762,8 @@ export const AssessmentWizard = () => {
                             <span className="text-2xl">{categoryIcons[bm.category] || "🏪"}</span>
                             {isSelected && <CheckCircle2 className="w-5 h-5 text-primary-600" />}
                           </div>
-                          <div className="font-bold text-xs text-gray-900">{bm.display_name}</div>
-                          <p className="text-[11px] text-gray-500 line-clamp-2">{bm.description}</p>
+                          <div className="font-bold text-xs text-gray-900">{localizedCard?.[0] || t(bm.display_name)}</div>
+                          <p className="text-[11px] text-gray-500 line-clamp-2">{localizedCard?.[1] || t(bm.description)}</p>
                         </div>
                         <div className="mt-3 pt-2 border-t border-gray-100 text-[10.5px] font-semibold text-primary-700">
                           {t('Capital')}: ₹{(bm.capital_min/100000).toFixed(1)}L – ₹{(bm.capital_max/100000).toFixed(1)}L
@@ -632,7 +778,7 @@ export const AssessmentWizard = () => {
               <div className="space-y-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    {t('Target Village Location')}
+                    {t('Target Village Location')} <span className="text-red-600" aria-hidden="true">*</span>
                   </h3>
                   <button
                     type="button"
@@ -646,8 +792,9 @@ export const AssessmentWizard = () => {
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('State')}</label>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('State')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={selectedState}
                       onChange={(e) => {
                         const state = e.target.value;
@@ -667,8 +814,9 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('District')}</label>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('District')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={selectedDistrict}
                       disabled={!selectedState}
                       onChange={(e) => {
@@ -688,8 +836,9 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('Block / Sub-District')}</label>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('Block / Sub-District')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={selectedBlock}
                       disabled={!selectedDistrict}
                       onChange={(e) => {
@@ -709,8 +858,9 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('Village')}</label>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">{t('Village')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <select
+                      required
                       value={selectedVillageId}
                       disabled={!selectedBlock}
                       onChange={(e) => {
@@ -770,13 +920,16 @@ export const AssessmentWizard = () => {
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{categoryIcons[selectedCategory]}</span>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{selectedCategory} {t('Readiness Questionnaire')}</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">{t(selectedCategory)} {t('Readiness Questionnaire')}</h2>
                     <p className="text-xs text-gray-500 mt-0.5">{t('Answer based on what is available today—not what you hope to arrange later.')}</p>
                   </div>
                 </div>
               </div>
 
-              {renderReadinessQuestions()}
+              <div>
+                <p className="mb-2 text-xs font-semibold text-gray-600">{t('All questions are required')} <span className="text-red-600" aria-hidden="true">*</span></p>
+                {renderReadinessQuestions()}
+              </div>
 
               <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900">
                 <strong>{t('Readiness Advisory')}:</strong> {t('Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.')}
@@ -814,9 +967,10 @@ export const AssessmentWizard = () => {
                 {/* Left Form Inputs */}
                 <div className="md:col-span-7 space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Project Cost Estimate (₹)')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Project Cost Estimate (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="number"
+                      required
                       value={finance.project_cost}
                       onChange={(e) => setFinance({ ...finance, project_cost: parseFloat(e.target.value) || 0 })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs font-bold"
@@ -824,9 +978,10 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Available Entrepreneur Margin Capital (₹)')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Available Entrepreneur Margin Capital (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="number"
+                      required
                       value={finance.available_margin}
                       onChange={(e) => setFinance({ ...finance, available_margin: parseFloat(e.target.value) || 0 })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-emerald-700"
@@ -834,9 +989,10 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Monthly Household Expenses (₹)')}</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Monthly Household Expenses (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="number"
+                      required
                       value={finance.household_expenses}
                       onChange={(e) => setFinance({ ...finance, household_expenses: parseFloat(e.target.value) || 0 })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs"
@@ -848,7 +1004,7 @@ export const AssessmentWizard = () => {
                     <span className="eyebrow !mb-0">{t('FINANCIAL UNDERSTANDING')}</span>
                     
                     <div className="space-y-2">
-                      <label className="block text-xs text-gray-700 font-medium">{t('Do you understand how EMI works?')}</label>
+                      <label className="block text-xs text-gray-700 font-medium">{t('Do you understand how EMI works?')} <span className="text-red-600" aria-hidden="true">*</span></label>
                       <div className="flex gap-2">
                         {["Yes", "Somewhat", "No"].map(opt => (
                           <button
@@ -875,28 +1031,28 @@ export const AssessmentWizard = () => {
                     <div className="space-y-3 border-b border-blue-200/50 pb-4">
                       <div className="flex justify-between text-xs">
                         <span className="text-gray-600">{t('Project Cost:')}</span>
-                        <span className="font-bold text-gray-900">₹{finance.project_cost.toLocaleString()}</span>
+                        <span className="font-bold text-gray-900">₹{(Number(finance.project_cost) || 0).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-gray-600">{t('Your Available Margin:')}</span>
-                        <span className="font-bold text-emerald-700">₹{finance.available_margin.toLocaleString()}</span>
+                        <span className="font-bold text-emerald-700">₹{(Number(finance.available_margin) || 0).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-gray-600">{t('Min Margin Needed (10%):')}</span>
-                        <span className="font-semibold text-gray-700">₹{(finance.project_cost * 0.1).toLocaleString()}</span>
+                        <span className="font-semibold text-gray-700">₹{((Number(finance.project_cost) || 0) * 0.1).toLocaleString()}</span>
                       </div>
                     </div>
 
                     <div className="space-y-1">
                       <div className="text-xs text-gray-500 font-medium">{t('Indicative Loan Amount')}</div>
                       <div className="text-2xl font-extrabold text-primary-700">
-                        ₹{Math.max(0, finance.project_cost - finance.available_margin).toLocaleString()}
+                        ₹{Math.max(0, (Number(finance.project_cost) || 0) - (Number(finance.available_margin) || 0)).toLocaleString()}
                       </div>
                     </div>
                   </div>
 
                   <p className="text-[10.5px] text-gray-500 italic mt-4">
-                    Final calculations, reducing balance interest, moratorium period, and exact EMI figures will come from the financial engine when you click Run.
+                    {t('Final calculations, reducing balance interest, moratorium period, and exact EMI figures will come from the financial engine when you click Run.')}
                   </p>
                 </div>
               </div>
@@ -934,7 +1090,7 @@ export const AssessmentWizard = () => {
                 <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-gray-900">{t('1. Personal Profile')}</div>
-                    <div className="text-[11.5px] text-gray-600">Age {profile.age_group} · {profile.education} · {profile.business_experience} experience</div>
+                    <div className="text-[11.5px] text-gray-600">{t('Age')} {profile.age_group} · {profile.education} · {profile.business_experience} {t('experience')}</div>
                   </div>
                   <button onClick={() => setCurrentStep(1)} className="text-xs font-bold text-primary-600 hover:underline">{t('Edit')}</button>
                 </div>
@@ -949,8 +1105,8 @@ export const AssessmentWizard = () => {
 
                 <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-gray-900">3. {selectedCategory} Readiness</div>
-                    <div className="text-[11.5px] text-gray-600">Category Questionnaire Completed</div>
+                    <div className="text-xs font-bold text-gray-900">3. {t(selectedCategory)} {t('Readiness')}</div>
+                    <div className="text-[11.5px] text-gray-600">{t('Category Questionnaire Completed')}</div>
                   </div>
                   <button onClick={() => setCurrentStep(3)} className="text-xs font-bold text-primary-600 hover:underline">{t('Edit')}</button>
                 </div>
@@ -958,7 +1114,7 @@ export const AssessmentWizard = () => {
                 <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-gray-900">{t('4. Financial Setup')}</div>
-                    <div className="text-[11.5px] text-gray-600">Project Cost: ₹{finance.project_cost.toLocaleString()} · Available Margin: ₹{finance.available_margin.toLocaleString()}</div>
+                    <div className="text-[11.5px] text-gray-600">{t('Project Cost:')} ₹{(Number(finance.project_cost) || 0).toLocaleString()} · {t('Your Available Margin:')} ₹{(Number(finance.available_margin) || 0).toLocaleString()}</div>
                   </div>
                   <button onClick={() => setCurrentStep(4)} className="text-xs font-bold text-primary-600 hover:underline">{t('Edit')}</button>
                 </div>
@@ -967,7 +1123,7 @@ export const AssessmentWizard = () => {
               {/* Bottom Run Action */}
               <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 space-y-4">
                 <div className="text-xs text-blue-900 leading-relaxed">
-                  Ready to analyse? Our deterministic engines will evaluate 10km village catchment demand, entrepreneur readiness, loan scheme options, and EMI affordability.
+                  {t('Ready to analyse? Our deterministic engines will evaluate 10km village catchment demand, entrepreneur readiness, loan scheme options, and EMI affordability.')}
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
@@ -975,7 +1131,7 @@ export const AssessmentWizard = () => {
                     onClick={() => setCurrentStep(4)}
                     className="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900"
                   >
-                    Back
+                    {t('Back')}
                   </button>
                   <button
                     onClick={handleRunAnalysis}

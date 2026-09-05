@@ -43,7 +43,7 @@ export const Dashboard = () => {
       }
     };
     fetchDashboardData();
-  }, [lang]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">

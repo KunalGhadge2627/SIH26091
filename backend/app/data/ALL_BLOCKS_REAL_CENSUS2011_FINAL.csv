@@ -1,0 +1,251 @@
+district,block_requested,state_2011census,district_2011census,subdistrict_2011census_name,population_2011,households_2011,sc_population_2011,st_population_2011,literate_population_2011,match_status,note
+Pune,Shirur,MAHARASHTRA,Pune,Shirur,385414.0,80917.0,32885.0,12030.0,278001.0,MATCHED,
+Pune,Junnar,MAHARASHTRA,Pune,Junnar,399302.0,85864.0,17922.0,80922.0,298644.0,MATCHED,
+Pune,Khed,MAHARASHTRA,Pune,Khed,450116.0,99477.0,30409.0,49291.0,318253.0,MATCHED,
+Pune,Maval,MAHARASHTRA,Pune,Mawal,377559.0,78233.0,36325.0,29208.0,272615.0,MATCHED,
+Pune,Daund,MAHARASHTRA,Pune,Daund,380496.0,78294.0,57273.0,9673.0,263989.0,MATCHED,
+Nashik,Nashik,MAHARASHTRA,Nashik,Nashik,1755491.0,389061.0,249864.0,182984.0,1374928.0,MATCHED,
+Nashik,Dindori,MAHARASHTRA,Nashik,Dindori,315709.0,58271.0,19681.0,175454.0,210976.0,MATCHED,
+Nashik,Igatpuri,MAHARASHTRA,Nashik,Igatpuri,253513.0,46129.0,21018.0,102608.0,169629.0,MATCHED,
+Nashik,Sinnar,MAHARASHTRA,Nashik,Sinnar,346390.0,67445.0,25226.0,46249.0,248838.0,MATCHED,
+Nashik,Yeola,MAHARASHTRA,Nashik,Yevla,271146.0,54299.0,25668.0,29071.0,194171.0,MATCHED,
+Nagpur,Nagpur Rural,MAHARASHTRA,Nagpur,Nagpur (Rural),302195.0,70781.0,58781.0,25693.0,237439.0,MATCHED,
+Nagpur,Hingna,MAHARASHTRA,Nagpur,Hingna,242198.0,58928.0,38455.0,29783.0,184835.0,MATCHED,
+Nagpur,Kamptee,MAHARASHTRA,Nagpur,Kamptee,238870.0,50307.0,52733.0,9623.0,185319.0,MATCHED,
+Nagpur,Katol,MAHARASHTRA,Nagpur,Katol,163808.0,37710.0,24929.0,21384.0,124487.0,MATCHED,
+Nagpur,Umred,MAHARASHTRA,Nagpur,Umred,154180.0,35521.0,27482.0,23436.0,114358.0,MATCHED,
+Aurangabad,Aurangabad,BIHAR,Aurangabad,Aurangabad,283193.0,43336.0,51419.0,136.0,180733.0,MATCHED,
+Aurangabad,Paithan,MAHARASHTRA,Aurangabad,Paithan,347973.0,72032.0,48534.0,8015.0,218225.0,MATCHED,
+Aurangabad,Gangapur,MAHARASHTRA,Aurangabad,Gangapur,358155.0,76054.0,57036.0,14743.0,232768.0,MATCHED,
+Aurangabad,Kannad,MAHARASHTRA,Aurangabad,Kannad,341019.0,67387.0,29919.0,24332.0,217665.0,MATCHED,
+Aurangabad,Sillod,MAHARASHTRA,Aurangabad,Sillod,359963.0,70518.0,32439.0,27816.0,222301.0,MATCHED,
+Kolhapur,Karvir,MAHARASHTRA,Kolhapur,Karvir,1037713.0,227202.0,145656.0,6143.0,807234.0,MATCHED,
+Kolhapur,Panhala,MAHARASHTRA,Kolhapur,Panhala,259417.0,53548.0,34030.0,591.0,184457.0,MATCHED,
+Kolhapur,Hatkanangale,MAHARASHTRA,Kolhapur,Hatkanangle,807751.0,171630.0,117004.0,6865.0,604186.0,MATCHED,
+Kolhapur,Shirol,MAHARASHTRA,Kolhapur,Shirol,391015.0,83953.0,59931.0,10511.0,291910.0,MATCHED,
+Kolhapur,Kagal,MAHARASHTRA,Kolhapur,Kagal,275372.0,59093.0,36662.0,523.0,194094.0,MATCHED,
+Bengaluru Rural,Devanahalli,KARNATAKA,Bangalore Rural,Devanahalli,209622.0,46260.0,49517.0,20385.0,143244.0,MATCHED,
+Bengaluru Rural,Doddaballapura,KARNATAKA,Bangalore Rural,Dod Ballapur,299594.0,71158.0,60773.0,14259.0,209756.0,MATCHED,
+Bengaluru Rural,Hosakote,KARNATAKA,Bangalore Rural,Hosakote,270818.0,60536.0,57882.0,9753.0,186979.0,MATCHED,
+Bengaluru Rural,Nelamangala,KARNATAKA,Bangalore Rural,Nelamangala,210889.0,51325.0,45528.0,8506.0,148770.0,MATCHED,
+Bengaluru Rural,Anekal,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Mysuru,Mysuru,KARNATAKA,Mysore,Mysore,1281768.0,299853.0,166333.0,93871.0,952290.0,MATCHED,
+Mysuru,Hunsur,KARNATAKA,Mysore,Hunsur,282963.0,65584.0,53399.0,46689.0,168731.0,MATCHED,
+Mysuru,Nanjangud,KARNATAKA,Mysore,Nanjangud,384922.0,90864.0,87095.0,53271.0,215361.0,MATCHED,
+Mysuru,Periyapatna,KARNATAKA,Mysore,Piriyapatna,243076.0,54075.0,41825.0,20610.0,154168.0,MATCHED,
+Mysuru,T. Narasipura,KARNATAKA,Mysore,Tirumakudal - Narsipur,292035.0,68533.0,76825.0,40279.0,163997.0,MATCHED,
+Belagavi,Belagavi,KARNATAKA,Belgaum,Belgaum,957373.0,209944.0,72568.0,64035.0,710306.0,MATCHED,
+Belagavi,Athani,KARNATAKA,Belgaum,Athni,525832.0,107689.0,84167.0,15217.0,320240.0,MATCHED,
+Belagavi,Bailhongal,KARNATAKA,Belgaum,Parasgad,352929.0,70063.0,33687.0,39064.0,208215.0,MATCHED,
+Belagavi,Chikodi,KARNATAKA,Belgaum,Chikodi,628800.0,132923.0,102135.0,7325.0,421750.0,MATCHED,
+Belagavi,Gokak,KARNATAKA,Belgaum,Gokak,612163.0,116569.0,65948.0,60038.0,350329.0,MATCHED,
+Dharwad,Dharwad,KARNATAKA,Dharwad,Dharwad,249993.0,50058.0,19250.0,16149.0,156515.0,MATCHED,
+Dharwad,Hubballi,KARNATAKA,Dharwad,Hubli,142807.0,29199.0,10933.0,7193.0,92170.0,MATCHED,
+Dharwad,Kalghatgi,KARNATAKA,Dharwad,Kalghatgi,154659.0,31526.0,20979.0,8386.0,91931.0,MATCHED,
+Dharwad,Kundgol,KARNATAKA,Dharwad,Kundgol,165568.0,33710.0,15736.0,11551.0,109180.0,MATCHED,
+Dharwad,Navalgund,KARNATAKA,Dharwad,Navalgund,190208.0,37789.0,18213.0,10034.0,124765.0,MATCHED,
+Shivamogga,Shivamogga,KARNATAKA,Shimoga,Shimoga,507324.0,117601.0,92070.0,21016.0,377468.0,MATCHED,
+Shivamogga,Bhadravati,KARNATAKA,Shimoga,Bhadravati,339846.0,79710.0,73883.0,12665.0,242218.0,MATCHED,
+Shivamogga,Sagar,KARNATAKA,Shimoga,Sagar,206319.0,48396.0,19908.0,4412.0,150630.0,MATCHED,
+Shivamogga,Shikaripura,KARNATAKA,Shimoga,Shikarpur,238229.0,51798.0,58775.0,14402.0,159348.0,MATCHED,
+Shivamogga,Thirthahalli,KARNATAKA,Shimoga,Tirthahalli,142006.0,35340.0,14091.0,2709.0,108090.0,MATCHED,
+Jaipur,Amber,RAJASTHAN,Jaipur,Amber,452005.0,74794.0,67837.0,51070.0,274206.0,MATCHED,
+Jaipur,Bassi,RAJASTHAN,Jaipur,Bassi,283594.0,44659.0,58279.0,91394.0,162647.0,MATCHED,
+Jaipur,Chaksu,RAJASTHAN,Jaipur,Chaksu,223634.0,35645.0,47216.0,47749.0,121801.0,MATCHED,
+Jaipur,Jamwa Ramgarh,RAJASTHAN,Jaipur,Jamwa Ramgarh,303236.0,49963.0,46974.0,93590.0,164117.0,MATCHED,
+Jaipur,Sanganer,RAJASTHAN,Jaipur,Sanganer,969696.0,185582.0,177215.0,74495.0,689670.0,MATCHED,
+Jodhpur,Balesar,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Jodhpur,Bhopalgarh,RAJASTHAN,Jodhpur,Bhopalgarh,320952.0,58361.0,69580.0,2876.0,155240.0,MATCHED,
+Jodhpur,Luni,RAJASTHAN,Jodhpur,Luni,221979.0,37897.0,35728.0,10991.0,116559.0,MATCHED,
+Jodhpur,Osian,RAJASTHAN,Jodhpur,Osian,465257.0,75643.0,84086.0,19656.0,217611.0,MATCHED,
+Jodhpur,Shergarh,RAJASTHAN,Jodhpur,Shergarh,452134.0,75925.0,82565.0,26515.0,208553.0,MATCHED,
+Udaipur,Girwa,RAJASTHAN,Udaipur,Girwa,898133.0,186254.0,71772.0,247949.0,600663.0,MATCHED,
+Udaipur,Gogunda,RAJASTHAN,Udaipur,Gogunda,214948.0,44340.0,16952.0,107220.0,89992.0,MATCHED,
+Udaipur,Jhadol,RAJASTHAN,Udaipur,Jhadol,249297.0,51655.0,6402.0,188925.0,105294.0,MATCHED,
+Udaipur,Kherwara,RAJASTHAN,Udaipur,Kherwara,206777.0,40350.0,9344.0,151494.0,111626.0,MATCHED,
+Udaipur,Salumbar,RAJASTHAN,Udaipur,Salumbar,248337.0,50813.0,12540.0,132473.0,118290.0,MATCHED,
+Kota,Ladpura,RAJASTHAN,Kota,Ladpura,1143792.0,236889.0,207033.0,68410.0,812242.0,MATCHED,
+Kota,Digod,RAJASTHAN,Kota,Digod,168734.0,33029.0,40720.0,30320.0,104963.0,MATCHED,
+Kota,Itawa,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Kota,Pipalda,RAJASTHAN,Kota,Pipalda,179800.0,35968.0,44769.0,40052.0,104282.0,MATCHED,
+Kota,Sangod,RAJASTHAN,Kota,Sangod,186240.0,35152.0,40237.0,18643.0,113723.0,MATCHED,
+Ajmer,Ajmer,RAJASTHAN,Ajmer,Ajmer,798454.0,156701.0,171784.0,11338.0,558520.0,MATCHED,
+Ajmer,Beawar,RAJASTHAN,Ajmer,Beawar,342935.0,68739.0,48673.0,1623.0,220171.0,MATCHED,
+Ajmer,Bhinay,RAJASTHAN,Ajmer,Bhinay,126466.0,23916.0,26695.0,4986.0,58279.0,MATCHED,
+Ajmer,Kekri,RAJASTHAN,Ajmer,Kekri,202758.0,40690.0,45776.0,21273.0,105506.0,MATCHED,
+Ajmer,Masuda,RAJASTHAN,Ajmer,Masuda,224181.0,43609.0,26438.0,6439.0,114546.0,MATCHED,
+Lucknow,Bakshi Ka Talab,UTTAR PRADESH,Lucknow,Bakshi Ka Talab,349654.0,62443.0,116221.0,45.0,203959.0,MATCHED,
+Lucknow,Chinhat,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Lucknow,Gosainganj,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Lucknow,Malihabad,UTTAR PRADESH,Lucknow,Malihabad,368453.0,65863.0,148084.0,47.0,205770.0,MATCHED,
+Lucknow,Mohan,UTTAR PRADESH,Lucknow,Mohanlalganj,480523.0,91037.0,200534.0,510.0,272452.0,MATCHED,
+Agra,Achhnera,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Agra,Bichpuri,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Agra,Etmadpur,UTTAR PRADESH,Agra,Etmadpur,367441.0,59287.0,88223.0,67.0,228448.0,MATCHED,
+Agra,Fatehabad,UTTAR PRADESH,Agra,Fatehabad,460592.0,69586.0,81753.0,22.0,242665.0,MATCHED,
+Agra,Kheragarh,UTTAR PRADESH,Agra,Kheragarh,466809.0,69272.0,94736.0,258.0,272525.0,MATCHED,
+Varanasi,Arajiline,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Varanasi,Chiraigaon,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Varanasi,Harhua,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Varanasi,Kashi Vidyapeeth,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Varanasi,Pindra,UTTAR PRADESH,Varanasi,Pindra,627298.0,92593.0,117597.0,4605.0,396157.0,MATCHED,
+Prayagraj,Bahria,UTTAR PRADESH,Allahabad ,Bara,365605.0,65850.0,103246.0,966.0,205538.0,MATCHED,
+Prayagraj,Chaka,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Prayagraj,Jasra,UTTAR PRADESH,Allahabad ,Bara,365605.0,65850.0,103246.0,966.0,205538.0,MATCHED,
+Prayagraj,Koraon,UTTAR PRADESH,Allahabad ,Koraon,378839.0,61971.0,116094.0,1155.0,201763.0,MATCHED,
+Prayagraj,Meja,UTTAR PRADESH,Allahabad ,Meja,579879.0,87482.0,128665.0,1042.0,343415.0,MATCHED,
+Meerut,Daurala,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Meerut,Hastinapur,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Meerut,Jani Khurd,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Meerut,Kharkhoda,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Meerut,Mawana,UTTAR PRADESH,Meerut,Mawana,772441.0,126121.0,152371.0,244.0,459070.0,MATCHED,
+Chennai,Ambattur,,,,,,,,,NO MATCH FOUND,"Chennai district in 2011 Census had NO sub-district/tehsil subdivisions (fully urban, single unit). Ambattur, Alandur, Poonamallee are separate municipalities in Tiruvallur/Kanchipuram districts, not Chennai tehsils."
+Chennai,Alandur,,,,,,,,,NO MATCH FOUND,Same as above - not a Chennai district sub-division.
+Chennai,Madhurantakam,,,,,,,,,NO MATCH FOUND,"Madhurantakam is a taluk of Kanchipuram district, not Chennai."
+Chennai,Poonamallee,,,,,,,,,NO MATCH FOUND,"Poonamallee is a taluk of Tiruvallur district, not Chennai."
+Chennai,Tiruvallur,,,,,,,,,NO MATCH FOUND,"Tiruvallur is its own separate district, not part of Chennai."
+Coimbatore,Annur,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Coimbatore,Karamadai,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Coimbatore,Madukkarai,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Coimbatore,Pollachi,TAMIL NADU,Coimbatore,Pollachi,575928.0,165932.0,110843.0,9655.0,402475.0,MATCHED,
+Coimbatore,Sulur,TAMIL NADU,Coimbatore,Sulur,321051.0,93100.0,55843.0,182.0,233427.0,MATCHED,
+Madurai,Kalligudi,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Madurai,Melur,TAMIL NADU,Madurai,Melur,291398.0,74851.0,48121.0,371.0,197676.0,MATCHED,
+Madurai,Perungudi,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Madurai,Tirumangalam,TAMIL NADU,Madurai,Thirumangalam,229645.0,62179.0,39476.0,70.0,161684.0,MATCHED,
+Madurai,Usilampatti,TAMIL NADU,Madurai,Usilampatti,195756.0,53137.0,29782.0,178.0,129342.0,MATCHED,
+Salem,Attur,TAMIL NADU,Salem,Attur,430949.0,112668.0,102755.0,41444.0,280938.0,MATCHED,
+Salem,Edappadi,TAMIL NADU,Salem,Edappadi,223756.0,60916.0,22758.0,287.0,127078.0,MATCHED,
+Salem,Mettur,TAMIL NADU,Salem,Mettur,419887.0,112155.0,54392.0,9503.0,265926.0,MATCHED,
+Salem,Omalur,TAMIL NADU,Salem,Omalur,494355.0,125462.0,90446.0,5593.0,293904.0,MATCHED,
+Salem,Sankari,TAMIL NADU,Salem,Sankari,241783.0,66453.0,35000.0,1049.0,148776.0,MATCHED,
+Tiruchirappalli,Lalgudi,TAMIL NADU,Tiruchirappalli,Lalgudi,254865.0,67722.0,53391.0,713.0,190592.0,MATCHED,
+Tiruchirappalli,Manachanallur,TAMIL NADU,Tiruchirappalli,Manachanallur,192869.0,49878.0,36477.0,224.0,142366.0,MATCHED,
+Tiruchirappalli,Manapparai,TAMIL NADU,Tiruchirappalli,Manapparai,375370.0,87298.0,66557.0,234.0,244916.0,MATCHED,
+Tiruchirappalli,Musiri,TAMIL NADU,Tiruchirappalli,Musiri,231655.0,63161.0,46739.0,164.0,159152.0,MATCHED,
+Tiruchirappalli,Thuraiyur,TAMIL NADU,Tiruchirappalli,Thuraiyur,249327.0,69677.0,54984.0,12778.0,175478.0,MATCHED,
+Ahmedabad,Bavla,GUJARAT,Ahmadabad,Bavla,158191.0,31843.0,15606.0,9946.0,94634.0,MATCHED,
+Ahmedabad,Daskroi,GUJARAT,Ahmadabad,Daskroi,321817.0,67131.0,22308.0,4643.0,227863.0,MATCHED,
+Ahmedabad,Dholka,GUJARAT,Ahmadabad,Dholka,249852.0,50721.0,33672.0,1802.0,169113.0,MATCHED,
+Ahmedabad,Detroj-Rampura,GUJARAT,Ahmadabad,Detroj-Rampura,83199.0,17580.0,5869.0,73.0,53328.0,MATCHED,
+Ahmedabad,Sanand,GUJARAT,Ahmadabad,Sanand,237845.0,47822.0,29654.0,1404.0,150795.0,MATCHED,
+Surat,Bardoli,GUJARAT,Surat,Bardoli,224164.0,48590.0,9047.0,101432.0,159094.0,MATCHED,
+Surat,Choryasi,GUJARAT,Surat,Chorasi,229277.0,55475.0,5361.0,30593.0,172930.0,MATCHED,
+Surat,Kamrej,GUJARAT,Surat,Kamrej,184554.0,39445.0,9911.0,58519.0,127763.0,MATCHED,
+Surat,Mandvi,GUJARAT,Surat,Mandvi,195949.0,42549.0,1908.0,151020.0,124226.0,MATCHED,
+Surat,Olpad,GUJARAT,Surat,Olpad,196846.0,42802.0,8957.0,48093.0,144587.0,MATCHED,
+Vadodara,Dabhoi,GUJARAT,Vadodara,Dabhoi,180518.0,38972.0,10431.0,59239.0,127490.0,MATCHED,
+Vadodara,Desar,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Vadodara,Karjan,GUJARAT,Vadodara,Karjan,167579.0,35374.0,10869.0,42454.0,119226.0,MATCHED,
+Vadodara,Padra,GUJARAT,Vadodara,Padra,265901.0,55104.0,15666.0,8090.0,189205.0,MATCHED,
+Vadodara,Savli,GUJARAT,Vadodara,Savli,255009.0,52708.0,13394.0,18510.0,175338.0,MATCHED,
+Rajkot,Dhoraji,GUJARAT,Rajkot,Dhoraji,154896.0,34044.0,15654.0,747.0,112767.0,MATCHED,
+Rajkot,Gondal,GUJARAT,Rajkot,Gondal,285550.0,57893.0,22870.0,1205.0,208270.0,MATCHED,
+Rajkot,Jasdan,GUJARAT,Rajkot,Jasdan,314124.0,58885.0,15417.0,689.0,188559.0,MATCHED,
+Rajkot,Jetpur,GUJARAT,Rajkot,Jetpur,247140.0,50619.0,18433.0,662.0,176292.0,MATCHED,
+Rajkot,Paddhari,GUJARAT,Rajkot,Paddhari,74781.0,14941.0,7421.0,666.0,49815.0,MATCHED,
+Bhavnagar,Bhavnagar,GUJARAT,Bhavnagar,Bhavnagar,787319.0,158301.0,43412.0,4717.0,574185.0,MATCHED,
+Bhavnagar,Gariadhar,GUJARAT,Bhavnagar,Gariadhar,118276.0,23136.0,10589.0,354.0,79209.0,MATCHED,
+Bhavnagar,Ghogha,GUJARAT,Bhavnagar,Ghogha,100977.0,17985.0,2081.0,170.0,67546.0,MATCHED,
+Bhavnagar,Mahuva,GUJARAT,Bhavnagar,Mahuva,452011.0,77075.0,15612.0,893.0,264692.0,MATCHED,
+Bhavnagar,Palitana,GUJARAT,Bhavnagar,Palitana,230271.0,41260.0,14262.0,761.0,147100.0,MATCHED,
+Kolkata,Behala,,,,,,,,,NO MATCH FOUND,"Kolkata district in 2011 Census had NO sub-district/tehsil subdivisions (fully urban). Behala, Bhangar, Bishnupur, Sonarpur, Thakurpukur are localities/blocks actually in South 24 Parganas district."
+Kolkata,Bhangar,,,,,,,,,NO MATCH FOUND,"Actually in South 24 Parganas district, not Kolkata."
+Kolkata,Bishnupur,,,,,,,,,NO MATCH FOUND,"Actually in South 24 Parganas district, not Kolkata."
+Kolkata,Sonarpur,,,,,,,,,NO MATCH FOUND,"Actually in South 24 Parganas district, not Kolkata."
+Kolkata,Thakurpukur,,,,,,,,,NO MATCH FOUND,"Actually a locality in South 24 Parganas district, not Kolkata."
+Hooghly,Chanditala,WEST BENGAL,Hugli ,Chanditala - I,179825.0,37681.0,35243.0,281.0,134421.0,MATCHED,
+Hooghly,Dhanyakhali,WEST BENGAL,Hugli ,Dhaniakhali,320534.0,78260.0,105811.0,45715.0,218902.0,MATCHED,
+Hooghly,Singur,WEST BENGAL,Hugli ,Singur,276413.0,64703.0,47037.0,4069.0,211984.0,MATCHED,
+Hooghly,Tarakeswar,WEST BENGAL,Hugli ,Tarakeswar,179148.0,41975.0,42338.0,9034.0,129574.0,MATCHED,
+Hooghly,Polba-Dadpur,WEST BENGAL,Hugli ,Polba - Dadpur,263555.0,62151.0,94320.0,30240.0,178535.0,MATCHED,
+Nadia,Chakdaha,WEST BENGAL,Nadia ,Chakdah,405719.0,94261.0,185933.0,21609.0,293946.0,MATCHED,
+Nadia,Haringhata,WEST BENGAL,Nadia ,Haringhata,231068.0,53838.0,73755.0,11218.0,171144.0,MATCHED,
+Nadia,Kaliganj,WEST BENGAL,Nadia ,Kaliganj,334881.0,78432.0,50979.0,1642.0,193975.0,MATCHED,
+Nadia,Krishnagar-I,WEST BENGAL,Nadia ,Krishnagar - I,314833.0,74375.0,113204.0,16019.0,201405.0,MATCHED,
+Nadia,Ranaghat-I,WEST BENGAL,Nadia ,Ranaghat - I,215137.0,52423.0,78160.0,3267.0,151243.0,MATCHED,
+Darjeeling,Darjeeling-Pulbazar,WEST BENGAL,Darjiling ,Darjeeling Pulbazar,126935.0,27470.0,5863.0,36563.0,93091.0,MATCHED,
+Darjeeling,Jorethang,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Darjeeling,Kurseong,WEST BENGAL,Darjiling ,Kurseong,94347.0,20892.0,8271.0,29232.0,69646.0,MATCHED,
+Darjeeling,Mirik,WEST BENGAL,Darjiling ,Mirik,46374.0,9962.0,3619.0,14280.0,34334.0,MATCHED,
+Darjeeling,Rangli Rangliot,WEST BENGAL,Darjiling ,Rangli Rangliot,70125.0,15304.0,3893.0,23187.0,51492.0,MATCHED,
+Murshidabad,Berhampore,WEST BENGAL,Murshidabad ,Berhampore,446887.0,105958.0,76935.0,10809.0,288728.0,MATCHED,
+Murshidabad,Domkal,WEST BENGAL,Murshidabad ,Domkal,363976.0,88520.0,9515.0,1219.0,203429.0,MATCHED,
+Murshidabad,Jalangi,WEST BENGAL,Murshidabad ,Jalangi,252477.0,60928.0,31831.0,2918.0,148291.0,MATCHED,
+Murshidabad,Kandi,WEST BENGAL,Murshidabad ,Kandi,220145.0,48963.0,35859.0,3390.0,124346.0,MATCHED,
+Murshidabad,Lalgola,WEST BENGAL,Murshidabad ,Lalgola,335831.0,70216.0,31248.0,168.0,180646.0,MATCHED,
+Thiruvananthapuram,Nedumangad,KERALA,Thiruvananthapuram,Nedumangad,645326.0,169220.0,62636.0,16469.0,541020.0,MATCHED,
+Thiruvananthapuram,Neyyattinkara,KERALA,Thiruvananthapuram,Neyyattinkara,880986.0,223536.0,85922.0,3892.0,731560.0,MATCHED,
+Thiruvananthapuram,Parassala,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Thiruvananthapuram,Perumkadavila,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Thiruvananthapuram,Varkala,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Ernakulam,Alangad,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Ernakulam,Angamaly,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Ernakulam,Kothamangalam,KERALA,Ernakulam,Kothamangalam,238403.0,58770.0,17786.0,5477.0,202437.0,MATCHED,
+Ernakulam,Kunnathunad,KERALA,Ernakulam,Kunnathunad,469164.0,115490.0,52416.0,1974.0,401887.0,MATCHED,
+Ernakulam,Paravur,KERALA,Ernakulam,Paravur,410571.0,102472.0,38984.0,1727.0,357415.0,MATCHED,
+Kozhikode,Balussery,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Kozhikode,Koduvally,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Kozhikode,Koyilandy,KERALA,Kozhikode,Quilandy,728168.0,172883.0,67996.0,3349.0,617923.0,MATCHED,
+Kozhikode,Thamarassery,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Kozhikode,Vadakara,KERALA,Kozhikode,Vadakara,687265.0,152553.0,15493.0,3487.0,570648.0,MATCHED,
+Thrissur,Chavakkad,KERALA,Thrissur,Chavakkad,470898.0,108151.0,23016.0,670.0,397676.0,MATCHED,
+Thrissur,Chowannur,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Thrissur,Irinjalakuda,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Thrissur,Kodungallur,KERALA,Thrissur,Kodungallur,312238.0,76926.0,30055.0,690.0,267214.0,MATCHED,
+Thrissur,Mukundapuram,KERALA,Thrissur,Mukundapuram,831363.0,210491.0,97697.0,3893.0,719811.0,MATCHED,
+Kollam,Karunagappally,KERALA,Kollam,Karunagappally,428802.0,106937.0,36224.0,965.0,361992.0,MATCHED,
+Kollam,Kottarakkara,KERALA,Kollam,Kottarakkara,586434.0,152944.0,85165.0,2122.0,502254.0,MATCHED,
+Kollam,Kunnathur,KERALA,Kollam,Kunnathur,199456.0,50624.0,35177.0,486.0,170279.0,MATCHED,
+Kollam,Pathanapuram,KERALA,Kollam,Pathanapuram,432904.0,115661.0,59079.0,4858.0,367455.0,MATCHED,
+Kollam,Punalur,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Visakhapatnam,Anakapalle,ANDHRA PRADESH,Visakhapatnam,Anakapalle,186937.0,48903.0,11696.0,1759.0,120742.0,MATCHED,
+Visakhapatnam,Bheemunipatnam,ANDHRA PRADESH,Visakhapatnam,Bheemunipatnam,116349.0,28364.0,9775.0,412.0,68663.0,MATCHED,
+Visakhapatnam,Gajuwaka,ANDHRA PRADESH,Visakhapatnam,Gajuwaka,250423.0,63788.0,16325.0,4098.0,184847.0,MATCHED,
+Visakhapatnam,Padmanabham,ANDHRA PRADESH,Visakhapatnam,Padmanabham,52079.0,13274.0,5227.0,253.0,23512.0,MATCHED,
+Visakhapatnam,Pendurthi,ANDHRA PRADESH,Visakhapatnam,Pendurthi,146650.0,37440.0,9381.0,1684.0,105069.0,MATCHED,
+Vijayawada,Gannavaram,,,,,,,,,NO MATCH FOUND,"Part of Krishna district in 2011 (Vijayawada was carved out as its own district, NTR district, only in the 2022 Andhra Pradesh district reorganization)"
+Vijayawada,Ibrahimpatnam,,,,,,,,,NO MATCH FOUND,"Part of Krishna district in 2011 (Vijayawada was carved out as its own district, NTR district, only in the 2022 Andhra Pradesh district reorganization)"
+Vijayawada,Kankipadu,,,,,,,,,NO MATCH FOUND,"Part of Krishna district in 2011 (Vijayawada was carved out as its own district, NTR district, only in the 2022 Andhra Pradesh district reorganization)"
+Vijayawada,Mylavaram,,,,,,,,,NO MATCH FOUND,"Part of Krishna district in 2011 (Vijayawada was carved out as its own district, NTR district, only in the 2022 Andhra Pradesh district reorganization)"
+Vijayawada,Nandigama,,,,,,,,,NO MATCH FOUND,"Part of Krishna district in 2011 (Vijayawada was carved out as its own district, NTR district, only in the 2022 Andhra Pradesh district reorganization)"
+Guntur,Amaravathi,ANDHRA PRADESH,Guntur,Amaravathi,66277.0,17502.0,18630.0,3439.0,37507.0,MATCHED,
+Guntur,Duggirala,ANDHRA PRADESH,Guntur,Duggirala,62655.0,18406.0,19981.0,1847.0,40244.0,MATCHED,
+Guntur,Mangalagiri,ANDHRA PRADESH,Guntur,Mangalagiri,160303.0,42639.0,29022.0,4563.0,104479.0,MATCHED,
+Guntur,Narasaraopet,ANDHRA PRADESH,Guntur,Narasaraopet,211948.0,52233.0,32310.0,7313.0,137390.0,MATCHED,
+Guntur,Tadikonda,ANDHRA PRADESH,Guntur,Tadikonda,67962.0,18838.0,17270.0,3310.0,40162.0,MATCHED,
+Tirupati,Chandragiri,,,,,,,,,NO MATCH FOUND,Part of Chittoor district in 2011 (Tirupati became a separate district only in the 2022 Andhra Pradesh reorganization)
+Tirupati,Kota,,,,,,,,,NO MATCH FOUND,Part of Chittoor district in 2011 (Tirupati became a separate district only in the 2022 Andhra Pradesh reorganization)
+Tirupati,Renigunta,,,,,,,,,NO MATCH FOUND,Part of Chittoor district in 2011 (Tirupati became a separate district only in the 2022 Andhra Pradesh reorganization)
+Tirupati,Srikalahasti,,,,,,,,,NO MATCH FOUND,Part of Chittoor district in 2011 (Tirupati became a separate district only in the 2022 Andhra Pradesh reorganization)
+Tirupati,Tirupati Rural,,,,,,,,,NO MATCH FOUND,Part of Chittoor district in 2011 (Tirupati became a separate district only in the 2022 Andhra Pradesh reorganization)
+Kurnool,Adoni,ANDHRA PRADESH,Kurnool,Adoni,269286.0,52503.0,45319.0,2577.0,139276.0,MATCHED,
+Kurnool,Alur,ANDHRA PRADESH,Kurnool,Alur,55834.0,10278.0,11502.0,1130.0,29064.0,MATCHED,
+Kurnool,Dhone,ANDHRA PRADESH,Kurnool,Dhone,120232.0,26505.0,16613.0,3064.0,66618.0,MATCHED,
+Kurnool,Nandikotkur,ANDHRA PRADESH,Kurnool,Nandikotkur,83748.0,19499.0,16966.0,1061.0,48899.0,MATCHED,
+Kurnool,Pattikonda,ANDHRA PRADESH,Kurnool,Pattikonda,68962.0,14410.0,8815.0,2968.0,33357.0,MATCHED,
+Bhopal,Berasia,MADHYA PRADESH,Bhopal,Berasia,263538.0,53675.0,59260.0,5495.0,144157.0,MATCHED,
+Bhopal,Phanda,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Bhopal,Huzur,MADHYA PRADESH,Bhopal,Huzur,2107523.0,448130.0,298256.0,63934.0,1516533.0,MATCHED,
+Bhopal,Kolar,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Bhopal,Sehore Rural,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Indore,Depalpur,MADHYA PRADESH,Indore,Depalpur,228101.0,42763.0,42481.0,13324.0,134616.0,MATCHED,
+Indore,Dr. Ambedkar Nagar,MADHYA PRADESH,Indore,Mhow,361937.0,68714.0,49835.0,87210.0,235883.0,MATCHED,
+Indore,Indore,MADHYA PRADESH,Indore,Indore,2389511.0,482493.0,379348.0,100332.0,1758546.0,MATCHED,
+Indore,Sanwer,MADHYA PRADESH,Indore,Sawer,197835.0,36659.0,52790.0,9645.0,120316.0,MATCHED,
+Indore,Sawer,MADHYA PRADESH,Indore,Sawer,197835.0,36659.0,52790.0,9645.0,120316.0,MATCHED,
+Jabalpur,Jabalpur,MADHYA PRADESH,Jabalpur,Jabalpur,1370673.0,288065.0,192968.0,105352.0,1047845.0,MATCHED,
+Jabalpur,Kundam,MADHYA PRADESH,Jabalpur,Kundam,123443.0,28716.0,10067.0,87152.0,67006.0,MATCHED,
+Jabalpur,Majholi,MADHYA PRADESH,Jabalpur,Majholi,169298.0,40999.0,26019.0,34272.0,106979.0,MATCHED,
+Jabalpur,Panagar,MADHYA PRADESH,Jabalpur,Panagar,264780.0,58673.0,39507.0,46372.0,188858.0,MATCHED,
+Jabalpur,Shahpura,MADHYA PRADESH,Jabalpur,Shahpura,191710.0,41902.0,27575.0,46696.0,118369.0,MATCHED,
+Gwalior,Bhitarwar,MADHYA PRADESH,Gwalior,Bhitarwar,108726.0,21135.0,25579.0,7619.0,60254.0,MATCHED,
+Gwalior,Dabra,MADHYA PRADESH,Gwalior,Dabra (Pichhore),324569.0,61741.0,80607.0,14409.0,196866.0,MATCHED,
+Gwalior,Ghatigaon,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Gwalior,Morar,,,,,,,,,NO MATCH FOUND,"Not a distinct Census 2011 tehsil/taluk in this district (likely a development block/panchayat samiti, or a tehsil created after 2011)"
+Gwalior,Pichhore,MADHYA PRADESH,Gwalior,Dabra (Pichhore),324569.0,61741.0,80607.0,14409.0,196866.0,MATCHED,
+Ujjain,Badnagar,MADHYA PRADESH,Ujjain,Badnagar,269573.0,50233.0,59160.0,16823.0,169935.0,MATCHED,
+Ujjain,Ghatiya,MADHYA PRADESH,Ujjain,Ghatiya,138861.0,27553.0,43211.0,1296.0,76670.0,MATCHED,
+Ujjain,Khachrod,MADHYA PRADESH,Ujjain,Khacharod,161270.0,31421.0,47870.0,6774.0,93735.0,MATCHED,
+Ujjain,Mahidpur,MADHYA PRADESH,Ujjain,Mahidpur,259299.0,51696.0,72064.0,1918.0,137842.0,MATCHED,
+Ujjain,Ujjain,MADHYA PRADESH,Ujjain,Ujjain,672566.0,131663.0,158363.0,11091.0,478609.0,MATCHED,

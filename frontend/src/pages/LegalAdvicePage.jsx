@@ -7,34 +7,32 @@ import LocationMap from '../components/map/LocationMap';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
+import { getCachedRequest, readCachedData } from '../api/requestCache';
 
 export const LegalAdvicePage = () => {
-  const { translate: t } = useLanguage();
+  const { lang, translate: t } = useLanguage();
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
 
-  const [legalData, setLegalData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = `legal-advice:${assessmentId}`;
+  const [legalData, setLegalData] = useState(() => readCachedData(cacheKey));
+  const [loading, setLoading] = useState(() => !readCachedData(cacheKey));
 
   useEffect(() => {
     const fetchLegal = async () => {
-      setLoading(true);
+      if (!readCachedData(cacheKey)) setLoading(true);
       try {
-        let data = null;
-        if (assessmentId && assessmentId !== 'ASM_DEFAULT') {
-          const resp = await api.getAssessmentLegalOffices(assessmentId);
-          data = resp.data;
-        } else {
-          // Default fallback to Pune district legal offices and Dairy checklist
+        const data = await getCachedRequest(`${cacheKey}:${lang}`, async () => {
+          if (assessmentId && assessmentId !== 'ASM_DEFAULT') {
+            const resp = await api.getAssessmentLegalOffices(assessmentId);
+            return resp.data;
+          }
           const [officesResp, checkResp] = await Promise.all([
             api.getLegalOffices('Pune'),
             api.getDocumentChecklist('Dairy')
           ]);
-          data = {
-            nearest_legal_offices: officesResp.data,
-            document_checklist: checkResp.data
-          };
-        }
+          return { nearest_legal_offices: officesResp.data, document_checklist: checkResp.data };
+        });
         setLegalData(data);
       } catch (err) {
         console.error("Legal advice fetch error:", err);
@@ -43,7 +41,7 @@ export const LegalAdvicePage = () => {
       }
     };
     fetchLegal();
-  }, [assessmentId]);
+  }, [assessmentId, lang]);
 
   const offices = legalData?.nearest_legal_offices || [];
   const checklist = legalData?.document_checklist || {};
