@@ -1,6 +1,10 @@
 import logging
 from typing import Dict, Any, List
 
+import httpx
+
+from app.config import settings
+
 logger = logging.getLogger("udyam_gram.translation")
 
 SUPPORTED_LANGUAGES = {
@@ -49,7 +53,122 @@ FALLBACK_DICTIONARY = {
     }
 }
 
+IMPROVEMENT_FALLBACKS = {
+    "hi": {
+        "Complete 2-Week Domain Apprenticeship": "2 सप्ताह का क्षेत्रीय प्रशिक्षण पूरा करें",
+        "Shadow an established shop owner in a nearby town to learn practical daily operations.": "दैनिक कार्यों का व्यावहारिक ज्ञान लेने के लिए पास के शहर में किसी अनुभवी दुकानदार के साथ प्रशिक्षण लें।",
+        "Finalize Workspace Lease Agreement": "कार्यस्थल का किराया समझौता पूरा करें",
+        "Secure a roadside workspace location with adequate power fitting and public access.": "पर्याप्त बिजली सुविधा और सार्वजनिक पहुंच वाले सड़क किनारे कार्यस्थल को सुरक्षित करें।",
+        "Confirm 2 Wholesale Supplier Links": "2 थोक आपूर्तिकर्ताओं के संपर्क पक्के करें",
+        "Establish written price quotations and supply delivery commitments with raw material distributors.": "कच्चे माल के वितरकों से लिखित मूल्य उद्धरण और आपूर्ति वितरण प्रतिबद्धता प्राप्त करें।",
+        "Gather Pre-orders & Buyer Letters": "प्री-ऑर्डर और खरीदारों के पत्र जुटाएं",
+        "Secure initial customer commitments or buyer intent letters from local households.": "स्थानीय परिवारों से शुरुआती ग्राहक प्रतिबद्धताएं या खरीदार की इच्छा के पत्र प्राप्त करें।",
+        "Build ₹15,000 Emergency Cash Reserve": "₹15,000 की आपातकालीन नकद बचत बनाएं",
+        "Deposit emergency cash buffer in a liquid bank savings account prior to loan disbursement.": "ऋण जारी होने से पहले आपातकालीन नकद राशि को आसानी से निकाले जा सकने वाले बैंक बचत खाते में जमा करें।"
+    },
+    "mr": {
+        "Complete 2-Week Domain Apprenticeship": "2 आठवड्यांचे क्षेत्रीय प्रशिक्षण पूर्ण करा",
+        "Shadow an established shop owner in a nearby town to learn practical daily operations.": "दैनंदिन कामकाजाचे व्यावहारिक ज्ञान घेण्यासाठी जवळच्या शहरातील अनुभवी दुकानदारासोबत प्रशिक्षण घ्या.",
+        "Finalize Workspace Lease Agreement": "कार्यस्थळाचा भाडेकरार पूर्ण करा",
+        "Secure a roadside workspace location with adequate power fitting and public access.": "पुरेशी वीज सुविधा आणि सार्वजनिक प्रवेश असलेले रस्त्यालगतचे कार्यस्थळ सुरक्षित करा.",
+        "Confirm 2 Wholesale Supplier Links": "2 घाऊक पुरवठादारांचे संपर्क निश्चित करा",
+        "Establish written price quotations and supply delivery commitments with raw material distributors.": "कच्चा माल वितरकांकडून लेखी दरपत्रक आणि पुरवठा वितरणाची हमी मिळवा.",
+        "Gather Pre-orders & Buyer Letters": "आधीच्या ऑर्डर आणि खरेदीदारांची पत्रे मिळवा",
+        "Secure initial customer commitments or buyer intent letters from local households.": "स्थानिक कुटुंबांकडून सुरुवातीच्या ग्राहकांची बांधिलकी किंवा खरेदीदारांची इच्छा-पत्रे मिळवा.",
+        "Build ₹15,000 Emergency Cash Reserve": "₹15,000 ची आपत्कालीन रोख बचत तयार करा",
+        "Deposit emergency cash buffer in a liquid bank savings account prior to loan disbursement.": "कर्ज वितरित होण्यापूर्वी आपत्कालीन रोख रक्कम सहज काढता येणाऱ्या बँक बचत खात्यात जमा करा."
+    }
+}
+
 _indictrans_pipeline = None
+
+
+def _sarvam_is_configured() -> bool:
+    return bool(settings.SARVAM_API_KEY)
+
+
+def translate_with_sarvam(text: str, target_lang: str) -> str | None:
+    """Translate one English string with Sarvam, returning None on provider failure."""
+    if not text or not _sarvam_is_configured() or target_lang not in SUPPORTED_LANGUAGES:
+        return None
+
+    payload = {
+        "input": text,
+        "source_language_code": "en-IN",
+        "target_language_code": f"{target_lang}-IN",
+        "model": settings.SARVAM_MODEL
+    }
+    headers = {
+        "api-subscription-key": settings.SARVAM_API_KEY,
+        "Content-Type": "application/json"
+    }
+
+    try:
+        with httpx.Client(timeout=15.0) as client:
+            response = client.post(settings.SARVAM_ENDPOINT, headers=headers, json=payload)
+            response.raise_for_status()
+            translated = response.json().get("translated_text")
+            if not isinstance(translated, str) or not translated.strip():
+                logger.warning("Sarvam returned an invalid translation response")
+                return None
+            return translated
+    except (httpx.HTTPError, ValueError, TypeError, KeyError) as error:
+        logger.warning("Sarvam translation unavailable: %s", error)
+        return None
+
+
+def _bhashini_is_configured() -> bool:
+    return bool(
+        settings.BHASHINI_USER_ID
+        and settings.BHASHINI_API_KEY
+        and settings.BHASHINI_INFERENCE_API_KEY
+        and settings.BHASHINI_SERVICE_ID
+    )
+
+
+def translate_with_bhashini(texts: List[str], target_lang: str) -> List[str] | None:
+    """Translate text through Bhashini, returning None when the provider is unavailable."""
+    if not texts or not _bhashini_is_configured():
+        return None
+
+    language = SUPPORTED_LANGUAGES.get(target_lang)
+    if not language:
+        return None
+
+    payload = {
+        "pipelineTasks": [{
+            "taskType": "translation",
+            "config": {
+                "language": {
+                    "sourceLanguage": "en",
+                    "targetLanguage": target_lang
+                },
+                "serviceId": settings.BHASHINI_SERVICE_ID
+            }
+        }],
+        "inputData": {"input": [{"source": text} for text in texts]}
+    }
+    headers = {
+        "userID": settings.BHASHINI_USER_ID,
+        "ulcaApiKey": settings.BHASHINI_API_KEY,
+        "inferenceApiKey": settings.BHASHINI_INFERENCE_API_KEY,
+        "Content-Type": "application/json"
+    }
+
+    try:
+        with httpx.Client(timeout=15.0) as client:
+            response = client.post(settings.BHASHINI_ENDPOINT, headers=headers, json=payload)
+            response.raise_for_status()
+            pipeline_response = response.json().get("pipelineResponse", [])
+            outputs = pipeline_response[0].get("output", []) if pipeline_response else []
+            translated = [item.get("target") for item in outputs]
+            if len(translated) != len(texts) or not all(isinstance(item, str) for item in translated):
+                logger.warning("Bhashini returned an incomplete translation response")
+                return None
+            return translated
+    except (httpx.HTTPError, ValueError, TypeError, KeyError) as error:
+        logger.warning("Bhashini translation unavailable: %s", error)
+        return None
 
 LOCALIZED_REPORT_COPY = {
     "hi": {
@@ -112,6 +231,20 @@ def translate_text(text: str, target_lang: str) -> str:
     """
     if not text or target_lang == "en" or target_lang not in SUPPORTED_LANGUAGES:
         return text
+
+    # Known action copy must remain localized even when an upstream provider
+    # returns the source text or a tagged fallback as its response.
+    improvement_dict = IMPROVEMENT_FALLBACKS.get(target_lang, {})
+    if text in improvement_dict:
+        return improvement_dict[text]
+
+    sarvam_translation = translate_with_sarvam(text, target_lang)
+    if sarvam_translation and sarvam_translation != text and not sarvam_translation.startswith("["):
+        return sarvam_translation
+
+    bhashini_translation = translate_with_bhashini([text], target_lang)
+    if bhashini_translation and bhashini_translation[0] != text and not bhashini_translation[0].startswith("["):
+        return bhashini_translation[0]
         
     pipeline = get_indictrans_pipeline()
     if pipeline:
@@ -128,6 +261,20 @@ def translate_text(text: str, target_lang: str) -> str:
     lang_dict = FALLBACK_DICTIONARY.get(target_lang, {})
     if text in lang_dict:
         return lang_dict[text]
+
+    if text.startswith("Enroll in RSETI / Skill India ") and text.endswith(" Training"):
+        category = text[len("Enroll in RSETI / Skill India "):-len(" Training")]
+        if target_lang == "hi":
+            return f"RSETI / स्किल इंडिया {category} प्रशिक्षण में नामांकन करें"
+        if target_lang == "mr":
+            return f"RSETI / स्किल इंडिया {category} प्रशिक्षणात प्रवेश घ्या"
+
+    if text.startswith("Undergo certified technical skill and equipment maintenance training for ") and text.endswith("."):
+        category = text[len("Undergo certified technical skill and equipment maintenance training for "):-1]
+        if target_lang == "hi":
+            return f"{category} के लिए प्रमाणित तकनीकी कौशल और उपकरण रखरखाव प्रशिक्षण लें।"
+        if target_lang == "mr":
+            return f"{category} साठी प्रमाणित तांत्रिक कौशल्य आणि उपकरण देखभाल प्रशिक्षण घ्या।"
         
     # Return formatted string indicating language representation if non-English
     lang_name = SUPPORTED_LANGUAGES[target_lang]["name"]
@@ -139,6 +286,14 @@ def translate_batch(texts: List[str], target_lang: str) -> List[str]:
     """
     if not texts or target_lang == "en":
         return texts
+
+    bhashini_translations = translate_with_bhashini(texts, target_lang)
+    if bhashini_translations and all(
+        translated != source and not translated.startswith("[")
+        for source, translated in zip(texts, bhashini_translations)
+    ):
+        return bhashini_translations
+
     return [translate_text(t, target_lang) for t in texts]
 
 def translate_report_payload(report: Dict[str, Any], target_lang: str) -> Dict[str, Any]:
