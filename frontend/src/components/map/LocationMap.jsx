@@ -23,6 +23,27 @@ const MapRecenter = ({ lat, lng, zoom }) => {
   return null;
 };
 
+const CatchmentZoomLimit = ({ lat, lng, radiusKm, showCatchment }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!showCatchment || radiusKm !== 10) {
+      map.setMaxZoom(19);
+      return;
+    }
+
+    const catchmentBounds = L.latLng(lat, lng).toBounds(radiusKm * 1000);
+    const maximumCatchmentZoom = map.getBoundsZoom(catchmentBounds, false);
+    map.setMaxZoom(maximumCatchmentZoom);
+
+    if (map.getZoom() > maximumCatchmentZoom) {
+      map.setZoom(maximumCatchmentZoom);
+    }
+  }, [lat, lng, map, radiusKm, showCatchment]);
+
+  return null;
+};
+
 export const LocationMap = ({ 
   lat = 18.6984, 
   lng = 74.1236, 
@@ -46,6 +67,7 @@ export const LocationMap = ({
           />
           
           <MapRecenter lat={lat} lng={lng} zoom={zoom} />
+          <CatchmentZoomLimit lat={lat} lng={lng} radiusKm={radiusKm} showCatchment={showCatchment} />
 
           {/* Village Center Marker */}
           {showVillageMarker && (

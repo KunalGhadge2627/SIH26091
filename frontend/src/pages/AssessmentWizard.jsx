@@ -85,10 +85,123 @@ const PROFILE_OPTION_COPY = {
   pa: { 'Select age group': 'ਉਮਰ ਸਮੂਹ ਚੁਣੋ', '18–24 years': '18–24 ਸਾਲ', '25–34 years': '25–34 ਸਾਲ', '35–44 years': '35–44 ਸਾਲ', '45+ years': '45+ ਸਾਲ', 'Select education level': 'ਸਿੱਖਿਆ ਪੱਧਰ ਚੁਣੋ', 'Primary School': 'ਪ੍ਰਾਇਮਰੀ ਸਕੂਲ', 'Secondary (Class 10/12)': 'ਸੈਕੰਡਰੀ (ਜਮਾਤ 10/12)', 'Graduate / Higher': 'ਗ੍ਰੈਜੂਏਟ / ਉੱਚ', 'No Formal Education': 'ਕੋਈ ਰਸਮੀ ਸਿੱਖਿਆ ਨਹੀਂ', 'e.g. Agriculture / Self-employed': 'ਜਿਵੇਂ ਖੇਤੀਬਾੜੀ / ਸਵੈ-ਰੋਜ਼ਗਾਰ', 'Select experience': 'ਤਜਰਬਾ ਚੁਣੋ', 'None (First-time)': 'ਕੋਈ ਨਹੀਂ (ਪਹਿਲੀ ਵਾਰ)', '0–2 years': '0–2 ਸਾਲ', '3–5 years': '3–5 ਸਾਲ', '5+ years': '5+ ਸਾਲ' }
 };
 
+const READINESS_QUESTION_COPY = {
+  hi: {
+    'Do you currently own cattle?': 'क्या आपके पास वर्तमान में मवेशी हैं?', 'How many cattle can you start with?': 'आप कितने मवेशियों के साथ शुरुआत कर सकते हैं?', 'Do you have a reliable fodder source?': 'क्या आपके पास चारे का भरोसेमंद स्रोत है?', 'Is adequate water available year-round?': 'क्या पूरे वर्ष पर्याप्त पानी उपलब्ध है?', 'Do you have access to refrigeration?': 'क्या आपके पास प्रशीतन की सुविधा है?', 'Is there a milk collection centre nearby?': 'क्या पास में दूध संग्रह केंद्र है?', 'How many reliable buyers have you identified?': 'आपने कितने भरोसेमंद खरीदारों की पहचान की है?',
+    'Do you have prior poultry-rearing experience?': 'क्या आपको मुर्गी पालन का पूर्व अनुभव है?', 'How many birds can you start with?': 'आप कितने पक्षियों के साथ शुरुआत कर सकते हैं?', 'Do you have reliable feed supply access?': 'क्या आपके पास भरोसेमंद चारा आपूर्ति उपलब्ध है?', 'Do you have access to veterinary support?': 'क्या आपको पशु चिकित्सा सहायता उपलब्ध है?', 'Do you have a secure, ventilated shed/enclosure?': 'क्या आपके पास सुरक्षित और हवादार शेड या बाड़ा है?', 'Is there a nearby market or trader for sale?': 'क्या बिक्री के लिए पास में बाजार या व्यापारी है?', 'How many reliable buyers/traders have you identified?': 'आपने कितने भरोसेमंद खरीदारों या व्यापारियों की पहचान की है?',
+    'Do you have tailoring/stitching skill or training?': 'क्या आपको सिलाई का कौशल या प्रशिक्षण है?', 'Do you own a sewing machine?': 'क्या आपके पास सिलाई मशीन है?', 'Do you have a dedicated workspace?': 'क्या आपके पास अलग कार्यस्थल है?', 'Do you have prior paid stitching orders/experience?': 'क्या आपको भुगतान वाले सिलाई ऑर्डर या अनुभव है?', 'Do you have a reliable fabric/material supplier?': 'क्या आपके पास भरोसेमंद कपड़ा या सामग्री आपूर्तिकर्ता है?', 'Is there demand for alteration/custom stitching nearby?': 'क्या आसपास कपड़ों की मरम्मत या कस्टम सिलाई की मांग है?', 'How many regular customers have you identified?': 'आपने कितने नियमित ग्राहकों की पहचान की है?',
+    'Do you have prior milling experience?': 'क्या आपको मिल चलाने का पूर्व अनुभव है?', 'Do you have access to a suitable workspace/shed?': 'क्या आपके पास उपयुक्त कार्यस्थल या शेड उपलब्ध है?', 'Is reliable electricity available?': 'क्या भरोसेमंद बिजली उपलब्ध है?', 'Do you have funds/access for milling machinery?': 'क्या आपके पास मिल मशीनरी के लिए धन या पहुंच है?', 'Is there sufficient local grain-growing activity nearby?': 'क्या आसपास पर्याप्त स्थानीय अनाज उत्पादन होता है?', 'Do you have transport access for grain/flour?': 'क्या आपके पास अनाज या आटे के परिवहन की सुविधा है?', 'How many households have you confirmed as regular customers?': 'आपने कितने परिवारों को नियमित ग्राहक के रूप में निश्चित किया है?',
+    'Do you have mechanical/repair training or experience?': 'क्या आपको मैकेनिक या मरम्मत का प्रशिक्षण या अनुभव है?', 'Do you own basic repair tools?': 'क्या आपके पास बुनियादी मरम्मत उपकरण हैं?', 'Do you have a workshop or roadside space secured?': 'क्या आपने कार्यशाला या सड़क किनारे की जगह सुरक्षित की है?', 'Do you have a reliable spare-parts supplier?': 'क्या आपके पास भरोसेमंद स्पेयर पार्ट्स आपूर्तिकर्ता है?', 'Is there significant two-wheeler traffic/ownership in the area?': 'क्या क्षेत्र में दोपहिया वाहनों की पर्याप्त आवाजाही या स्वामित्व है?', 'Do you have experience with common repair jobs?': 'क्या आपको सामान्य मरम्मत कार्यों का अनुभव है?'
+  },
+  mr: {
+    'Do you have tailoring/stitching skill or training?': 'तुम्हाला शिंपीकामाचे कौशल्य किंवा प्रशिक्षण आहे का?', 'Do you own a sewing machine?': 'तुमच्याकडे शिवणयंत्र आहे का?', 'Do you have a dedicated workspace?': 'तुमच्याकडे स्वतंत्र कार्यस्थळ आहे का?', 'Do you have prior paid stitching orders/experience?': 'तुम्हाला सशुल्क शिंपीकामाच्या ऑर्डरचा किंवा अनुभव आहे का?', 'Do you have a reliable fabric/material supplier?': 'तुमच्याकडे विश्वासार्ह कापड किंवा साहित्य पुरवठादार आहे का?', 'Is there demand for alteration/custom stitching nearby?': 'जवळ कपडे दुरुस्ती किंवा कस्टम शिंपीकामाची मागणी आहे का?', 'How many regular customers have you identified?': 'तुम्ही किती नियमित ग्राहक ओळखले आहेत?'
+  },
+  ta: {
+    'Do you have tailoring/stitching skill or training?': 'உங்களுக்கு தையல் திறன் அல்லது பயிற்சி உள்ளதா?', 'Do you own a sewing machine?': 'உங்களிடம் தையல் இயந்திரம் உள்ளதா?', 'Do you have a dedicated workspace?': 'உங்களுக்கென தனி பணியிடம் உள்ளதா?', 'Do you have prior paid stitching orders/experience?': 'கட்டண தையல் ஆர்டர்கள் அல்லது அனுபவம் உள்ளதா?', 'Do you have a reliable fabric/material supplier?': 'நம்பகமான துணி அல்லது பொருள் வழங்குநர் உள்ளாரா?', 'Is there demand for alteration/custom stitching nearby?': 'அருகில் ஆடை மாற்றம் அல்லது தனிப்பயன் தையலுக்கான தேவை உள்ளதா?', 'How many regular customers have you identified?': 'எத்தனை வழக்கமான வாடிக்கையாளர்களை அடையாளம் கண்டுள்ளீர்கள்?'
+  },
+  te: {
+    'Do you have tailoring/stitching skill or training?': 'మీకు టైలరింగ్ లేదా కుట్టు నైపుణ్యం, శిక్షణ ఉందా?', 'Do you own a sewing machine?': 'మీ వద్ద కుట్టు యంత్రం ఉందా?', 'Do you have a dedicated workspace?': 'మీకు ప్రత్యేక పని స్థలం ఉందా?', 'Do you have prior paid stitching orders/experience?': 'మీకు చెల్లింపు కుట్టు ఆర్డర్లు లేదా అనుభవం ఉందా?', 'Do you have a reliable fabric/material supplier?': 'మీకు నమ్మకమైన వస్త్ర లేదా సామగ్రి సరఫరాదారు ఉన్నారా?', 'Is there demand for alteration/custom stitching nearby?': 'సమీపంలో మార్పులు లేదా కస్టమ్ కుట్టుకు డిమాండ్ ఉందా?', 'How many regular customers have you identified?': 'ఎంతమంది సాధారణ కస్టమర్లను గుర్తించారు?'
+  },
+  kn: {
+    'Do you have tailoring/stitching skill or training?': 'ನಿಮಗೆ ಹೊಲಿಗೆ ಕೌಶಲ್ಯ ಅಥವಾ ತರಬೇತಿ ಇದೆಯೇ?', 'Do you own a sewing machine?': 'ನಿಮ್ಮ ಬಳಿ ಹೊಲಿಗೆ ಯಂತ್ರವಿದೆಯೇ?', 'Do you have a dedicated workspace?': 'ನಿಮಗೆ ಪ್ರತ್ಯೇಕ ಕೆಲಸದ ಸ್ಥಳವಿದೆಯೇ?', 'Do you have prior paid stitching orders/experience?': 'ಪಾವತಿಸಿದ ಹೊಲಿಗೆ ಆರ್ಡರ್ ಅಥವಾ ಅನುಭವವಿದೆಯೇ?', 'Do you have a reliable fabric/material supplier?': 'ವಿಶ್ವಾಸಾರ್ಹ ಬಟ್ಟೆ ಅಥವಾ ಸಾಮಗ್ರಿ ಪೂರೈಕೆದಾರರಿದ್ದಾರೆಯೇ?', 'Is there demand for alteration/custom stitching nearby?': 'ಹತ್ತಿರದಲ್ಲಿ ಬಟ್ಟೆ ಬದಲಾವಣೆ ಅಥವಾ ಕಸ್ಟಮ್ ಹೊಲಿಗೆಗೆ ಬೇಡಿಕೆಯಿದೆಯೇ?', 'How many regular customers have you identified?': 'ಎಷ್ಟು ನಿಯಮಿತ ಗ್ರಾಹಕರನ್ನು ಗುರುತಿಸಿದ್ದೀರಿ?'
+  },
+  bn: {
+    'Do you have tailoring/stitching skill or training?': 'আপনার কি সেলাইয়ের দক্ষতা বা প্রশিক্ষণ আছে?', 'Do you own a sewing machine?': 'আপনার কি সেলাই মেশিন আছে?', 'Do you have a dedicated workspace?': 'আপনার কি নির্দিষ্ট কাজের জায়গা আছে?', 'Do you have prior paid stitching orders/experience?': 'আপনার কি পেইড সেলাইয়ের অর্ডার বা অভিজ্ঞতা আছে?', 'Do you have a reliable fabric/material supplier?': 'আপনার কি নির্ভরযোগ্য কাপড় বা উপকরণ সরবরাহকারী আছে?', 'Is there demand for alteration/custom stitching nearby?': 'কাছাকাছি কি পোশাক পরিবর্তন বা কাস্টম সেলাইয়ের চাহিদা আছে?', 'How many regular customers have you identified?': 'আপনি কতজন নিয়মিত গ্রাহক চিহ্নিত করেছেন?'
+  },
+  gu: {
+    'Do you have tailoring/stitching skill or training?': 'શું તમારી પાસે ટેલરિંગનું કૌશલ્ય અથવા તાલીમ છે?', 'Do you own a sewing machine?': 'શું તમારી પાસે સીવણ મશીન છે?', 'Do you have a dedicated workspace?': 'શું તમારી પાસે અલગ કાર્યસ્થળ છે?', 'Do you have prior paid stitching orders/experience?': 'શું તમને ચૂકવેલ સીવણ ઓર્ડર અથવા અનુભવ છે?', 'Do you have a reliable fabric/material supplier?': 'શું તમારી પાસે વિશ્વસનીય કાપડ અથવા સામગ્રી સપ્લાયર છે?', 'Is there demand for alteration/custom stitching nearby?': 'શું નજીકમાં કપડાંના ફેરફાર અથવા કસ્ટમ સીવણની માંગ છે?', 'How many regular customers have you identified?': 'તમે કેટલા નિયમિત ગ્રાહકો ઓળખ્યા છે?'
+  },
+  pa: {
+    'Do you have tailoring/stitching skill or training?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਸਿਲਾਈ ਦਾ ਹੁਨਰ ਜਾਂ ਸਿਖਲਾਈ ਹੈ?', 'Do you own a sewing machine?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਸਿਲਾਈ ਮਸ਼ੀਨ ਹੈ?', 'Do you have a dedicated workspace?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਵੱਖਰੀ ਕੰਮ ਵਾਲੀ ਥਾਂ ਹੈ?', 'Do you have prior paid stitching orders/experience?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਭੁਗਤਾਨ ਵਾਲੇ ਸਿਲਾਈ ਆਰਡਰ ਜਾਂ ਤਜਰਬਾ ਹੈ?', 'Do you have a reliable fabric/material supplier?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਭਰੋਸੇਯੋਗ ਕੱਪੜੇ ਜਾਂ ਸਮੱਗਰੀ ਦਾ ਸਪਲਾਇਰ ਹੈ?', 'Is there demand for alteration/custom stitching nearby?': 'ਕੀ ਨੇੜੇ ਕੱਪੜਿਆਂ ਦੀ ਸੋਧ ਜਾਂ ਕਸਟਮ ਸਿਲਾਈ ਦੀ ਮੰਗ ਹੈ?', 'How many regular customers have you identified?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਨਿਯਮਿਤ ਗਾਹਕ ਪਛਾਣੇ ਹਨ?'
+  }
+};
+
+const POULTRY_QUESTION_COPY = {
+  hi: { 'Do you have prior poultry-rearing experience?': 'क्या आपको मुर्गी पालन का पूर्व अनुभव है?', 'How many birds can you start with?': 'आप कितने पक्षियों के साथ शुरुआत कर सकते हैं?', 'Do you have reliable feed supply access?': 'क्या आपके पास भरोसेमंद चारा आपूर्ति उपलब्ध है?', 'Do you have access to veterinary support?': 'क्या आपको पशु चिकित्सा सहायता उपलब्ध है?', 'Do you have a secure, ventilated shed/enclosure?': 'क्या आपके पास सुरक्षित और हवादार शेड या बाड़ा है?', 'Is there a nearby market or trader for sale?': 'क्या बिक्री के लिए पास में बाजार या व्यापारी है?', 'How many reliable buyers/traders have you identified?': 'आपने कितने भरोसेमंद खरीदारों या व्यापारियों की पहचान की है?' },
+  mr: { 'Do you have prior poultry-rearing experience?': 'तुम्हाला कुक्कुटपालनाचा पूर्व अनुभव आहे का?', 'How many birds can you start with?': 'तुम्ही किती पक्ष्यांपासून सुरुवात करू शकता?', 'Do you have reliable feed supply access?': 'तुमच्याकडे विश्वासार्ह खाद्यपुरवठ्याची सुविधा आहे का?', 'Do you have access to veterinary support?': 'तुम्हाला पशुवैद्यकीय मदत मिळू शकते का?', 'Do you have a secure, ventilated shed/enclosure?': 'तुमच्याकडे सुरक्षित आणि हवेशीर शेड किंवा कुंपण आहे का?', 'Is there a nearby market or trader for sale?': 'विक्रीसाठी जवळ बाजार किंवा व्यापारी आहे का?', 'How many reliable buyers/traders have you identified?': 'तुम्ही किती विश्वासार्ह खरेदीदार किंवा व्यापारी ओळखले आहेत?' },
+  ta: { 'Do you have prior poultry-rearing experience?': 'உங்களுக்கு கோழி வளர்ப்பு அனுபவம் உள்ளதா?', 'How many birds can you start with?': 'எத்தனை பறவைகளுடன் தொடங்க முடியும்?', 'Do you have reliable feed supply access?': 'நம்பகமான தீவன விநியோகம் கிடைக்கிறதா?', 'Do you have access to veterinary support?': 'கால்நடை மருத்துவ உதவி கிடைக்கிறதா?', 'Do you have a secure, ventilated shed/enclosure?': 'பாதுகாப்பான காற்றோட்டமான கொட்டகை அல்லது கூண்டு உள்ளதா?', 'Is there a nearby market or trader for sale?': 'விற்பனைக்கு அருகில் சந்தை அல்லது வணிகர் உள்ளாரா?', 'How many reliable buyers/traders have you identified?': 'எத்தனை நம்பகமான வாங்குபவர்கள் அல்லது வணிகர்களை அடையாளம் கண்டுள்ளீர்கள்?' },
+  te: { 'Do you have prior poultry-rearing experience?': 'మీకు కోళ్ల పెంపకంలో మునుపటి అనుభవం ఉందా?', 'How many birds can you start with?': 'మీరు ఎన్ని పక్షులతో ప్రారంభించగలరు?', 'Do you have reliable feed supply access?': 'మీకు నమ్మకమైన మేత సరఫరా అందుబాటులో ఉందా?', 'Do you have access to veterinary support?': 'పశువైద్య సహాయం మీకు అందుబాటులో ఉందా?', 'Do you have a secure, ventilated shed/enclosure?': 'మీకు సురక్షితమైన, గాలి ప్రసరణ ఉన్న షెడ్ లేదా ఆవరణ ఉందా?', 'Is there a nearby market or trader for sale?': 'విక్రయానికి సమీపంలో మార్కెట్ లేదా వ్యాపారి ఉన్నారా?', 'How many reliable buyers/traders have you identified?': 'ఎంతమంది నమ్మకమైన కొనుగోలుదారులు లేదా వ్యాపారులను గుర్తించారు?' },
+  kn: { 'Do you have prior poultry-rearing experience?': 'ನಿಮಗೆ ಕೋಳಿ ಸಾಕಾಣಿಕೆಯ ಹಿಂದಿನ ಅನುಭವವಿದೆಯೇ?', 'How many birds can you start with?': 'ಎಷ್ಟು ಪಕ್ಷಿಗಳೊಂದಿಗೆ ಪ್ರಾರಂಭಿಸಬಹುದು?', 'Do you have reliable feed supply access?': 'ವಿಶ್ವಾಸಾರ್ಹ ಆಹಾರ ಪೂರೈಕೆ ಲಭ್ಯವಿದೆಯೇ?', 'Do you have access to veterinary support?': 'ಪಶುವೈದ್ಯಕೀಯ ಸಹಾಯ ಲಭ್ಯವಿದೆಯೇ?', 'Do you have a secure, ventilated shed/enclosure?': 'ಸುರಕ್ಷಿತ, ಗಾಳಿ ಹರಿಯುವ ಶೆಡ್ ಅಥವಾ ಆವರಣವಿದೆಯೇ?', 'Is there a nearby market or trader for sale?': 'ಮಾರಾಟಕ್ಕೆ ಹತ್ತಿರದಲ್ಲಿ ಮಾರುಕಟ್ಟೆ ಅಥವಾ ವ್ಯಾಪಾರಿ ಇದ್ದಾರೆಯೇ?', 'How many reliable buyers/traders have you identified?': 'ಎಷ್ಟು ವಿಶ್ವಾಸಾರ್ಹ ಖರೀದಿದಾರರು ಅಥವಾ ವ್ಯಾಪಾರಿಗಳನ್ನು ಗುರುತಿಸಿದ್ದೀರಿ?' },
+  bn: { 'Do you have prior poultry-rearing experience?': 'আপনার কি পোলট্রি পালনের পূর্ব অভিজ্ঞতা আছে?', 'How many birds can you start with?': 'আপনি কতগুলি পাখি দিয়ে শুরু করতে পারেন?', 'Do you have reliable feed supply access?': 'আপনার কি নির্ভরযোগ্য খাদ্য সরবরাহের ব্যবস্থা আছে?', 'Do you have access to veterinary support?': 'আপনার কি পশুচিকিৎসা সহায়তা পাওয়ার সুযোগ আছে?', 'Do you have a secure, ventilated shed/enclosure?': 'আপনার কি নিরাপদ ও বায়ুচলাচলযুক্ত শেড বা ঘের আছে?', 'Is there a nearby market or trader for sale?': 'বিক্রির জন্য কি কাছাকাছি বাজার বা ব্যবসায়ী আছে?', 'How many reliable buyers/traders have you identified?': 'আপনি কতজন নির্ভরযোগ্য ক্রেতা বা ব্যবসায়ী চিহ্নিত করেছেন?' },
+  gu: { 'Do you have prior poultry-rearing experience?': 'શું તમને મરઘાં ઉછેરનો અગાઉનો અનુભવ છે?', 'How many birds can you start with?': 'તમે કેટલા પક્ષીઓથી શરૂઆત કરી શકો છો?', 'Do you have reliable feed supply access?': 'શું તમારી પાસે વિશ્વસનીય ચારા પુરવઠાની સુવિધા છે?', 'Do you have access to veterinary support?': 'શું તમને પશુચિકિત્સા સહાય મળી શકે છે?', 'Do you have a secure, ventilated shed/enclosure?': 'શું તમારી પાસે સુરક્ષિત અને હવાવાળું શેડ અથવા ઘેરો છે?', 'Is there a nearby market or trader for sale?': 'શું વેચાણ માટે નજીકમાં બજાર અથવા વેપારી છે?', 'How many reliable buyers/traders have you identified?': 'તમે કેટલા વિશ્વસનીય ખરીદદારો અથવા વેપારીઓ ઓળખ્યા છે?' },
+  pa: { 'Do you have prior poultry-rearing experience?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਪੋਲਟਰੀ ਪਾਲਣ ਦਾ ਪਿਛਲਾ ਤਜਰਬਾ ਹੈ?', 'How many birds can you start with?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਪੰਛੀਆਂ ਨਾਲ ਸ਼ੁਰੂ ਕਰ ਸਕਦੇ ਹੋ?', 'Do you have reliable feed supply access?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਭਰੋਸੇਯੋਗ ਚਾਰੇ ਦੀ ਸਪਲਾਈ ਉਪਲਬਧ ਹੈ?', 'Do you have access to veterinary support?': 'ਕੀ ਤੁਹਾਨੂੰ ਪਸ਼ੂ ਡਾਕਟਰੀ ਸਹਾਇਤਾ ਮਿਲ ਸਕਦੀ ਹੈ?', 'Do you have a secure, ventilated shed/enclosure?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਸੁਰੱਖਿਅਤ ਅਤੇ ਹਵਾਦਾਰ ਸ਼ੈੱਡ ਜਾਂ ਘੇਰਾ ਹੈ?', 'Is there a nearby market or trader for sale?': 'ਕੀ ਵਿਕਰੀ ਲਈ ਨੇੜੇ ਕੋਈ ਬਾਜ਼ਾਰ ਜਾਂ ਵਪਾਰੀ ਹੈ?', 'How many reliable buyers/traders have you identified?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਭਰੋਸੇਯੋਗ ਖਰੀਦਦਾਰ ਜਾਂ ਵਪਾਰੀ ਪਛਾਣੇ ਹਨ?' }
+};
+
+const OTHER_READINESS_QUESTION_COPY = {
+  hi: {
+    'Do you have prior milling experience?': 'क्या आपको मिल चलाने का पूर्व अनुभव है?', 'Do you have access to a suitable workspace/shed?': 'क्या आपके पास उपयुक्त कार्यस्थल या शेड उपलब्ध है?', 'Is reliable electricity available?': 'क्या भरोसेमंद बिजली उपलब्ध है?', 'Do you have funds/access for milling machinery?': 'क्या आपके पास मिल मशीनरी के लिए धन या पहुंच है?', 'Is there sufficient local grain-growing activity nearby?': 'क्या आसपास पर्याप्त स्थानीय अनाज उत्पादन होता है?', 'Do you have transport access for grain/flour?': 'क्या आपके पास अनाज या आटे के परिवहन की सुविधा है?', 'How many households have you confirmed as regular customers?': 'आपने कितने परिवारों को नियमित ग्राहक के रूप में निश्चित किया है?',
+    'Do you have mechanical/repair training or experience?': 'क्या आपको मैकेनिक या मरम्मत का प्रशिक्षण या अनुभव है?', 'Do you own basic repair tools?': 'क्या आपके पास बुनियादी मरम्मत उपकरण हैं?', 'Do you have a workshop or roadside space secured?': 'क्या आपने कार्यशाला या सड़क किनारे की जगह सुरक्षित की है?', 'Do you have a reliable spare-parts supplier?': 'क्या आपके पास भरोसेमंद स्पेयर पार्ट्स आपूर्तिकर्ता है?', 'Is there significant two-wheeler traffic/ownership in the area?': 'क्या क्षेत्र में दोपहिया वाहनों की पर्याप्त आवाजाही या स्वामित्व है?', 'Do you have experience with common repair jobs?': 'क्या आपको सामान्य मरम्मत कार्यों का अनुभव है?', 'How many regular customers have you identified?': 'आपने कितने नियमित ग्राहकों की पहचान की है?'
+  },
+  mr: {
+    'Do you have prior milling experience?': 'तुम्हाला गिरणी चालवण्याचा पूर्व अनुभव आहे का?', 'Do you have access to a suitable workspace/shed?': 'तुमच्याकडे योग्य कार्यस्थळ किंवा शेड उपलब्ध आहे का?', 'Is reliable electricity available?': 'विश्वासार्ह वीज उपलब्ध आहे का?', 'Do you have funds/access for milling machinery?': 'गिरणी यंत्रसामग्रीसाठी तुमच्याकडे निधी किंवा सुविधा आहे का?', 'Is there sufficient local grain-growing activity nearby?': 'जवळपास पुरेसे स्थानिक धान्य उत्पादन होते का?', 'Do you have transport access for grain/flour?': 'धान्य किंवा पिठाच्या वाहतुकीची सुविधा आहे का?', 'How many households have you confirmed as regular customers?': 'तुम्ही किती कुटुंबांना नियमित ग्राहक म्हणून निश्चित केले आहे?',
+    'Do you have mechanical/repair training or experience?': 'तुम्हाला यांत्रिकी किंवा दुरुस्तीचे प्रशिक्षण किंवा अनुभव आहे का?', 'Do you own basic repair tools?': 'तुमच्याकडे मूलभूत दुरुस्तीची साधने आहेत का?', 'Do you have a workshop or roadside space secured?': 'तुम्ही कार्यशाळा किंवा रस्त्यालगतची जागा निश्चित केली आहे का?', 'Do you have a reliable spare-parts supplier?': 'तुमच्याकडे विश्वासार्ह सुटे भाग पुरवठादार आहे का?', 'Is there significant two-wheeler traffic/ownership in the area?': 'या परिसरात दुचाकींची लक्षणीय वाहतूक किंवा मालकी आहे का?', 'Do you have experience with common repair jobs?': 'तुम्हाला सामान्य दुरुस्तीच्या कामांचा अनुभव आहे का?', 'How many regular customers have you identified?': 'तुम्ही किती नियमित ग्राहक ओळखले आहेत?'
+  },
+  ta: {
+    'Do you have prior milling experience?': 'உங்களுக்கு ஆலை இயக்கிய முன் அனுபவம் உள்ளதா?', 'Do you have access to a suitable workspace/shed?': 'பொருத்தமான பணியிடம் அல்லது கொட்டகை கிடைக்கிறதா?', 'Is reliable electricity available?': 'நம்பகமான மின்சாரம் கிடைக்கிறதா?', 'Do you have funds/access for milling machinery?': 'ஆலை இயந்திரங்களுக்கான நிதி அல்லது அணுகல் உள்ளதா?', 'Is there sufficient local grain-growing activity nearby?': 'அருகில் போதுமான உள்ளூர் தானிய உற்பத்தி உள்ளதா?', 'Do you have transport access for grain/flour?': 'தானியம் அல்லது மாவு போக்குவரத்து வசதி உள்ளதா?', 'How many households have you confirmed as regular customers?': 'எத்தனை குடும்பங்களை வழக்கமான வாடிக்கையாளர்களாக உறுதி செய்துள்ளீர்கள்?',
+    'Do you have mechanical/repair training or experience?': 'இயந்திர அல்லது பழுதுபார்ப்பு பயிற்சி அல்லது அனுபவம் உள்ளதா?', 'Do you own basic repair tools?': 'அடிப்படை பழுதுபார்ப்பு கருவிகள் உங்களிடம் உள்ளதா?', 'Do you have a workshop or roadside space secured?': 'பணிமனை அல்லது சாலையோர இடத்தை உறுதி செய்துள்ளீர்களா?', 'Do you have a reliable spare-parts supplier?': 'நம்பகமான உதிரிபாக வழங்குநர் உள்ளாரா?', 'Is there significant two-wheeler traffic/ownership in the area?': 'இப்பகுதியில் இருசக்கர வாகன போக்குவரத்து அல்லது உரிமை அதிகமாக உள்ளதா?', 'Do you have experience with common repair jobs?': 'பொதுவான பழுதுபார்ப்பு பணிகளில் அனுபவம் உள்ளதா?', 'How many regular customers have you identified?': 'எத்தனை வழக்கமான வாடிக்கையாளர்களை அடையாளம் கண்டுள்ளீர்கள்?'
+  },
+  te: {
+    'Do you have prior milling experience?': 'మీకు మిల్లింగ్‌లో మునుపటి అనుభవం ఉందా?', 'Do you have access to a suitable workspace/shed?': 'మీకు తగిన పని స్థలం లేదా షెడ్ అందుబాటులో ఉందా?', 'Is reliable electricity available?': 'నమ్మకమైన విద్యుత్ అందుబాటులో ఉందా?', 'Do you have funds/access for milling machinery?': 'మిల్లింగ్ యంత్రాలకు నిధులు లేదా ప్రాప్యత ఉందా?', 'Is there sufficient local grain-growing activity nearby?': 'సమీపంలో తగినంత స్థానిక ధాన్యం సాగు జరుగుతుందా?', 'Do you have transport access for grain/flour?': 'ధాన్యం లేదా పిండి రవాణా సౌకర్యం ఉందా?', 'How many households have you confirmed as regular customers?': 'ఎన్ని కుటుంబాలను సాధారణ కస్టమర్లుగా నిర్ధారించారు?',
+    'Do you have mechanical/repair training or experience?': 'మీకు మెకానికల్ లేదా మరమ్మతు శిక్షణ, అనుభవం ఉందా?', 'Do you own basic repair tools?': 'మీ వద్ద ప్రాథమిక మరమ్మతు పరికరాలు ఉన్నాయా?', 'Do you have a workshop or roadside space secured?': 'మీరు వర్క్‌షాప్ లేదా రోడ్డు పక్క స్థలాన్ని ఏర్పాటు చేసుకున్నారా?', 'Do you have a reliable spare-parts supplier?': 'మీకు నమ్మకమైన విడిభాగాల సరఫరాదారు ఉన్నారా?', 'Is there significant two-wheeler traffic/ownership in the area?': 'ఈ ప్రాంతంలో ద్విచక్ర వాహనాల రాకపోకలు లేదా యాజమాన్యం ఎక్కువగా ఉందా?', 'Do you have experience with common repair jobs?': 'సాధారణ మరమ్మతు పనుల్లో మీకు అనుభవం ఉందా?', 'How many regular customers have you identified?': 'ఎంతమంది సాధారణ కస్టమర్లను గుర్తించారు?'
+  },
+  kn: {
+    'Do you have prior milling experience?': 'ನಿಮಗೆ ಗಿರಣಿ ನಡೆಸಿದ ಹಿಂದಿನ ಅನುಭವವಿದೆಯೇ?', 'Do you have access to a suitable workspace/shed?': 'ಸೂಕ್ತ ಕೆಲಸದ ಸ್ಥಳ ಅಥವಾ ಶೆಡ್ ಲಭ್ಯವಿದೆಯೇ?', 'Is reliable electricity available?': 'ವಿಶ್ವಾಸಾರ್ಹ ವಿದ್ಯುತ್ ಲಭ್ಯವಿದೆಯೇ?', 'Do you have funds/access for milling machinery?': 'ಗಿರಣಿ ಯಂತ್ರಗಳಿಗೆ ಹಣ ಅಥವಾ ಪ್ರವೇಶವಿದೆಯೇ?', 'Is there sufficient local grain-growing activity nearby?': 'ಹತ್ತಿರದಲ್ಲಿ ಸಾಕಷ್ಟು ಸ್ಥಳೀಯ ಧಾನ್ಯ ಬೆಳೆಯಲಾಗುತ್ತದೆಯೇ?', 'Do you have transport access for grain/flour?': 'ಧಾನ್ಯ ಅಥವಾ ಹಿಟ್ಟಿನ ಸಾಗಣೆಗೆ ಸೌಲಭ್ಯವಿದೆಯೇ?', 'How many households have you confirmed as regular customers?': 'ಎಷ್ಟು ಕುಟುಂಬಗಳನ್ನು ನಿಯಮಿತ ಗ್ರಾಹಕರಾಗಿ ಖಚಿತಪಡಿಸಿದ್ದೀರಿ?',
+    'Do you have mechanical/repair training or experience?': 'ನಿಮಗೆ ಮೆಕ್ಯಾನಿಕಲ್ ಅಥವಾ ದುರಸ್ತಿ ತರಬೇತಿ, ಅನುಭವವಿದೆಯೇ?', 'Do you own basic repair tools?': 'ನಿಮ್ಮ ಬಳಿ ಮೂಲಭೂತ ದುರಸ್ತಿ ಸಾಧನಗಳಿವೆಯೇ?', 'Do you have a workshop or roadside space secured?': 'ಕಾರ್ಯಾಗಾರ ಅಥವಾ ರಸ್ತೆಬದಿಯ ಸ್ಥಳವನ್ನು ಖಚಿತಪಡಿಸಿದ್ದೀರಾ?', 'Do you have a reliable spare-parts supplier?': 'ವಿಶ್ವಾಸಾರ್ಹ ಬಿಡಿಭಾಗಗಳ ಪೂರೈಕೆದಾರರಿದ್ದಾರೆಯೇ?', 'Is there significant two-wheeler traffic/ownership in the area?': 'ಈ ಪ್ರದೇಶದಲ್ಲಿ ದ್ವಿಚಕ್ರ ವಾಹನಗಳ ಸಂಚಾರ ಅಥವಾ ಮಾಲೀಕತ್ವ ಹೆಚ್ಚಿದೆಯೇ?', 'Do you have experience with common repair jobs?': 'ಸಾಮಾನ್ಯ ದುರಸ್ತಿ ಕೆಲಸಗಳಲ್ಲಿ ಅನುಭವವಿದೆಯೇ?', 'How many regular customers have you identified?': 'ಎಷ್ಟು ನಿಯಮಿತ ಗ್ರಾಹಕರನ್ನು ಗುರುತಿಸಿದ್ದೀರಿ?'
+  },
+  bn: {
+    'Do you have prior milling experience?': 'আপনার কি মিল চালানোর পূর্ব অভিজ্ঞতা আছে?', 'Do you have access to a suitable workspace/shed?': 'আপনার কি উপযুক্ত কাজের জায়গা বা শেড আছে?', 'Is reliable electricity available?': 'নির্ভরযোগ্য বিদ্যুৎ কি পাওয়া যায়?', 'Do you have funds/access for milling machinery?': 'মিলের যন্ত্রপাতির জন্য আপনার কি অর্থ বা সুযোগ আছে?', 'Is there sufficient local grain-growing activity nearby?': 'কাছাকাছি কি পর্যাপ্ত স্থানীয় শস্য উৎপাদন হয়?', 'Do you have transport access for grain/flour?': 'শস্য বা আটা পরিবহনের সুবিধা কি আছে?', 'How many households have you confirmed as regular customers?': 'আপনি কতটি পরিবারকে নিয়মিত গ্রাহক হিসেবে নিশ্চিত করেছেন?',
+    'Do you have mechanical/repair training or experience?': 'আপনার কি যান্ত্রিক বা মেরামতের প্রশিক্ষণ বা অভিজ্ঞতা আছে?', 'Do you own basic repair tools?': 'আপনার কি মৌলিক মেরামতের সরঞ্জাম আছে?', 'Do you have a workshop or roadside space secured?': 'আপনি কি ওয়ার্কশপ বা রাস্তার পাশের জায়গা নিশ্চিত করেছেন?', 'Do you have a reliable spare-parts supplier?': 'আপনার কি নির্ভরযোগ্য যন্ত্রাংশ সরবরাহকারী আছে?', 'Is there significant two-wheeler traffic/ownership in the area?': 'এলাকায় কি দুই চাকার যানবাহনের চলাচল বা মালিকানা বেশি?', 'Do you have experience with common repair jobs?': 'সাধারণ মেরামতের কাজে কি আপনার অভিজ্ঞতা আছে?', 'How many regular customers have you identified?': 'আপনি কতজন নিয়মিত গ্রাহক চিহ্নিত করেছেন?'
+  },
+  gu: {
+    'Do you have prior milling experience?': 'શું તમને મિલિંગનો અગાઉનો અનુભવ છે?', 'Do you have access to a suitable workspace/shed?': 'શું તમારી પાસે યોગ્ય કાર્યસ્થળ અથવા શેડ છે?', 'Is reliable electricity available?': 'શું વિશ્વસનીય વીજળી ઉપલબ્ધ છે?', 'Do you have funds/access for milling machinery?': 'શું તમારી પાસે મિલિંગ મશીનરી માટે ભંડોળ અથવા પહોંચ છે?', 'Is there sufficient local grain-growing activity nearby?': 'શું નજીકમાં પૂરતી સ્થાનિક અનાજની ખેતી થાય છે?', 'Do you have transport access for grain/flour?': 'શું તમારી પાસે અનાજ અથવા લોટના પરિવહનની સુવિધા છે?', 'How many households have you confirmed as regular customers?': 'તમે કેટલા પરિવારોને નિયમિત ગ્રાહકો તરીકે નિશ્ચિત કર્યા છે?',
+    'Do you have mechanical/repair training or experience?': 'શું તમને મિકેનિકલ અથવા સમારકામની તાલીમ કે અનુભવ છે?', 'Do you own basic repair tools?': 'શું તમારી પાસે મૂળભૂત સમારકામનાં સાધનો છે?', 'Do you have a workshop or roadside space secured?': 'શું તમે વર્કશોપ અથવા રસ્તા કિનારાની જગ્યા સુરક્ષિત કરી છે?', 'Do you have a reliable spare-parts supplier?': 'શું તમારી પાસે વિશ્વસનીય સ્પેર પાર્ટ્સ સપ્લાયર છે?', 'Is there significant two-wheeler traffic/ownership in the area?': 'શું આ વિસ્તારમાં ટુ-વ્હીલરની નોંધપાત્ર અવરજવર અથવા માલિકી છે?', 'Do you have experience with common repair jobs?': 'શું તમને સામાન્ય સમારકામના કામનો અનુભવ છે?', 'How many regular customers have you identified?': 'તમે કેટલા નિયમિત ગ્રાહકો ઓળખ્યા છે?'
+  },
+  pa: {
+    'Do you have prior milling experience?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਮਿੱਲ ਚਲਾਉਣ ਦਾ ਪਿਛਲਾ ਤਜਰਬਾ ਹੈ?', 'Do you have access to a suitable workspace/shed?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਢੁਕਵੀਂ ਕੰਮ ਵਾਲੀ ਥਾਂ ਜਾਂ ਸ਼ੈੱਡ ਹੈ?', 'Is reliable electricity available?': 'ਕੀ ਭਰੋਸੇਯੋਗ ਬਿਜਲੀ ਉਪਲਬਧ ਹੈ?', 'Do you have funds/access for milling machinery?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਮਿੱਲ ਮਸ਼ੀਨਰੀ ਲਈ ਫੰਡ ਜਾਂ ਪਹੁੰਚ ਹੈ?', 'Is there sufficient local grain-growing activity nearby?': 'ਕੀ ਨੇੜੇ ਕਾਫ਼ੀ ਸਥਾਨਕ ਅਨਾਜ ਦੀ ਖੇਤੀ ਹੁੰਦੀ ਹੈ?', 'Do you have transport access for grain/flour?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਅਨਾਜ ਜਾਂ ਆਟੇ ਦੀ ਢੋਆ-ਢੁਆਈ ਦੀ ਸਹੂਲਤ ਹੈ?', 'How many households have you confirmed as regular customers?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਪਰਿਵਾਰਾਂ ਨੂੰ ਨਿਯਮਿਤ ਗਾਹਕ ਵਜੋਂ ਪੱਕਾ ਕੀਤਾ ਹੈ?',
+    'Do you have mechanical/repair training or experience?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਮਕੈਨੀਕਲ ਜਾਂ ਮੁਰੰਮਤ ਦੀ ਸਿਖਲਾਈ ਜਾਂ ਤਜਰਬਾ ਹੈ?', 'Do you own basic repair tools?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਬੁਨਿਆਦੀ ਮੁਰੰਮਤ ਦੇ ਸੰਦ ਹਨ?', 'Do you have a workshop or roadside space secured?': 'ਕੀ ਤੁਸੀਂ ਵਰਕਸ਼ਾਪ ਜਾਂ ਸੜਕ ਕਿਨਾਰੇ ਦੀ ਥਾਂ ਸੁਰੱਖਿਅਤ ਕੀਤੀ ਹੈ?', 'Do you have a reliable spare-parts supplier?': 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਭਰੋਸੇਯੋਗ ਸਪੇਅਰ ਪਾਰਟਸ ਸਪਲਾਇਰ ਹੈ?', 'Is there significant two-wheeler traffic/ownership in the area?': 'ਕੀ ਇਲਾਕੇ ਵਿੱਚ ਦੋ-ਪਹੀਆ ਵਾਹਨਾਂ ਦੀ ਕਾਫ਼ੀ ਆਵਾਜਾਈ ਜਾਂ ਮਾਲਕੀ ਹੈ?', 'Do you have experience with common repair jobs?': 'ਕੀ ਤੁਹਾਨੂੰ ਆਮ ਮੁਰੰਮਤ ਦੇ ਕੰਮਾਂ ਦਾ ਤਜਰਬਾ ਹੈ?', 'How many regular customers have you identified?': 'ਤੁਸੀਂ ਕਿੰਨੇ ਨਿਯਮਿਤ ਗਾਹਕ ਪਛਾਣੇ ਹਨ?'
+  }
+};
+
+const FINANCE_INPUT_COPY = {
+  hi: { 'Project Cost Estimate (₹)': 'परियोजना लागत (₹)', 'Available Entrepreneur Margin Capital (₹)': 'उपलब्ध उद्यमी मार्जिन पूंजी (₹)', 'Monthly Household Expenses (₹)': 'मासिक घरेलू खर्च (₹)' },
+  mr: { 'Project Cost Estimate (₹)': 'प्रकल्प खर्चाचा अंदाज (₹)', 'Available Entrepreneur Margin Capital (₹)': 'उपलब्ध उद्योजक भांडवल (₹)', 'Monthly Household Expenses (₹)': 'मासिक घरगुती खर्च (₹)' },
+  ta: { 'Project Cost Estimate (₹)': 'திட்டச் செலவு மதிப்பீடு (₹)', 'Available Entrepreneur Margin Capital (₹)': 'கிடைக்கும் தொழில்முனைவோர் மார்ஜின் மூலதனம் (₹)', 'Monthly Household Expenses (₹)': 'மாதாந்திர குடும்பச் செலவுகள் (₹)' },
+  te: { 'Project Cost Estimate (₹)': 'ప్రాజెక్ట్ ఖర్చు అంచనా (₹)', 'Available Entrepreneur Margin Capital (₹)': 'అందుబాటులో ఉన్న వ్యాపారవేత్త మార్జిన్ మూలధనం (₹)', 'Monthly Household Expenses (₹)': 'నెలవారీ కుటుంబ ఖర్చులు (₹)' },
+  kn: { 'Project Cost Estimate (₹)': 'ಯೋಜನೆಯ ವೆಚ್ಚದ ಅಂದಾಜು (₹)', 'Available Entrepreneur Margin Capital (₹)': 'ಲಭ್ಯವಿರುವ ಉದ್ಯಮಿ ಬಂಡವಾಳ (₹)', 'Monthly Household Expenses (₹)': 'ಮಾಸಿಕ ಕುಟುಂಬದ ವೆಚ್ಚಗಳು (₹)' },
+  bn: { 'Project Cost Estimate (₹)': 'প্রকল্প খরচের অনুমান (₹)', 'Available Entrepreneur Margin Capital (₹)': 'উপলব্ধ উদ্যোক্তা মার্জিন মূলধন (₹)', 'Monthly Household Expenses (₹)': 'মাসিক পারিবারিক খরচ (₹)' },
+  gu: { 'Project Cost Estimate (₹)': 'પ્રોજેક્ટ ખર્ચનો અંદાજ (₹)', 'Available Entrepreneur Margin Capital (₹)': 'ઉપલબ્ધ ઉદ્યોગસાહસિક મૂડી (₹)', 'Monthly Household Expenses (₹)': 'માસિક ઘરખર્ચ (₹)' },
+  pa: { 'Project Cost Estimate (₹)': 'ਪ੍ਰੋਜੈਕਟ ਲਾਗਤ ਦਾ ਅੰਦਾਜ਼ਾ (₹)', 'Available Entrepreneur Margin Capital (₹)': 'ਉਪਲਬਧ ਉਦਮੀ ਮਾਰਜਿਨ ਪੂੰਜੀ (₹)', 'Monthly Household Expenses (₹)': 'ਮਹੀਨਾਵਾਰ ਘਰੇਲੂ ਖਰਚੇ (₹)' }
+};
+
+const ASSESSMENT_VALUE_COPY = {
+  hi: { Somewhat: 'कुछ हद तक', 'Select time commitment': 'समय प्रतिबद्धता चुनें', 'Full-time commitment': 'पूर्णकालिक प्रतिबद्धता', 'Part-time': 'अंशकालिक', Seasonal: 'मौसमी', 'Family-managed': 'परिवार द्वारा संचालित' },
+  mr: { Somewhat: 'काही प्रमाणात', 'Select time commitment': 'वेळेची बांधिलकी निवडा', 'Full-time commitment': 'पूर्णवेळ बांधिलकी', 'Part-time': 'अर्धवेळ', Seasonal: 'हंगामी', 'Family-managed': 'कुटुंबाद्वारे व्यवस्थापित' },
+  ta: { Somewhat: 'ஓரளவு', 'Select time commitment': 'நேர ஒதுக்கீட்டைத் தேர்ந்தெடுக்கவும்', 'Full-time commitment': 'முழுநேர ஒதுக்கீடு', 'Part-time': 'பகுதிநேரம்', Seasonal: 'பருவகாலம்', 'Family-managed': 'குடும்ப நிர்வாகம்' },
+  te: { Somewhat: 'కొంతవరకు', 'Select time commitment': 'సమయ నిబద్ధతను ఎంచుకోండి', 'Full-time commitment': 'పూర్తి సమయ నిబద్ధత', 'Part-time': 'పార్ట్ టైమ్', Seasonal: 'కాలానుగుణం', 'Family-managed': 'కుటుంబ నిర్వహణ' },
+  kn: { Somewhat: 'ಸ್ವಲ್ಪಮಟ್ಟಿಗೆ', 'Select time commitment': 'ಸಮಯದ ಬದ್ಧತೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ', 'Full-time commitment': 'ಪೂರ್ಣ ಸಮಯದ ಬದ್ಧತೆ', 'Part-time': 'ಅರೆಕಾಲಿಕ', Seasonal: 'ಋತುಮಾನಿಕ', 'Family-managed': 'ಕುಟುಂಬ ನಿರ್ವಹಣೆ' },
+  bn: { Somewhat: 'কিছুটা', 'Select time commitment': 'সময়ের প্রতিশ্রুতি নির্বাচন করুন', 'Full-time commitment': 'পূর্ণকালীন প্রতিশ্রুতি', 'Part-time': 'খণ্ডকালীন', Seasonal: 'মৌসুমি', 'Family-managed': 'পরিবার পরিচালিত' },
+  gu: { Somewhat: 'કેટલાક અંશે', 'Select time commitment': 'સમયની પ્રતિબદ્ધતા પસંદ કરો', 'Full-time commitment': 'પૂર્ણ-સમયની પ્રતિબદ્ધતા', 'Part-time': 'અંશકાલિક', Seasonal: 'મોસમી', 'Family-managed': 'કુટુંબ દ્વારા સંચાલિત' },
+  pa: { Somewhat: 'ਕੁਝ ਹੱਦ ਤੱਕ', 'Select time commitment': 'ਸਮੇਂ ਦੀ ਵਚਨਬੱਧਤਾ ਚੁਣੋ', 'Full-time commitment': 'ਪੂਰੇ ਸਮੇਂ ਦੀ ਵਚਨਬੱਧਤਾ', 'Part-time': 'ਪਾਰਟ-ਟਾਈਮ', Seasonal: 'ਮੌਸਮੀ', 'Family-managed': 'ਪਰਿਵਾਰ ਦੁਆਰਾ ਚਲਾਇਆ' }
+};
+
 export const AssessmentWizard = () => {
   const navigate = useNavigate();
   const { translate: t, lang } = useLanguage();
-  const at = (key) => ASSESSMENT_HEADING_COPY[lang]?.[key] || PROFILE_OPTION_COPY[lang]?.[key] || t(key);
+  const at = (key) => READINESS_QUESTION_COPY[lang]?.[key] || POULTRY_QUESTION_COPY[lang]?.[key] || OTHER_READINESS_QUESTION_COPY[lang]?.[key] || FINANCE_INPUT_COPY[lang]?.[key] || ASSESSMENT_VALUE_COPY[lang]?.[key] || ASSESSMENT_HEADING_COPY[lang]?.[key] || PROFILE_OPTION_COPY[lang]?.[key] || t(key);
+  const profileValue = (value) => ({
+    '18-24': at('18–24 years'),
+    '25-34': at('25–34 years'),
+    '35-44': at('35–44 years'),
+    '45+': at('45+ years'),
+    Primary: at('Primary School'),
+    Secondary: at('Secondary (Class 10/12)'),
+    Graduate: at('Graduate / Higher'),
+    'No Formal': at('No Formal Education'),
+    None: at('None (First-time)'),
+    '0-2 years': at('0–2 years'),
+    '3-5 years': at('3–5 years'),
+    '5+ years': at('5+ years')
+  }[value] || value);
 
   // Assessment & Wizard State
   const [assessmentId, setAssessmentId] = useState(null);
@@ -400,7 +513,7 @@ export const AssessmentWizard = () => {
             <div key={key} className="p-4 rounded-xl bg-gray-50 border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <span className="text-xs font-medium text-gray-800">
                 <strong className="text-primary-600 mr-2">{qIdx + 1}.</strong>
-                {t(qText)} <span className="text-red-600" aria-hidden="true">*</span>
+                {at(qText)} <span className="text-red-600" aria-hidden="true">*</span>
               </span>
 
               {isNumeric ? (
@@ -690,11 +803,11 @@ export const AssessmentWizard = () => {
                     onChange={(e) => setProfile({ ...profile, time_commitment: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white"
                   >
-                    <option value="">Select time commitment</option>
-                    <option value="Full-time">Full-time commitment</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Seasonal">Seasonal</option>
-                    <option value="Family-managed">Family-managed</option>
+                    <option value="">{at('Select time commitment')}</option>
+                    <option value="Full-time">{at('Full-time commitment')}</option>
+                    <option value="Part-time">{at('Part-time')}</option>
+                    <option value="Seasonal">{at('Seasonal')}</option>
+                    <option value="Family-managed">{at('Family-managed')}</option>
                   </select>
                 </div>
 
@@ -967,7 +1080,7 @@ export const AssessmentWizard = () => {
                 {/* Left Form Inputs */}
                 <div className="md:col-span-7 space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Project Cost Estimate (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Project Cost Estimate (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="number"
                       required
@@ -978,7 +1091,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Available Entrepreneur Margin Capital (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Available Entrepreneur Margin Capital (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="number"
                       required
@@ -989,7 +1102,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Monthly Household Expenses (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">{at('Monthly Household Expenses (₹)')} <span className="text-red-600" aria-hidden="true">*</span></label>
                     <input
                       type="number"
                       required
@@ -1015,7 +1128,7 @@ export const AssessmentWizard = () => {
                               finance.understands_emi === opt ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200'
                             }`}
                           >
-                            {t(opt)}
+                            {at(opt)}
                           </button>
                         ))}
                       </div>
@@ -1090,7 +1203,7 @@ export const AssessmentWizard = () => {
                 <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-gray-900">{t('1. Personal Profile')}</div>
-                    <div className="text-[11.5px] text-gray-600">{t('Age')} {profile.age_group} · {profile.education} · {profile.business_experience} {t('experience')}</div>
+                    <div className="text-[11.5px] text-gray-600">{t('Age')} {profileValue(profile.age_group)} · {profileValue(profile.education)} · {profileValue(profile.business_experience)} {t('experience')}</div>
                   </div>
                   <button onClick={() => setCurrentStep(1)} className="text-xs font-bold text-primary-600 hover:underline">{t('Edit')}</button>
                 </div>
@@ -1098,7 +1211,7 @@ export const AssessmentWizard = () => {
                 <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-gray-900">{t('2. Business & Location')}</div>
-                    <div className="text-[11.5px] text-gray-600">{selectedCategory} · {selectedVillageObj.name || 'Shikrapur'}, {selectedDistrict}, {selectedState}</div>
+                    <div className="text-[11.5px] text-gray-600">{at(selectedCategory)} · {selectedVillageObj.name || 'Shikrapur'}, {selectedDistrict}, {selectedState}</div>
                   </div>
                   <button onClick={() => setCurrentStep(2)} className="text-xs font-bold text-primary-600 hover:underline">{t('Edit')}</button>
                 </div>
