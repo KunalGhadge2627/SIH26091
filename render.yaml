@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: udyam-gram-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: PROJECT_NAME
+        value: Udyam Gram Backend
+      - key: DATABASE_NAME
+        value: udyam_gram
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 1440
+      - key: LLM_MODEL_NAME
+        value: claude-3-5-sonnet-20241022
+      # ⚠️ Set these in the Render dashboard — do NOT put real secrets here
+      - key: MONGODB_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -20,10 +21,14 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Enable CORS for development
+# CORS — reads ALLOWED_ORIGINS env var (comma-separated URLs).
+# Falls back to ["*"] for local development if the variable is not set.
+_raw_origins = os.getenv("ALLOWED_ORIGINS", "")
+allowed_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()] or ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
