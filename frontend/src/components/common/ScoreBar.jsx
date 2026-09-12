@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export const ScoreBar = ({ label, score = 0, max = 100, color = "bg-primary-600" }) => {
+export const ScoreBar = ({ label, score = 0, max = 100, color = "bg-turf-primary" }) => {
   const [widthPct, setWidthPct] = useState(0);
 
   useEffect(() => {
@@ -12,12 +12,12 @@ export const ScoreBar = ({ label, score = 0, max = 100, color = "bg-primary-600"
   }, [score, max]);
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-semibold text-gray-700">{label}</span>
-        <span className="font-bold text-gray-900">{score}/{max}</span>
+        <span className="font-semibold text-turf-text">{label}</span>
+        <span className="stat-number text-turf-text">{score}/{max}</span>
       </div>
-      <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-2 w-full bg-turf-border rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-1000 ease-out ${color}`}
           style={{ width: `${widthPct}%` }}

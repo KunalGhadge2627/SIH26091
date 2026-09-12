@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Globe, Eye, Settings, LogOut, CheckCircle2, Save, Edit3 } from 'lucide-react';
+import { Globe, Eye, LogOut, CheckCircle2, Save, Edit3 } from 'lucide-react';
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import { useAuth } from '../context/AuthContext';
@@ -9,7 +9,7 @@ import api from '../api/client';
 
 export const ProfilePage = () => {
   const { user, logout } = useAuth();
-  const { lang, setLang, languagesList } = useLanguage();
+  const { lang, setLang, languagesList, t } = useLanguage();
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -82,7 +82,7 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-white flex">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -90,91 +90,91 @@ export const ProfilePage = () => {
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+          <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
-              <span className="eyebrow">ACCOUNT</span>
-              <h1 className="text-2xl font-bold text-gray-900">Your profile</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Manage your personal details, language preferences, and accessibility settings.</p>
+              <span className="eyebrow">Account</span>
+              <h1 className="text-2xl font-bold text-turf-text">{t('User Profile')}</h1>
+              <p className="text-xs text-turf-text-muted mt-0.5">Manage your personal details, language preferences, and accessibility settings.</p>
             </div>
 
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+              className="px-4 py-2 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
             >
               <Edit3 className="w-4 h-4" />
-              <span>{isEditing ? "Cancel editing" : "Edit profile"}</span>
+              <span>{isEditing ? t('Cancel editing') : t('Edit profile')}</span>
             </button>
           </div>
 
           <div className="grid md:grid-cols-12 gap-6">
-            {/* Left Summary Card */}
-            <div className="md:col-span-4 bg-white border border-gray-200 rounded-3xl p-6 shadow-xs text-center space-y-4">
-              <div className="w-20 h-20 rounded-full bg-primary-600 text-white font-black text-2xl flex items-center justify-center mx-auto shadow-md">
+            {/* Left Summary Card (Data Card Fill) */}
+            <div className="md:col-span-4 bg-turf-surface border border-turf-border rounded-2xl p-6 text-center space-y-4">
+              <div className="w-20 h-20 rounded-full bg-turf-primary text-white font-bold text-2xl flex items-center justify-center mx-auto">
                 {getInitials(profileData.full_name)}
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-gray-900">{profileData.full_name || 'User'}</h3>
-                <span className="text-xs font-semibold text-primary-700 bg-blue-50 px-2.5 py-0.5 rounded-full inline-block mt-1 border border-blue-100">
+                <h3 className="text-base font-bold text-turf-text">{profileData.full_name || 'User'}</h3>
+                <span className="text-xs font-semibold text-turf-primary bg-white border border-turf-border px-2.5 py-0.5 rounded-lg inline-block mt-1">
                   Rural Micro-Entrepreneur
                 </span>
               </div>
 
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-turf-primary bg-white px-3 py-1 rounded-xl border border-turf-border">
+                  <CheckCircle2 className="w-4 h-4 text-turf-primary" />
                   <span>Profile Complete</span>
                 </span>
               </div>
             </div>
 
             {/* Right Profile Details / Edit Form Card */}
-            <div className="md:col-span-8 bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
-              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Profile Details</h3>
-                <span className="text-xs text-gray-400 font-mono">ID: {user?.id}</span>
+            <div className="md:col-span-8 bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
+              <div className="flex items-center justify-between border-b border-turf-border pb-3">
+                <h3 className="text-xs font-semibold text-turf-text">Profile details</h3>
+                <span className="text-xs text-turf-text-muted">ID: {user?.id}</span>
               </div>
 
               {isEditing ? (
                 <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">Full Name</label>
+                      <label className="block font-semibold text-turf-text mb-1">Full name</label>
                       <input
                         type="text"
                         value={profileData.full_name}
                         onChange={(e) => setProfileData({ ...profileData, full_name: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-gray-200"
+                        className="w-full px-3 py-2 rounded-xl border border-turf-border text-turf-text bg-white"
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">Mobile</label>
+                      <label className="block font-semibold text-turf-text mb-1">Mobile</label>
                       <input
                         type="text"
                         value={profileData.mobile}
                         onChange={(e) => setProfileData({ ...profileData, mobile: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-gray-200"
+                        className="w-full px-3 py-2 rounded-xl border border-turf-border text-turf-text bg-white stat-number"
                       />
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">State</label>
+                      <label className="block font-semibold text-turf-text mb-1">State</label>
                       <input
                         type="text"
                         value={profileData.state}
                         onChange={(e) => setProfileData({ ...profileData, state: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-gray-200"
+                        className="w-full px-3 py-2 rounded-xl border border-turf-border text-turf-text bg-white"
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">District</label>
+                      <label className="block font-semibold text-turf-text mb-1">District</label>
                       <input
                         type="text"
                         value={profileData.district}
                         onChange={(e) => setProfileData({ ...profileData, district: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-gray-200"
+                        className="w-full px-3 py-2 rounded-xl border border-turf-border text-turf-text bg-white"
                       />
                     </div>
                   </div>
@@ -183,7 +183,7 @@ export const ProfilePage = () => {
                     <button
                       type="submit"
                       disabled={saving}
-                      className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs flex items-center gap-1.5"
+                      className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
                     >
                       <Save className="w-4 h-4" />
                       <span>{saving ? "Saving..." : "Save changes"}</span>
@@ -193,35 +193,35 @@ export const ProfilePage = () => {
               ) : (
                 <div className="grid sm:grid-cols-2 gap-6 text-xs">
                   <div>
-                    <span className="text-gray-400 font-semibold block">Full Name</span>
-                    <span className="font-bold text-gray-900 text-sm">{profileData.full_name}</span>
+                    <span className="text-turf-text-muted font-medium block">Full name</span>
+                    <span className="font-bold text-turf-text text-sm">{profileData.full_name}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Email Address</span>
-                    <span className="font-bold text-gray-900 text-sm">{profileData.email}</span>
+                    <span className="text-turf-text-muted font-medium block">Email address</span>
+                    <span className="font-bold text-turf-text text-sm">{profileData.email}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Mobile Number</span>
-                    <span className="font-bold text-gray-900 text-sm">{profileData.mobile}</span>
+                    <span className="text-turf-text-muted font-medium block">Mobile number</span>
+                    <span className="font-bold text-turf-text text-sm stat-number">{profileData.mobile}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Preferred Language</span>
-                    <span className="font-bold text-gray-900 text-sm">
+                    <span className="text-turf-text-muted font-medium block">Preferred language</span>
+                    <span className="font-bold text-turf-text text-sm">
                       {languagesList.find(l => l.code === profileData.preferred_language)?.native || 'English'}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">State & District</span>
-                    <span className="font-bold text-gray-900 text-sm">{profileData.district}, {profileData.state}</span>
+                    <span className="text-turf-text-muted font-medium block">State & district</span>
+                    <span className="font-bold text-turf-text text-sm">{profileData.district}, {profileData.state}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Prior Business Experience</span>
-                    <span className="font-bold text-gray-900 text-sm">{profileData.business_experience}</span>
+                    <span className="text-turf-text-muted font-medium block">Prior business experience</span>
+                    <span className="font-bold text-turf-text text-sm">{profileData.business_experience}</span>
                   </div>
                 </div>
               )}
@@ -229,25 +229,25 @@ export const ProfilePage = () => {
           </div>
 
           {/* Preferences Section */}
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
-            <span className="eyebrow">PREFERENCES & ACCESSIBILITY</span>
-            <h2 className="text-xl font-bold text-gray-900">App Preferences</h2>
+          <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
+            <span className="eyebrow">Preferences & accessibility</span>
+            <h2 className="text-xl font-bold text-turf-text">App Preferences</h2>
 
-            <div className="space-y-4 divide-y divide-gray-100 text-xs">
+            <div className="space-y-4 divide-y divide-turf-border text-xs">
               {/* Language Row */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
                 <div className="flex items-center gap-3">
-                  <Globe className="w-5 h-5 text-primary-600 shrink-0" />
+                  <Globe className="w-5 h-5 text-turf-primary shrink-0" />
                   <div>
-                    <div className="font-bold text-gray-900">App Language</div>
-                    <div className="text-gray-500">English, Hindi and 7 more Indic languages supported</div>
+                    <div className="font-bold text-turf-text">App language</div>
+                    <div className="text-turf-text-muted">English, Hindi and 7 more Indic languages supported</div>
                   </div>
                 </div>
 
                 <select
                   value={lang}
                   onChange={(e) => setLang(e.target.value)}
-                  className="px-3 py-2 rounded-xl border border-gray-200 font-bold bg-white text-xs"
+                  className="px-3 py-2 rounded-xl border border-turf-border font-semibold bg-white text-xs text-turf-text"
                 >
                   {languagesList.map(l => (
                     <option key={l.code} value={l.code}>{l.native} ({l.name})</option>
@@ -258,30 +258,30 @@ export const ProfilePage = () => {
               {/* Accessibility Preferences Row */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4">
                 <div className="flex items-center gap-3">
-                  <Eye className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <Eye className="w-5 h-5 text-turf-primary shrink-0" />
                   <div>
-                    <div className="font-bold text-gray-900">Accessibility Preferences</div>
-                    <div className="text-gray-500">High-contrast visuals and reduced animation settings</div>
+                    <div className="font-bold text-turf-text">Accessibility preferences</div>
+                    <div className="text-turf-text-muted">High-contrast visuals and reduced animation settings</div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 font-semibold text-gray-700">
+                  <label className="flex items-center gap-2 font-semibold text-turf-text">
                     <input
                       type="checkbox"
                       checked={accessibility.highContrast}
                       onChange={(e) => handleAccessibilityToggle('highContrast', e.target.checked)}
-                      className="rounded text-primary-600"
+                      className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                     />
                     <span>High contrast</span>
                   </label>
 
-                  <label className="flex items-center gap-2 font-semibold text-gray-700">
+                  <label className="flex items-center gap-2 font-semibold text-turf-text">
                     <input
                       type="checkbox"
                       checked={accessibility.reducedMotion}
                       onChange={(e) => handleAccessibilityToggle('reducedMotion', e.target.checked)}
-                      className="rounded text-primary-600"
+                      className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                     />
                     <span>Reduced motion</span>
                   </label>
@@ -291,15 +291,15 @@ export const ProfilePage = () => {
           </div>
 
           {/* Sign Out Card */}
-          <div className="bg-red-50/50 border border-red-200/80 rounded-3xl p-6 shadow-xs flex items-center justify-between">
+          <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-red-900">Sign Out of Account</h3>
-              <p className="text-xs text-red-700 mt-0.5">Clears active session token from browser local storage.</p>
+              <h3 className="text-sm font-bold text-turf-text">Sign Out of Account</h3>
+              <p className="text-xs text-turf-text-muted mt-0.5">Clears active session token from browser local storage.</p>
             </div>
 
             <button
               onClick={handleSignOut}
-              className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+              className="px-6 py-2.5 bg-gray-800 hover:bg-gray-900 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>

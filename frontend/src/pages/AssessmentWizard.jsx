@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  CheckCircle2, ArrowRight, ArrowLeft, Clock, ShieldCheck, 
-  Store, UserCheck, Wallet, MapPin, Check, Save, Sparkles
+  CheckCircle2, ArrowRight, Clock, ShieldCheck, 
+  Store, Check, Save, Sparkles, MapPin
 } from 'lucide-react';
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
@@ -98,103 +98,118 @@ export const AssessmentWizard = () => {
     initData();
   }, []);
 
-  // Cascading Location Dropdowns
+  // Cascading location loads
   useEffect(() => {
     if (selectedState) {
-      api.getDistricts(selectedState).then(res => setDistricts(res.data));
+      api.getDistricts(selectedState).then(res => {
+        setDistricts(res.data);
+        if (res.data.length > 0) setSelectedDistrict(res.data[0]);
+      }).catch(console.error);
     }
   }, [selectedState]);
 
   useEffect(() => {
-    if (selectedDistrict) {
-      api.getBlocks(selectedDistrict).then(res => setBlocks(res.data));
+    if (selectedState && selectedDistrict) {
+      api.getBlocks(selectedState, selectedDistrict).then(res => {
+        setBlocks(res.data);
+        if (res.data.length > 0) setSelectedBlock(res.data[0]);
+      }).catch(console.error);
     }
-  }, [selectedDistrict]);
+  }, [selectedState, selectedDistrict]);
 
   useEffect(() => {
-    if (selectedBlock) {
-      api.getVillages(selectedBlock).then(res => {
+    if (selectedState && selectedDistrict && selectedBlock) {
+      api.getVillages(selectedState, selectedDistrict, selectedBlock).then(res => {
         setVillages(res.data);
         if (res.data.length > 0) {
           setSelectedVillageId(res.data[0].village_id);
           setSelectedVillageObj(res.data[0]);
         }
-      });
+      }).catch(console.error);
     }
-  }, [selectedBlock]);
+  }, [selectedState, selectedDistrict, selectedBlock]);
 
   useEffect(() => {
-    if (selectedVillageId) {
-      api.getVillageById(selectedVillageId).then(res => {
-        if (res.data) setSelectedVillageObj(res.data);
-      });
-    }
-  }, [selectedVillageId]);
+    const found = villages.find(v => v.village_id === selectedVillageId);
+    if (found) setSelectedVillageObj(found);
+  }, [selectedVillageId, villages]);
 
-  // Save Draft Helper
-  const triggerAutosave = async (newStep) => {
+  // Autosave handler
+  const triggerAutosave = async (nextStep) => {
     setSaving(true);
     try {
       if (!assessmentId) {
-        const resp = await api.createAssessment({
-          village_id: selectedVillageId,
+        // Create initial draft
+        const createResp = await api.createAssessment({
           category: selectedCategory,
-          project_cost: finance.project_cost,
-          available_margin: finance.available_margin,
-          existing_emi: profile.existing_emi,
-          household_expenses: finance.household_expenses
+          village_id: selectedVillageId,
+          project_cost: finance.project_cost
         });
-        setAssessmentId(resp.data.id);
+        setAssessmentId(createResp.data.id);
+
+        // Update step 1 profile & resources
+        await api.saveAssessmentStep(createResp.data.id, 1, {
+          profile: profile,
+          resources: profile.resources
+        });
       } else {
-        await api.updateAssessment(assessmentId, {
-          village_id: selectedVillageId,
-          category: selectedCategory,
-          project_cost: finance.project_cost,
-          available_margin: finance.available_margin,
-          existing_emi: profile.existing_emi,
-          household_expenses: finance.household_expenses,
-          questionnaire_answers: {
-            experience_years: parseFloat(readinessAnswers.experience_years),
-            has_relevant_skill: readinessAnswers.has_relevant_skill,
-            has_workspace: readinessAnswers.has_workspace,
-            has_supplier_contacts: readinessAnswers.has_supplier_contacts,
-            has_committed_customers: readinessAnswers.has_committed_customers,
-            emergency_savings: parseFloat(readinessAnswers.emergency_savings),
-            category_specific_answers: readinessAnswers.category_specific_answers
-          }
-        });
+        // Save relevant step data
+        let payload = {};
+        if (currentStep === 1) payload = { profile: profile, resources: profile.resources };
+        else if (currentStep === 2) payload = { category: selectedCategory, village_id: selectedVillageId };
+        else if (currentStep === 3) payload = { readiness_answers: readinessAnswers };
+        else if (currentStep === 4) payload = { finance_inputs: finance, project_cost: finance.project_cost };
+
+        await api.saveAssessmentStep(assessmentId, currentStep, payload);
       }
+
       setSavedIndicator(true);
       setTimeout(() => setSavedIndicator(false), 2000);
+      setCurrentStep(nextStep);
     } catch (err) {
-      console.error("Autosave error:", err);
+      console.error("Autosave step error:", err);
+      // Fallback transition if offline
+      setCurrentStep(nextStep);
     } finally {
       setSaving(false);
-      setCurrentStep(newStep);
     }
   };
 
-  // Run Feasibility Engine
+  // Run full feasibility analysis
   const handleRunAnalysis = async () => {
-    setCurrentStep(6); // Processing screen
-    
-    // Animate stages sequentially
-    for (let i = 1; i <= 7; i++) {
-      await new Promise(r => setTimeout(r, 600));
-      setProcessingStage(i);
-    }
-
-    try {
-      await api.runAssessment(assessmentId);
-      navigate(`/assessments/${assessmentId}/report`);
-    } catch (err) {
-      console.error("Run analysis error:", err);
-      // Navigate to report placeholder route even if backend mongo is offline
-      navigate(`/assessments/${assessmentId || 'ASM_DEFAULT'}/report`);
-    }
+    setCurrentStep(6);
+    let stage = 0;
+    const interval = setInterval(() => {
+      stage += 1;
+      setProcessingStage(stage);
+      if (stage >= 7) {
+        clearInterval(interval);
+        setTimeout(async () => {
+          try {
+            if (assessmentId) {
+              await api.runAssessmentAnalysis(assessmentId);
+              navigate(`/assessments/${assessmentId}/report`);
+            } else {
+              // Create and run inline
+              const createResp = await api.createAssessment({
+                category: selectedCategory,
+                village_id: selectedVillageId,
+                project_cost: finance.project_cost
+              });
+              await api.runAssessmentAnalysis(createResp.data.id);
+              navigate(`/assessments/${createResp.data.id}/report`);
+            }
+          } catch (err) {
+            console.error("Analysis engine error:", err);
+            // Navigate fallback demo
+            navigate('/dashboard');
+          }
+        }, 800);
+      }
+    }, 600);
   };
 
-  // Render Step 3 Category Readiness Questions
+  // Render readiness questions per category
   const renderReadinessQuestions = () => {
     const qMap = {
       Dairy: [
@@ -247,16 +262,16 @@ export const AssessmentWizard = () => {
     const questions = qMap[selectedCategory] || qMap.Dairy;
 
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         {questions.map((qText, qIdx) => {
           const key = `q${qIdx + 1}`;
           const isNumeric = qIdx === 1 || qIdx === 6;
           const currentVal = readinessAnswers.category_specific_answers[key] || (isNumeric ? "3" : "Yes");
 
           return (
-            <div key={key} className="p-4 rounded-xl bg-gray-50 border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <span className="text-xs font-medium text-gray-800">
-                <strong className="text-primary-600 mr-2">{qIdx + 1}.</strong>
+            <div key={key} className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <span className="text-xs font-medium text-turf-text">
+                <strong className="text-turf-primary mr-2">{qIdx + 1}.</strong>
                 {qText}
               </span>
 
@@ -268,7 +283,7 @@ export const AssessmentWizard = () => {
                     ...readinessAnswers,
                     category_specific_answers: { ...readinessAnswers.category_specific_answers, [key]: e.target.value }
                   })}
-                  className="w-24 px-3 py-1.5 rounded-lg border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
+                  className="w-24 px-3 py-1.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary stat-number"
                 />
               ) : (
                 <div className="flex items-center gap-2">
@@ -278,8 +293,8 @@ export const AssessmentWizard = () => {
                       ...readinessAnswers,
                       category_specific_answers: { ...readinessAnswers.category_specific_answers, [key]: 'Yes' }
                     })}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      currentVal === 'Yes' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-gray-600 border border-gray-200'
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      currentVal === 'Yes' ? 'bg-turf-primary text-white' : 'bg-white text-turf-text-muted border border-turf-border'
                     }`}
                   >
                     Yes
@@ -290,8 +305,8 @@ export const AssessmentWizard = () => {
                       ...readinessAnswers,
                       category_specific_answers: { ...readinessAnswers.category_specific_answers, [key]: 'No' }
                     })}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      currentVal === 'No' ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-600 border border-gray-200'
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      currentVal === 'No' ? 'bg-gray-800 text-white' : 'bg-white text-turf-text-muted border border-turf-border'
                     }`}
                   >
                     No
@@ -306,7 +321,7 @@ export const AssessmentWizard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-white flex">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -315,17 +330,17 @@ export const AssessmentWizard = () => {
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Stepper Header (Only for Steps 1..5) */}
           {currentStep >= 1 && currentStep <= 5 && (
-            <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-xs">
-              <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+            <div className="bg-white border border-turf-border rounded-2xl p-4">
+              <div className="flex items-center justify-between border-b border-turf-border pb-3 mb-4">
                 <div className="flex items-center gap-2">
-                  <span className="eyebrow !mb-0">ASSESSMENT PROGRESS</span>
+                  <span className="eyebrow !mb-0">Assessment progress</span>
                   {savedIndicator && (
-                    <span className="flex items-center gap-1 text-[11px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 animate-pulse">
+                    <span className="flex items-center gap-1 text-[11px] text-turf-primary font-semibold bg-turf-surface px-2 py-0.5 rounded-lg border border-turf-border animate-pulse">
                       <Save className="w-3 h-3" /> Draft saved
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-bold text-gray-500">Step {currentStep} of 5</span>
+                <span className="text-xs font-semibold text-turf-text-muted">Step {currentStep} of 5</span>
               </div>
 
               {/* 5-Step Indicators */}
@@ -342,12 +357,16 @@ export const AssessmentWizard = () => {
                   return (
                     <div key={st.step} className="flex flex-col items-center text-center">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                        isDone ? 'bg-emerald-600 text-white' : (isCurrent ? 'bg-primary-600 text-white ring-4 ring-primary-100' : 'bg-gray-100 text-gray-400')
+                        isDone 
+                          ? 'bg-turf-surface text-turf-primary border border-turf-border' 
+                          : isCurrent 
+                          ? 'bg-turf-primary text-white' 
+                          : 'bg-gray-100 text-turf-text-muted'
                       }`}>
                         {isDone ? <Check className="w-4 h-4" /> : st.step}
                       </div>
                       <span className={`text-[11px] font-semibold mt-1 hidden sm:inline-block ${
-                        isCurrent ? 'text-primary-700' : 'text-gray-500'
+                        isCurrent ? 'text-turf-primary' : 'text-turf-text-muted'
                       }`}>
                         {st.label}
                       </span>
@@ -360,42 +379,42 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- INTRO SCREEN (Step 0) ---------------- */}
           {currentStep === 0 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8">
+            <div className="bg-white border border-turf-border rounded-2xl p-8 md:p-12 space-y-8">
               <div className="space-y-3">
-                <span className="eyebrow">PRE-INVESTMENT ADVISORY</span>
-                <h1 className="text-3xl font-extrabold text-gray-900 leading-tight">
+                <span className="eyebrow">Pre-investment advisory</span>
+                <h1 className="text-3xl font-extrabold text-turf-text leading-tight">
                   Business Feasibility Assessment
                 </h1>
-                <p className="text-sm text-gray-600 leading-relaxed max-w-2xl">
+                <p className="text-sm text-turf-text-muted leading-relaxed max-w-2xl">
                   Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.
                 </p>
               </div>
 
               {/* Trust Markers */}
-              <div className="flex flex-wrap items-center gap-6 text-xs font-semibold text-gray-600">
-                <div className="flex items-center gap-2 bg-blue-50 text-blue-800 px-3 py-1.5 rounded-lg border border-blue-100">
-                  <Clock className="w-4 h-4 text-primary-600" />
+              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-turf-text">
+                <div className="flex items-center gap-2 bg-turf-surface text-turf-primary px-3 py-2 rounded-xl border border-turf-border">
+                  <Clock className="w-4 h-4 text-turf-primary" />
                   <span>Takes 5–7 minutes</span>
                 </div>
-                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-100">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <div className="flex items-center gap-2 bg-turf-surface text-turf-primary px-3 py-2 rounded-xl border border-turf-border">
+                  <ShieldCheck className="w-4 h-4 text-turf-primary" />
                   <span>Answers stored securely</span>
                 </div>
               </div>
 
-              {/* 3 Recap Mini-Cards */}
+              {/* 3 Recap Mini Data Cards */}
               <div className="grid md:grid-cols-3 gap-4">
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-1">
-                  <div className="text-xs font-bold text-primary-600">1. Market Feasibility</div>
-                  <p className="text-[11px] text-gray-500">Evaluates 10km village demand, competitor density & infrastructure.</p>
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
+                  <div className="text-xs font-bold text-turf-primary">1. Market Feasibility</div>
+                  <p className="text-[11px] text-turf-text-muted">Evaluates 10km village demand, competitor density & infrastructure.</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-1">
-                  <div className="text-xs font-bold text-emerald-600">2. Entrepreneur Readiness</div>
-                  <p className="text-[11px] text-gray-500">Assesses your skills, workspace, supplier contacts & customers.</p>
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
+                  <div className="text-xs font-bold text-turf-primary">2. Entrepreneur Readiness</div>
+                  <p className="text-[11px] text-turf-text-muted">Assesses your skills, workspace, supplier contacts & customers.</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-1">
-                  <div className="text-xs font-bold text-amber-600">3. Financial Fit</div>
-                  <p className="text-[11px] text-gray-500">Verifies margin sufficiency & monthly disposable EMI capacity.</p>
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
+                  <div className="text-xs font-bold text-turf-primary">3. Financial Fit</div>
+                  <p className="text-[11px] text-turf-text-muted">Verifies margin sufficiency & monthly disposable EMI capacity.</p>
                 </div>
               </div>
 
@@ -403,7 +422,7 @@ export const AssessmentWizard = () => {
 
               <button
                 onClick={() => triggerAutosave(1)}
-                className="w-full sm:w-auto px-8 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-3.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <span>Begin assessment</span>
                 <ArrowRight className="w-4 h-4" />
@@ -413,26 +432,26 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- STEP 1 — PROFILE ---------------- */}
           {currentStep === 1 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
+            <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">STEP 1 OF 5</span>
-                <h2 className="text-2xl font-bold text-gray-900">Personal Profile & Resources</h2>
-                <p className="text-xs text-gray-500 mt-1">Tell us about your background and available operational assets.</p>
+                <span className="eyebrow">Step 1 of 5</span>
+                <h2 className="text-2xl font-bold text-turf-text">Personal Profile & Resources</h2>
+                <p className="text-xs text-turf-text-muted mt-1">Tell us about your background and available operational assets.</p>
               </div>
 
               {/* Sub-Section 1: Personal Profile */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider border-b border-gray-100 pb-2">
-                  Personal Background
+                <h3 className="text-xs font-semibold text-turf-text border-b border-turf-border pb-2">
+                  Personal background
                 </h3>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Age Group</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Age group</label>
                     <select
                       value={profile.age_group}
                       onChange={(e) => setProfile({ ...profile, age_group: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary"
                     >
                       <option value="18-24">18–24 years</option>
                       <option value="25-34">25–34 years</option>
@@ -442,36 +461,36 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Education Level</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Education level</label>
                     <select
                       value={profile.education}
                       onChange={(e) => setProfile({ ...profile, education: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary"
                     >
-                      <option value="Primary">Primary School</option>
+                      <option value="Primary">Primary school</option>
                       <option value="Secondary">Secondary (Class 10/12)</option>
-                      <option value="Graduate">Graduate / Higher</option>
-                      <option value="No Formal">No Formal Education</option>
+                      <option value="Graduate">Graduate / higher</option>
+                      <option value="No Formal">No formal education</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Current Occupation</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Current occupation</label>
                     <input
                       type="text"
                       value={profile.occupation}
                       onChange={(e) => setProfile({ ...profile, occupation: e.target.value })}
                       placeholder="e.g. Agriculture / Self-employed"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Prior Business Experience</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Prior business experience</label>
                     <select
                       value={profile.business_experience}
                       onChange={(e) => setProfile({ ...profile, business_experience: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary"
                     >
                       <option value="None">None (First-time)</option>
                       <option value="0-2 years">0–2 years</option>
@@ -481,19 +500,18 @@ export const AssessmentWizard = () => {
                   </div>
                 </div>
 
-                {/* Inline Green Guarantee Banner Requirement */}
-                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl text-xs text-turf-text flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-turf-primary shrink-0 mt-0.5" />
                   <span>
-                    <strong>Education Guarantee:</strong> Education level does not reduce your feasibility score. It is used strictly to personalize explanation complexity, skill training guidance, and financial-literacy support.
+                    <strong>Education guarantee:</strong> Education level does not reduce your feasibility score. It is used strictly to personalize explanation complexity, skill training guidance, and financial-literacy support.
                   </span>
                 </div>
               </div>
 
               {/* Sub-Section 2: Resources You Can Use */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider border-b border-gray-100 pb-2">
-                  Resources You Can Use (Multi-Select)
+                <h3 className="text-xs font-semibold text-turf-text border-b border-turf-border pb-2">
+                  Resources you can use (multi-select)
                 </h3>
 
                 <div className="flex flex-wrap gap-2.5">
@@ -514,8 +532,8 @@ export const AssessmentWizard = () => {
                         }}
                         className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 ${
                           isSelected 
-                            ? 'bg-primary-600 text-white font-bold shadow-xs'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-turf-primary text-white font-bold'
+                            : 'bg-turf-surface text-turf-text border border-turf-border hover:bg-turf-surface-hover'
                         }`}
                       >
                         {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -529,11 +547,11 @@ export const AssessmentWizard = () => {
               {/* Time Commitment & Financial Resilience */}
               <div className="grid sm:grid-cols-2 gap-4 pt-2">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Time Commitment</label>
+                  <label className="block text-xs font-semibold text-turf-text mb-1">Time commitment</label>
                   <select
                     value={profile.time_commitment}
                     onChange={(e) => setProfile({ ...profile, time_commitment: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white"
                   >
                     <option value="Full-time">Full-time commitment</option>
                     <option value="Part-time">Part-time</option>
@@ -543,30 +561,30 @@ export const AssessmentWizard = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Existing Monthly Loan EMI (₹)</label>
+                  <label className="block text-xs font-semibold text-turf-text mb-1">Existing monthly loan EMI (₹)</label>
                   <input
                     type="number"
                     value={profile.existing_emi}
                     onChange={(e) => setProfile({ ...profile, existing_emi: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs stat-number"
                     placeholder="0"
                   />
                 </div>
               </div>
 
               {/* Buttons */}
-              <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+              <div className="flex items-center justify-between border-t border-turf-border pt-6">
                 <button
                   onClick={() => setCurrentStep(0)}
-                  className="px-4 py-2.5 text-xs font-semibold text-gray-600 hover:text-gray-900"
+                  className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => triggerAutosave(2)}
-                  className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+                  className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to Business</span>
+                  <span>Continue to business</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -575,17 +593,17 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- STEP 2 — BUSINESS & LOCATION ---------------- */}
           {currentStep === 2 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
+            <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">STEP 2 OF 5</span>
-                <h2 className="text-2xl font-bold text-gray-900">Select Business Category & Location</h2>
-                <p className="text-xs text-gray-500 mt-1">Pick your target business and village location for catchment analysis.</p>
+                <span className="eyebrow">Step 2 of 5</span>
+                <h2 className="text-2xl font-bold text-turf-text">Select Business Category & Location</h2>
+                <p className="text-xs text-turf-text-muted mt-1">Pick your target business and village location for catchment analysis.</p>
               </div>
 
               {/* 5 Radio-Selectable Category Cards */}
               <div className="space-y-3">
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wider">
-                  Select Business Category
+                <label className="block text-xs font-semibold text-turf-text">
+                  Select business category
                 </label>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {businessModels.map((bm) => {
@@ -596,19 +614,19 @@ export const AssessmentWizard = () => {
                         onClick={() => setSelectedCategory(bm.category)}
                         className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
                           isSelected 
-                            ? 'border-primary-600 bg-blue-50/40 ring-2 ring-blue-100 shadow-xs'
-                            : 'border-gray-200 bg-white hover:border-gray-300'
+                            ? 'border-turf-primary bg-turf-surface'
+                            : 'border-turf-border bg-white hover:border-turf-primary/50'
                         }`}
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="text-2xl">{categoryIcons[bm.category] || "🏪"}</span>
-                            {isSelected && <CheckCircle2 className="w-5 h-5 text-primary-600" />}
+                            {isSelected && <CheckCircle2 className="w-5 h-5 text-turf-primary" />}
                           </div>
-                          <div className="font-bold text-xs text-gray-900">{bm.display_name}</div>
-                          <p className="text-[11px] text-gray-500 line-clamp-2">{bm.description}</p>
+                          <div className="font-bold text-xs text-turf-text">{bm.display_name}</div>
+                          <p className="text-[11px] text-turf-text-muted line-clamp-2">{bm.description}</p>
                         </div>
-                        <div className="mt-3 pt-2 border-t border-gray-100 text-[10.5px] font-semibold text-primary-700">
+                        <div className="mt-3 pt-2 border-t border-turf-border text-[10.5px] font-semibold text-turf-primary stat-number">
                           Capital: ₹{(bm.capital_min/100000).toFixed(1)}L – ₹{(bm.capital_max/100000).toFixed(1)}L
                         </div>
                       </div>
@@ -618,15 +636,15 @@ export const AssessmentWizard = () => {
               </div>
 
               {/* Cascading Location Selectors */}
-              <div className="space-y-4 pt-4 border-t border-gray-100">
+              <div className="space-y-4 pt-4 border-t border-turf-border">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
-                    Target Village Location
+                  <h3 className="text-xs font-semibold text-turf-text">
+                    Target village location
                   </h3>
                   <button
                     type="button"
                     onClick={() => alert("Location set to Shikrapur, MS default demo village.")}
-                    className="text-[11px] font-semibold text-primary-600 hover:underline flex items-center gap-1"
+                    className="text-[11px] font-semibold text-turf-primary hover:underline flex items-center gap-1"
                   >
                     <MapPin className="w-3.5 h-3.5" />
                     <span>Use current location (Mock)</span>
@@ -635,44 +653,44 @@ export const AssessmentWizard = () => {
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">State</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">State</label>
                     <select
                       value={selectedState}
                       onChange={(e) => setSelectedState(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-turf-border text-xs bg-white"
                     >
                       {states.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">District</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">District</label>
                     <select
                       value={selectedDistrict}
                       onChange={(e) => setSelectedDistrict(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-turf-border text-xs bg-white"
                     >
                       {districts.map(d => <option key={d} value={d}>{d}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">Block / Sub-District</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">Block / Sub-District</label>
                     <select
                       value={selectedBlock}
                       onChange={(e) => setSelectedBlock(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-turf-border text-xs bg-white"
                     >
                       {blocks.map(b => <option key={b} value={b}>{b}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">Village</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">Village</label>
                     <select
                       value={selectedVillageId}
                       onChange={(e) => setSelectedVillageId(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white font-bold text-primary-700"
+                      className="w-full px-3 py-2 rounded-xl border border-turf-border text-xs bg-white font-bold text-turf-primary"
                     >
                       {villages.map(v => <option key={v.village_id} value={v.village_id}>{v.name}</option>)}
                     </select>
@@ -690,18 +708,18 @@ export const AssessmentWizard = () => {
               </div>
 
               {/* Buttons */}
-              <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+              <div className="flex items-center justify-between border-t border-turf-border pt-6">
                 <button
                   onClick={() => setCurrentStep(1)}
-                  className="px-4 py-2.5 text-xs font-semibold text-gray-600 hover:text-gray-900"
+                  className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => triggerAutosave(3)}
-                  className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+                  className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to Readiness</span>
+                  <span>Continue to readiness</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -710,37 +728,37 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- STEP 3 — READINESS QUESTIONNAIRE ---------------- */}
           {currentStep === 3 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
+            <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">STEP 3 OF 5</span>
+                <span className="eyebrow">Step 3 of 5</span>
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{categoryIcons[selectedCategory]}</span>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{selectedCategory} Readiness Questionnaire</h2>
-                    <p className="text-xs text-gray-500 mt-0.5">Answer based on what is available today—not what you hope to arrange later.</p>
+                    <h2 className="text-2xl font-bold text-turf-text">{selectedCategory} Readiness Questionnaire</h2>
+                    <p className="text-xs text-turf-text-muted mt-0.5">Answer based on what is available today—not what you hope to arrange later.</p>
                   </div>
                 </div>
               </div>
 
               {renderReadinessQuestions()}
 
-              <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900">
+              <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl text-xs text-turf-text">
                 <strong>Readiness Advisory:</strong> Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.
               </div>
 
               {/* Buttons */}
-              <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+              <div className="flex items-center justify-between border-t border-turf-border pt-6">
                 <button
                   onClick={() => setCurrentStep(2)}
-                  className="px-4 py-2.5 text-xs font-semibold text-gray-600 hover:text-gray-900"
+                  className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => triggerAutosave(4)}
-                  className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+                  className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to Finance</span>
+                  <span>Continue to finance</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -749,60 +767,60 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- STEP 4 — FINANCE ---------------- */}
           {currentStep === 4 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
+            <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">STEP 4 OF 5</span>
-                <h2 className="text-2xl font-bold text-gray-900">Understand Your Financial Fit</h2>
-                <p className="text-xs text-gray-500 mt-1">Provide your available capital and monthly household obligations.</p>
+                <span className="eyebrow">Step 4 of 5</span>
+                <h2 className="text-2xl font-bold text-turf-text">Understand Your Financial Fit</h2>
+                <p className="text-xs text-turf-text-muted mt-1">Provide your available capital and monthly household obligations.</p>
               </div>
 
               <div className="grid md:grid-cols-12 gap-6">
                 {/* Left Form Inputs */}
                 <div className="md:col-span-7 space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Project Cost Estimate (₹)</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Project cost estimate (₹)</label>
                     <input
                       type="number"
                       value={finance.project_cost}
                       onChange={(e) => setFinance({ ...finance, project_cost: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs font-bold"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs font-bold stat-number"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Available Entrepreneur Margin Capital (₹)</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Available entrepreneur margin capital (₹)</label>
                     <input
                       type="number"
                       value={finance.available_margin}
                       onChange={(e) => setFinance({ ...finance, available_margin: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs font-bold text-emerald-700"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs font-bold text-turf-primary stat-number"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Monthly Household Expenses (₹)</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">Monthly household expenses (₹)</label>
                     <input
                       type="number"
                       value={finance.household_expenses}
                       onChange={(e) => setFinance({ ...finance, household_expenses: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs stat-number"
                     />
                   </div>
 
                   {/* Financial Understanding Self-Assessment */}
-                  <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 pt-3">
-                    <span className="eyebrow !mb-0">FINANCIAL UNDERSTANDING</span>
+                  <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-3 pt-3">
+                    <span className="eyebrow !mb-0">Financial understanding</span>
                     
                     <div className="space-y-2">
-                      <label className="block text-xs text-gray-700 font-medium">Do you understand how EMI works?</label>
+                      <label className="block text-xs text-turf-text font-medium">Do you understand how EMI works?</label>
                       <div className="flex gap-2">
                         {["Yes", "Somewhat", "No"].map(opt => (
                           <button
                             key={opt}
                             type="button"
                             onClick={() => setFinance({ ...finance, understands_emi: opt })}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                              finance.understands_emi === opt ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200'
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                              finance.understands_emi === opt ? 'bg-turf-primary text-white' : 'bg-white text-turf-text-muted border border-turf-border'
                             }`}
                           >
                             {opt}
@@ -813,53 +831,53 @@ export const AssessmentWizard = () => {
                   </div>
                 </div>
 
-                {/* Right Card: Live Preview Calculation */}
-                <div className="md:col-span-5 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 flex flex-col justify-between">
+                {/* Right Card: Live Preview Calculation (Data Card) */}
+                <div className="md:col-span-5 bg-turf-surface border border-turf-border rounded-2xl p-6 flex flex-col justify-between">
                   <div className="space-y-4">
-                    <span className="eyebrow">PRELIMINARY DEMO ESTIMATE</span>
+                    <span className="eyebrow">Preliminary demo estimate</span>
                     
-                    <div className="space-y-3 border-b border-blue-200/50 pb-4">
+                    <div className="space-y-3 border-b border-turf-border pb-4">
                       <div className="flex justify-between text-xs">
-                        <span className="text-gray-600">Project Cost:</span>
-                        <span className="font-bold text-gray-900">₹{finance.project_cost.toLocaleString()}</span>
+                        <span className="text-turf-text-muted">Project cost:</span>
+                        <span className="stat-number text-turf-text">₹{finance.project_cost.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-xs">
-                        <span className="text-gray-600">Your Available Margin:</span>
-                        <span className="font-bold text-emerald-700">₹{finance.available_margin.toLocaleString()}</span>
+                        <span className="text-turf-text-muted">Your available margin:</span>
+                        <span className="stat-number text-turf-primary">₹{finance.available_margin.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-xs">
-                        <span className="text-gray-600">Min Margin Needed (10%):</span>
-                        <span className="font-semibold text-gray-700">₹{(finance.project_cost * 0.1).toLocaleString()}</span>
+                        <span className="text-turf-text-muted">Min margin needed (10%):</span>
+                        <span className="stat-number text-turf-text">₹{(finance.project_cost * 0.1).toLocaleString()}</span>
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <div className="text-xs text-gray-500 font-medium">Indicative Loan Amount</div>
-                      <div className="text-2xl font-extrabold text-primary-700">
+                      <div className="text-xs text-turf-text-muted font-medium">Indicative loan amount</div>
+                      <div className="text-2xl stat-number text-turf-primary">
                         ₹{Math.max(0, finance.project_cost - finance.available_margin).toLocaleString()}
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-[10.5px] text-gray-500 italic mt-4">
+                  <p className="text-[10.5px] text-turf-text-muted italic mt-4">
                     Final calculations, reducing balance interest, moratorium period, and exact EMI figures will come from the financial engine when you click Run.
                   </p>
                 </div>
               </div>
 
               {/* Buttons */}
-              <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+              <div className="flex items-center justify-between border-t border-turf-border pt-6">
                 <button
                   onClick={() => setCurrentStep(3)}
-                  className="px-4 py-2.5 text-xs font-semibold text-gray-600 hover:text-gray-900"
+                  className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => triggerAutosave(5)}
-                  className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
+                  className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to Review</span>
+                  <span>Continue to review</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -868,64 +886,64 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- STEP 5 — REVIEW & SUBMIT ---------------- */}
           {currentStep === 5 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-sm space-y-8">
+            <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">STEP 5 OF 5</span>
-                <h2 className="text-2xl font-bold text-gray-900">Review Your Inputs</h2>
-                <p className="text-xs text-gray-500 mt-1">Check your assessment inputs before running the feasibility engine.</p>
+                <span className="eyebrow">Step 5 of 5</span>
+                <h2 className="text-2xl font-bold text-turf-text">Review Your Inputs</h2>
+                <p className="text-xs text-turf-text-muted mt-1">Check your assessment inputs before running the feasibility engine.</p>
               </div>
 
               {/* 5 Summary Cards */}
               <div className="space-y-3">
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-gray-900">1. Personal Profile</div>
-                    <div className="text-[11.5px] text-gray-600">Age {profile.age_group} · {profile.education} · {profile.business_experience} experience</div>
+                    <div className="text-xs font-bold text-turf-text">1. Personal profile</div>
+                    <div className="text-[11.5px] text-turf-text-muted">Age {profile.age_group} · {profile.education} · {profile.business_experience} experience</div>
                   </div>
-                  <button onClick={() => setCurrentStep(1)} className="text-xs font-bold text-primary-600 hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(1)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-gray-900">2. Business & Location</div>
-                    <div className="text-[11.5px] text-gray-600">{selectedCategory} · {selectedVillageObj.name || 'Shikrapur'}, {selectedDistrict}, {selectedState}</div>
+                    <div className="text-xs font-bold text-turf-text">2. Business & location</div>
+                    <div className="text-[11.5px] text-turf-text-muted">{selectedCategory} · {selectedVillageObj.name || 'Shikrapur'}, {selectedDistrict}, {selectedState}</div>
                   </div>
-                  <button onClick={() => setCurrentStep(2)} className="text-xs font-bold text-primary-600 hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(2)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-gray-900">3. {selectedCategory} Readiness</div>
-                    <div className="text-[11.5px] text-gray-600">Category Questionnaire Completed</div>
+                    <div className="text-xs font-bold text-turf-text">3. {selectedCategory} readiness</div>
+                    <div className="text-[11.5px] text-turf-text-muted">Category questionnaire completed</div>
                   </div>
-                  <button onClick={() => setCurrentStep(3)} className="text-xs font-bold text-primary-600 hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(3)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between">
+                <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-gray-900">4. Financial Setup</div>
-                    <div className="text-[11.5px] text-gray-600">Project Cost: ₹{finance.project_cost.toLocaleString()} · Available Margin: ₹{finance.available_margin.toLocaleString()}</div>
+                    <div className="text-xs font-bold text-turf-text">4. Financial setup</div>
+                    <div className="text-[11.5px] text-turf-text-muted">Project cost: ₹{finance.project_cost.toLocaleString()} · Available margin: ₹{finance.available_margin.toLocaleString()}</div>
                   </div>
-                  <button onClick={() => setCurrentStep(4)} className="text-xs font-bold text-primary-600 hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(4)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
                 </div>
               </div>
 
               {/* Bottom Run Action */}
-              <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 space-y-4">
-                <div className="text-xs text-blue-900 leading-relaxed">
+              <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-4">
+                <div className="text-xs text-turf-text leading-relaxed">
                   Ready to analyse? Our deterministic engines will evaluate 10km village catchment demand, entrepreneur readiness, loan scheme options, and EMI affordability.
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
                   <button
                     onClick={() => setCurrentStep(4)}
-                    className="px-4 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900"
+                    className="px-4 py-2 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                   >
                     Back
                   </button>
                   <button
                     onClick={handleRunAnalysis}
-                    className="px-8 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-extrabold text-sm rounded-xl shadow-md transition-all flex items-center gap-2"
+                    className="px-8 py-3.5 bg-turf-primary hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition-all flex items-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
                     <span>Run Feasibility Analysis →</span>
@@ -937,16 +955,16 @@ export const AssessmentWizard = () => {
 
           {/* ---------------- STEP 6 — PROCESSING ANIMATED SCREEN ---------------- */}
           {currentStep === 6 && (
-            <div className="bg-white border border-gray-200 rounded-3xl p-12 shadow-sm text-center max-w-xl mx-auto space-y-8 my-8">
+            <div className="bg-turf-surface border border-turf-border rounded-2xl p-12 text-center max-w-xl mx-auto space-y-8 my-8">
               <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
-                <Sparkles className="w-8 h-8 text-primary-600" />
+                <div className="absolute inset-0 rounded-full border-4 border-turf-border border-t-turf-primary animate-spin"></div>
+                <Sparkles className="w-8 h-8 text-turf-primary" />
               </div>
 
               <div className="space-y-2">
-                <span className="eyebrow">PROTOTYPE ANALYSIS</span>
-                <h2 className="text-2xl font-extrabold text-gray-900">Building your feasibility picture</h2>
-                <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
+                <span className="eyebrow">Prototype analysis</span>
+                <h2 className="text-2xl font-bold text-turf-text">Building your feasibility picture</h2>
+                <p className="text-xs text-turf-text-muted max-w-md mx-auto leading-relaxed">
                   Keeping market feasibility, entrepreneur readiness, and financial fit separate for clear explainability.
                 </p>
               </div>
@@ -965,11 +983,11 @@ export const AssessmentWizard = () => {
                   const isFinished = processingStage > idx;
                   const isCurrent = processingStage === idx + 1;
                   return (
-                    <div key={idx} className={`flex items-center gap-3 text-xs font-semibold transition-all ${
-                      isFinished ? 'text-emerald-700 font-bold' : (isCurrent ? 'text-primary-600 font-extrabold animate-pulse' : 'text-gray-300')
+                    <div key={idx} className={`flex items-center gap-3 text-xs font-medium transition-all ${
+                      isFinished ? 'text-turf-primary font-bold' : (isCurrent ? 'text-turf-primary font-extrabold animate-pulse' : 'text-turf-text-muted')
                     }`}>
                       <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
-                        isFinished ? 'bg-emerald-600 text-white' : (isCurrent ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-400')
+                        isFinished ? 'bg-turf-primary text-white' : (isCurrent ? 'bg-turf-primary text-white' : 'bg-white border border-turf-border text-turf-text-muted')
                       }`}>
                         {isFinished ? <Check className="w-3 h-3" /> : idx + 1}
                       </div>

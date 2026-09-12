@@ -33,7 +33,7 @@ export const LocationMap = ({
 
   return (
     <div className="space-y-2">
-      <div className="h-72 w-full border border-gray-200 rounded-xl overflow-hidden shadow-xs relative">
+      <div className="h-72 w-full border border-turf-border rounded-2xl overflow-hidden relative">
         <MapContainer center={position} zoom={12} scrollWheelZoom={false} className="h-full w-full">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -55,7 +55,7 @@ export const LocationMap = ({
           <Circle
             center={position}
             radius={radiusKm * 1000}
-            pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15, weight: 2 }}
+            pathOptions={{ color: '#16A34A', fillColor: '#86EFAC', fillOpacity: 0.2, weight: 2 }}
           />
 
           {/* Render Competitor Points */}
@@ -73,21 +73,21 @@ export const LocationMap = ({
         </MapContainer>
 
         {/* Map Legend Overlay */}
-        <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-gray-200 rounded-lg p-2.5 shadow-md text-[10.5px] z-[1000] space-y-1">
-          <div className="font-bold text-gray-800 uppercase tracking-wider text-[9px] mb-1">CATCHMENT LEGEND</div>
+        <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-turf-border rounded-xl p-2.5 text-[10.5px] z-[1000] space-y-1">
+          <div className="font-semibold text-turf-primary text-[10px] mb-1">Catchment legend</div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
-            <span>10 km Radius Circle</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-turf-primary inline-block"></span>
+            <span>10 km radius circle</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-            <span>Competitor Shops</span>
+            <span>Competitor shops</span>
           </div>
         </div>
       </div>
 
-      <p className="text-[11px] text-gray-500 leading-snug">
-        We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.
+      <p className="text-[11px] text-turf-text-muted leading-snug">
+        We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only.
       </p>
     </div>
   );

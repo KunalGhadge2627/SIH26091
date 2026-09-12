@@ -2,9 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --turf-bg: #FFFFFF;
+  --turf-surface: #F0FAF1;
+  --turf-surface-hover: #E4F5E6;
+  --turf-primary: #16A34A;
+  --turf-primary-light: #86EFAC;
+  --turf-border: #DCEEDD;
+  --turf-text: #111827;
+  --turf-text-muted: #6B7280;
+  --turf-text-on-primary: #FFFFFF;
+}
+
+body {
+  background-color: var(--turf-bg);
+  color: var(--turf-text);
+  font-family: Inter, 'General Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
 @layer utilities {
   .eyebrow {
-    @apply text-xs font-semibold uppercase tracking-wider text-primary-600 mb-1 block;
+    @apply text-xs font-medium text-turf-primary mb-1 block;
+  }
+
+  .stat-number {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
 }
 
@@ -27,5 +52,5 @@
 .leaflet-container {
   width: 100%;
   height: 100%;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
 }

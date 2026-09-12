@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckSquare, ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Save } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
@@ -11,7 +11,7 @@ import api from '../api/client';
 export const ImprovementPlanPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
 
   const [actions, setActions] = useState([]);
   const [baseReadinessScore, setBaseReadinessScore] = useState(65);
@@ -70,7 +70,7 @@ export const ImprovementPlanPage = () => {
   const potentialScore = Math.min(100, baseReadinessScore + completedPoints);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-white flex">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -78,47 +78,47 @@ export const ImprovementPlanPage = () => {
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+          <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
-              <span className="eyebrow">PREPARATION BEFORE LAUNCH</span>
-              <h1 className="text-2xl font-bold text-gray-900">Improvement Plan</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Concrete action items to strengthen your entrepreneur readiness before starting.</p>
+              <span className="eyebrow">Preparation before launch</span>
+              <h1 className="text-2xl font-bold text-turf-text">{t('Improvement Plan')}</h1>
+              <p className="text-xs text-turf-text-muted mt-0.5">Concrete action items to strengthen your entrepreneur readiness before starting.</p>
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
-              className="text-xs font-bold text-primary-600 hover:underline flex items-center gap-1"
+              className="text-xs font-semibold text-turf-primary hover:underline flex items-center gap-1"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to results</span>
+              <span>{t('Back to results')}</span>
             </Link>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-gray-400">Loading readiness action items...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">Loading readiness action items...</div>
           ) : (
             <div className="space-y-6">
-              {/* Summary Strip (Current -> Potential Preparedness) */}
-              <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6">
+              {/* Summary Strip (Data Card Fills) */}
+              <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label="CURRENT" />
-                  <ArrowRight className="w-6 h-6 text-gray-300 hidden sm:block" />
-                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label="POTENTIAL" />
+                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label="Current" />
+                  <ArrowRight className="w-5 h-5 text-turf-primary hidden sm:block" />
+                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label="Potential" />
                   <div>
-                    <h3 className="text-sm font-bold text-gray-900">Potential Preparedness</h3>
-                    <p className="text-xs text-emerald-700 font-semibold mt-0.5">
+                    <h3 className="text-sm font-bold text-turf-text">Potential Preparedness</h3>
+                    <p className="text-xs text-turf-primary font-semibold mt-0.5 stat-number">
                       +{completedPoints} points gained from completed actions
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl text-xs font-bold border border-blue-100 shrink-0">
+                <div className="bg-white text-turf-primary px-4 py-2 rounded-xl text-xs font-semibold border border-turf-border shrink-0 stat-number">
                   {completedCount} of {actions.length} Actions Completed
                 </div>
               </div>
 
               {/* Numbered Action Cards */}
               <div className="space-y-4">
-                <h2 className="text-xs font-bold text-gray-800 uppercase tracking-wider">Recommended Action Items</h2>
+                <h2 className="text-xs font-semibold text-turf-text">Recommended Action Items</h2>
 
                 {actions.map((act, idx) => {
                   const actKey = act.dimension.toLowerCase().replace(/ /g, '_');
@@ -130,27 +130,27 @@ export const ImprovementPlanPage = () => {
                       key={idx}
                       className={`p-5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                         isCompleted 
-                          ? 'bg-emerald-50/50 border-emerald-200 shadow-xs' 
+                          ? 'bg-turf-surface border-turf-border' 
                           : isInProgress 
-                          ? 'bg-blue-50/40 border-blue-200' 
-                          : 'bg-white border-gray-200'
+                          ? 'bg-turf-surface/50 border-turf-border' 
+                          : 'bg-white border-turf-border'
                       }`}
                     >
                       <div className="flex items-start gap-3">
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 ${
-                          isCompleted ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700'
+                          isCompleted ? 'bg-turf-primary text-white' : 'bg-turf-surface text-turf-text border border-turf-border'
                         }`}>
                           {idx + 1}
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-sm text-gray-900">{act.title}</span>
-                            <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
+                            <span className="font-bold text-sm text-turf-text">{act.title}</span>
+                            <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg stat-number">
                               +{act.impact_points} Readiness
                             </span>
                           </div>
-                          <p className="text-xs text-gray-600 leading-relaxed">{act.description}</p>
-                          <span className="text-[10px] font-semibold text-gray-400 block uppercase tracking-wider pt-1">
+                          <p className="text-xs text-turf-text-muted leading-relaxed">{act.description}</p>
+                          <span className="text-[10px] font-medium text-turf-text-muted block pt-1">
                             Dimension: {act.dimension}
                           </span>
                         </div>
@@ -162,17 +162,17 @@ export const ImprovementPlanPage = () => {
                           value={act.current_status}
                           onChange={(e) => handleStatusChange(act.dimension, e.target.value)}
                           disabled={updatingId === actKey}
-                          className={`px-3 py-2 rounded-xl text-xs font-bold outline-none cursor-pointer border ${
+                          className={`px-3 py-2 rounded-xl text-xs font-semibold outline-none cursor-pointer border ${
                             isCompleted 
-                              ? 'bg-emerald-600 text-white border-emerald-600' 
+                              ? 'bg-turf-primary text-white border-turf-primary' 
                               : isInProgress 
-                              ? 'bg-primary-600 text-white border-primary-600' 
-                              : 'bg-white text-gray-700 border-gray-200'
+                              ? 'bg-gray-800 text-white border-gray-800' 
+                              : 'bg-white text-turf-text border-turf-border'
                           }`}
                         >
-                          <option value="Not Started" className="bg-white text-gray-800">Not Started</option>
-                          <option value="In Progress" className="bg-white text-gray-800">In Progress</option>
-                          <option value="Completed" className="bg-white text-gray-800">Completed</option>
+                          <option value="Not Started" className="bg-white text-turf-text">Not Started</option>
+                          <option value="In Progress" className="bg-white text-turf-text">In Progress</option>
+                          <option value="Completed" className="bg-white text-turf-text">Completed</option>
                         </select>
                       </div>
                     </div>

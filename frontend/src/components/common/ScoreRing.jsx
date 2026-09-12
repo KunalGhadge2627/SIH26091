@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export const ScoreRing = ({ score = 75, size = 120, strokeWidth = 10, label = "FEASIBILITY", subtitle = "" }) => {
+export const ScoreRing = ({ score = 75, size = 120, strokeWidth = 10, label = "Feasibility", subtitle = "" }) => {
   const [currentScore, setCurrentScore] = useState(0);
 
   useEffect(() => {
@@ -12,14 +12,12 @@ export const ScoreRing = ({ score = 75, size = 120, strokeWidth = 10, label = "F
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (currentScore / 100) * circumference;
 
-  let colorClass = "text-emerald-500 stroke-emerald-500";
-  if (score < 36) colorClass = "text-red-500 stroke-red-500";
-  else if (score < 51) colorClass = "text-orange-500 stroke-orange-500";
-  else if (score < 66) colorClass = "text-amber-500 stroke-amber-500";
-  else if (score < 81) colorClass = "text-primary-600 stroke-primary-600";
+  let colorClass = "text-turf-primary stroke-turf-primary";
+  if (score < 40) colorClass = "text-amber-600 stroke-amber-600";
+  else if (score < 60) colorClass = "text-turf-primary-light stroke-turf-primary-light";
 
   return (
-    <div className="flex flex-col items-center justify-center relative" style={{ width: size, height: size }}>
+    <div className="flex flex-col items-center justify-center relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
         {/* Background track */}
         <circle
@@ -28,7 +26,7 @@ export const ScoreRing = ({ score = 75, size = 120, strokeWidth = 10, label = "F
           r={radius}
           stroke="currentColor"
           strokeWidth={strokeWidth}
-          className="text-gray-100 fill-none"
+          className="text-turf-border fill-none"
         />
         {/* Animated fill ring */}
         <circle
@@ -43,8 +41,8 @@ export const ScoreRing = ({ score = 75, size = 120, strokeWidth = 10, label = "F
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className="text-2xl font-black text-gray-900 tracking-tight">{currentScore}</span>
-        {label && <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{label}</span>}
+        <span className="text-2xl stat-number text-turf-text">{currentScore}</span>
+        {label && <span className="text-[10px] font-medium text-turf-text-muted mt-0.5">{label}</span>}
       </div>
     </div>
   );

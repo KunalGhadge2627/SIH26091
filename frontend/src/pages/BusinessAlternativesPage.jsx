@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Layers, ArrowLeft, ArrowRight, Award, CheckCircle2, Info } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
@@ -11,7 +11,7 @@ import api from '../api/client';
 export const BusinessAlternativesPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
 
   const [alternatives, setAlternatives] = useState([]);
   const [selectedCategoryModal, setSelectedCategoryModal] = useState(null);
@@ -33,7 +33,7 @@ export const BusinessAlternativesPage = () => {
   }, [assessmentId, lang]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-white flex">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -41,26 +41,26 @@ export const BusinessAlternativesPage = () => {
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 pb-4">
+          <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="eyebrow !mb-0">BUSINESS ↔ PERSON ↔ LOCATION</span>
-                <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">DEMO ESTIMATES</span>
+                <span className="eyebrow !mb-0">Business ↔ Person ↔ Location</span>
+                <span className="text-[10px] font-semibold text-turf-text-muted bg-turf-surface border border-turf-border px-2 py-0.5 rounded-lg">Demo estimates</span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Business Alternatives</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Ranked comparison of 5 business categories for your village location and capital.</p>
+              <h1 className="text-2xl font-bold text-turf-text">{t('Business Alternatives')}</h1>
+              <p className="text-xs text-turf-text-muted mt-0.5">Ranked comparison of 5 business categories for your village location and capital.</p>
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
-              className="text-xs font-bold text-primary-600 hover:underline flex items-center gap-1"
+              className="text-xs font-semibold text-turf-primary hover:underline flex items-center gap-1"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to results</span>
+              <span>{t('Back to results')}</span>
             </Link>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-gray-400">Evaluating 5 business alternatives...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">Evaluating 5 business alternatives...</div>
           ) : (
             <div className="space-y-6">
               {/* Ranked #1..#5 Cards */}
@@ -70,65 +70,65 @@ export const BusinessAlternativesPage = () => {
                   return (
                     <div
                       key={alt.category}
-                      className={`p-6 rounded-3xl border transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs ${
+                      className={`p-6 rounded-2xl border transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 ${
                         isBestFit 
-                          ? 'bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border-primary-300 ring-2 ring-blue-100' 
-                          : 'bg-white border-gray-200'
+                          ? 'bg-turf-surface border-turf-border' 
+                          : 'bg-white border-turf-border'
                       }`}
                     >
                       <div className="space-y-3 max-w-xl">
                         <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs shrink-0 ${
-                            isBestFit ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
+                            isBestFit ? 'bg-turf-primary text-white' : 'bg-white border border-turf-border text-turf-text'
                           }`}>
                             #{idx + 1}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="text-base font-bold text-gray-900">{alt.display_name}</h3>
+                              <h3 className="text-base font-bold text-turf-text">{alt.display_name}</h3>
                               {isBestFit && (
-                                <span className="text-[10px] font-extrabold text-white bg-primary-600 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                  BEST FIT
+                                <span className="text-[10px] font-semibold text-white bg-turf-primary px-2 py-0.5 rounded-lg">
+                                  Best fit
                                 </span>
                               )}
-                              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                              <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg">
                                 {alt.status_label}
                               </span>
                             </div>
                           </div>
                         </div>
 
-                        <p className="text-xs text-gray-600 leading-relaxed italic">
+                        <p className="text-xs text-turf-text-muted leading-relaxed italic">
                           "{alt.explanation_blurb}"
                         </p>
 
                         {/* 3-Part Sub-Scores */}
                         <div className="grid grid-cols-3 gap-3 text-[11px] pt-1">
-                          <div className="bg-white/80 border border-gray-100 rounded-xl p-2 text-center">
-                            <span className="text-gray-500 block text-[9px] uppercase font-bold">Market Fit</span>
-                            <span className="font-bold text-gray-900">{alt.market_fit_score}/100</span>
+                          <div className="bg-white border border-turf-border rounded-xl p-2 text-center">
+                            <span className="text-turf-text-muted block text-[9px] font-medium">Market Fit</span>
+                            <span className="stat-number text-turf-text">{alt.market_fit_score}/100</span>
                           </div>
-                          <div className="bg-white/80 border border-gray-100 rounded-xl p-2 text-center">
-                            <span className="text-gray-500 block text-[9px] uppercase font-bold">Capital Fit</span>
-                            <span className="font-bold text-gray-900">{alt.capital_fit_score}/100</span>
+                          <div className="bg-white border border-turf-border rounded-xl p-2 text-center">
+                            <span className="text-turf-text-muted block text-[9px] font-medium">Capital Fit</span>
+                            <span className="stat-number text-turf-text">{alt.capital_fit_score}/100</span>
                           </div>
-                          <div className="bg-white/80 border border-gray-100 rounded-xl p-2 text-center">
-                            <span className="text-gray-500 block text-[9px] uppercase font-bold">Resource Fit</span>
-                            <span className="font-bold text-gray-900">{alt.resource_fit_score}/100</span>
+                          <div className="bg-white border border-turf-border rounded-xl p-2 text-center">
+                            <span className="text-turf-text-muted block text-[9px] font-medium">Resource Fit</span>
+                            <span className="stat-number text-turf-text">{alt.resource_fit_score}/100</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Right Overall Score & CTA */}
-                      <div className="flex md:flex-col items-center justify-between md:justify-center gap-4 shrink-0 border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6">
+                      <div className="flex md:flex-col items-center justify-between md:justify-center gap-4 shrink-0 border-t md:border-t-0 md:border-l border-turf-border pt-4 md:pt-0 md:pl-6">
                         <div className="text-center">
-                          <div className="text-3xl font-black text-primary-700">{alt.alternative_score}</div>
-                          <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">FIT SCORE</div>
+                          <div className="text-3xl stat-number text-turf-primary">{alt.alternative_score}</div>
+                          <div className="text-[9px] font-medium text-turf-text-muted">Fit score</div>
                         </div>
 
                         <button
                           onClick={() => setSelectedCategoryModal(alt.category)}
-                          className="px-4 py-2 bg-white hover:bg-gray-50 text-primary-600 font-bold text-xs rounded-xl border border-primary-200 transition-colors shadow-xs"
+                          className="px-4 py-2 bg-white hover:bg-turf-surface text-turf-primary font-semibold text-xs rounded-xl border border-turf-border transition-colors"
                         >
                           Explore This Business →
                         </button>

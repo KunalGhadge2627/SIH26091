@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Query
 from app.db import get_database
 from app.models.village import VillageModel
 from app.data.mock_villages import MOCK_VILLAGES
@@ -39,18 +39,22 @@ async def get_districts(state: Optional[str] = Query(None)):
     return districts
 
 @router.get("/blocks", response_model=List[str])
-async def get_blocks(district: Optional[str] = Query(None)):
+async def get_blocks(state: Optional[str] = Query(None), district: Optional[str] = Query(None)):
     db = get_database()
     blocks = []
     try:
         if db is not None:
-            query = {"district": district} if district else {}
+            query = {}
+            if state: query["state"] = state
+            if district: query["district"] = district
             blocks = await db["villages"].distinct("block", query)
     except Exception:
         pass
         
     if not blocks:
-        filtered = [v for v in MOCK_VILLAGES if not district or v["district"] == district]
+        filtered = MOCK_VILLAGES
+        if state: filtered = [v for v in filtered if v["state"] == state]
+        if district: filtered = [v for v in filtered if v["district"] == district]
         blocks = list(dict.fromkeys([v["block"] for v in filtered]))
         if not blocks:
             blocks = ["Shirur", "Block Center"]

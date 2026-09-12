@@ -31,28 +31,28 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex grid md:grid-cols-12">
+    <div className="min-h-screen bg-white flex grid md:grid-cols-12">
       {/* Left Panel (Reassurance & Brand) */}
-      <div className="md:col-span-5 bg-primary-800 text-white p-8 md:p-12 flex flex-col justify-between hidden md:flex">
+      <div className="md:col-span-5 bg-turf-primary text-white p-8 md:p-12 flex flex-col justify-between hidden md:flex">
         <div>
           <Logo textClassName="text-xl font-bold text-white" />
           
           <div className="mt-16 space-y-6">
-            <h2 className="text-2xl font-bold leading-snug text-blue-50">
+            <h2 className="text-2xl font-bold leading-snug text-white">
               Understand the opportunity before you commit your savings or take a loan.
             </h2>
 
-            <div className="space-y-3 text-xs text-blue-100 font-medium">
+            <div className="space-y-3 text-xs text-white/90 font-medium">
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
                 <span>Deterministic 3-way fit scoring</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
                 <span>Village-level market & competition mapping</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
                 <span>Reducing-balance EMI & scheme matching</span>
               </div>
             </div>
@@ -60,7 +60,7 @@ export const LoginPage = () => {
         </div>
 
         {/* Footer Tag Requirement */}
-        <div className="text-[11px] font-mono text-blue-300 border-t border-blue-700/50 pt-4">
+        <div className="text-[11px] text-white/80 border-t border-white/20 pt-4">
           SIH26091 · Frontend Prototype
         </div>
       </div>
@@ -69,21 +69,21 @@ export const LoginPage = () => {
       <div className="md:col-span-7 p-6 sm:p-12 flex flex-col justify-center bg-white">
         <div className="max-w-md w-full mx-auto space-y-6">
           <div>
-            <span className="eyebrow">WELCOME BACK</span>
-            <h2 className="text-2xl font-bold text-gray-900">Log in to your account</h2>
-            <p className="text-xs text-gray-500 mt-1">
+            <span className="eyebrow">Welcome back</span>
+            <h2 className="text-2xl font-bold text-turf-text">Log in to your account</h2>
+            <p className="text-xs text-turf-text-muted mt-1">
               Access your saved assessments, improvement plans, and legal advice.
             </p>
           </div>
 
           {/* Demo Hint Banner */}
-          <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-900 leading-relaxed">
-            <span className="font-bold block mb-0.5">Demo Tip:</span>
+          <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl text-xs text-turf-text leading-relaxed">
+            <span className="font-semibold block mb-0.5">Demo Tip:</span>
             Create a new account via Signup, or log in with any existing registered user credentials.
           </div>
 
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
+            <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -91,21 +91,21 @@ export const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+              <label className="block text-xs font-semibold text-turf-text mb-1">Email address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text"
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-semibold text-gray-700">Password</label>
-                <a href="#forgot" onClick={(e) => { e.preventDefault(); alert("Password reset link available in production."); }} className="text-xs font-medium text-primary-600 hover:underline">
+                <label className="text-xs font-semibold text-turf-text">Password</label>
+                <a href="#forgot" onClick={(e) => { e.preventDefault(); alert("Password reset link available in production."); }} className="text-xs font-semibold text-turf-primary hover:underline">
                   Forgot password?
                 </a>
               </div>
@@ -116,12 +116,12 @@ export const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600 pr-10"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-turf-text-muted hover:text-turf-text"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -134,23 +134,23 @@ export const LoginPage = () => {
                 id="remember"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded text-primary-600 focus:ring-primary-500"
+                className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
               />
-              <label htmlFor="remember" className="text-xs text-gray-600 font-medium">Remember me</label>
+              <label htmlFor="remember" className="text-xs text-turf-text-muted font-medium">Remember me</label>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors disabled:opacity-50"
+              className="w-full py-3 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition-colors disabled:opacity-50"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>
           </form>
 
-          <p className="text-center text-xs text-gray-500">
+          <p className="text-center text-xs text-turf-text-muted">
             Don't have an account yet?{" "}
-            <Link to="/signup" className="font-bold text-primary-600 hover:underline">
+            <Link to="/signup" className="font-bold text-turf-primary hover:underline">
               Create account
             </Link>
           </p>
