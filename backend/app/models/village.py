@@ -32,6 +32,10 @@ class VillageModel(BaseModel):
     amenities: VillageAmenities
     data_year: int = 2024
     source: str = "Census & LGD Data"
+    sc_population: int = 0
+    st_population: int = 0
+    literate_population: int = 0
+    match_status: str = ""
     
     # Derived fields
     worker_ratio: float = 0.0

@@ -9,14 +9,17 @@ from app.models.assessment import (
     QuestionnaireAnswers, ComputedScores, ComputedFinance, ComputedExplanation,
     SWOTAnalysis, FinancialLiteracyExplainerCard, BusinessAlternativeItem, ImprovementActionItem
 )
-from app.services.geo import find_villages_within_radius, find_competitors_within_radius, find_nearest_legal_offices, aggregate_catchment_stats
+from app.services.geo import (
+    find_villages_within_radius, find_competitors_within_radius,
+    find_nearest_legal_offices, aggregate_catchment_stats, haversine_distance,
+)
 from app.services.finance import calculate_margin_and_loan, calculate_emi, calculate_affordability, select_scheme
 from app.services.scoring import calculate_market_score, calculate_readiness_score, calculate_financial_score, calculate_overall_feasibility, rank_business_alternatives
 from app.services.llm_explainer import (
     generate_score_narrative, generate_swot, generate_improvement_actions,
     generate_financial_literacy_notes, generate_90_day_plan, generate_alternative_blurb
 )
-from app.services.translation import translate_report_payload, translate_batch, translate_text
+from app.services.translation import SUPPORTED_LANGUAGES, translate_report_payload, translate_batch, translate_text
 from app.data.document_checklists import DOCUMENT_CHECKLISTS_DATA
 from app.data.mock_villages import MOCK_VILLAGES
 from app.data.mock_legal_offices import MOCK_LEGAL_OFFICES
@@ -361,23 +364,86 @@ async def get_assessment_market_map(id: str, current_user: dict = Depends(get_cu
         raise HTTPException(status_code=404, detail=f"Assessment {id} not found")
         
     village = MOCK_VILLAGES_MAP.get(asm["village_id"], MOCK_VILLAGES[0])
+
+    nearby_villages = []
+    competitor_breakdown = {
+        "band_0_2km": [],
+        "band_2_5km": [],
+        "band_5_10km": [],
+        "total_count": 0,
+        "weighted_score": 0.0,
+        "all_competitors": [],
+    }
+
+    if db is not None:
+        try:
+            nearby_villages = await find_villages_within_radius(
+                db, village["latitude"], village["longitude"], radius_km=10.0
+            )
+            competitor_breakdown = await find_competitors_within_radius(
+                db, village["latitude"], village["longitude"],
+                asm.get("category", ""), radius_km=10.0
+            )
+        except Exception:
+            nearby_villages = []
+
+    if not nearby_villages:
+        for candidate in MOCK_VILLAGES:
+            candidate_copy = candidate.copy()
+            distance = haversine_distance(
+                village["latitude"], village["longitude"],
+                candidate_copy["latitude"], candidate_copy["longitude"],
+            )
+            if distance <= 10.0:
+                candidate_copy["distance_km"] = distance
+                nearby_villages.append(candidate_copy)
+        nearby_villages.sort(key=lambda item: item["distance_km"])
+
+    if not competitor_breakdown["all_competitors"]:
+        stats = next(
+            (
+                item for item in MOCK_VILLAGE_BUSINESS_STATS
+                if item["village_id"] == village["village_id"]
+                and item["category"] == asm.get("category")
+            ),
+            None,
+        )
+        if stats:
+            bands = {"band_0_2km": [], "band_2_5km": [], "band_5_10km": []}
+            for competitor in stats.get("named_competitors", []):
+                distance = float(competitor.get("distance_km", 2.0))
+                point = {
+                    **competitor,
+                    "latitude": round(village["latitude"] + distance / 111.0, 4),
+                    "longitude": round(village["longitude"] + distance / 111.0, 4),
+                    "category": asm.get("category"),
+                    "village_id": village["village_id"],
+                }
+                if distance <= 2.0:
+                    bands["band_0_2km"].append(point)
+                elif distance <= 5.0:
+                    bands["band_2_5km"].append(point)
+                else:
+                    bands["band_5_10km"].append(point)
+            competitor_breakdown.update(bands)
+            competitor_breakdown["all_competitors"] = [
+                *bands["band_0_2km"], *bands["band_2_5km"], *bands["band_5_10km"]
+            ]
+            competitor_breakdown["total_count"] = len(competitor_breakdown["all_competitors"])
+            competitor_breakdown["weighted_score"] = (
+                len(bands["band_0_2km"])
+                + len(bands["band_2_5km"]) * 0.7
+                + len(bands["band_5_10km"]) * 0.3
+            )
+
+    catchment_stats = aggregate_catchment_stats(nearby_villages)
     
     return {
         "center_village": village,
         "catchment_radius_km": 10.0,
-        "nearby_villages": [village],
-        "competitor_breakdown": {
-            "band_0_2km": [],
-            "band_2_5km": [],
-            "band_5_10km": [],
-            "total_count": 2
-        },
-        "catchment_stats": {
-            "catchment_village_count": 1,
-            "total_population": village.get("population", 12000),
-            "total_households": village.get("households", 2500),
-            "total_workers": 5000
-        }
+        "nearby_villages": nearby_villages,
+        "competitor_breakdown": competitor_breakdown,
+        "catchment_stats": catchment_stats,
     }
 
 @router.get("/{id}/alternatives", response_model=List[BusinessAlternativeItem])
@@ -483,7 +549,11 @@ async def update_improvement_action_status(
     return {"status": status_val, "action_id": action_id, "updated": True}
 
 @router.get("/{id}/financial-plan")
-async def get_assessment_financial_plan(id: str, current_user: dict = Depends(get_current_user)):
+async def get_assessment_financial_plan(
+    id: str,
+    lang: str = Query("en"),
+    current_user: dict = Depends(get_current_user)
+):
     asm = IN_MEMORY_ASSESSMENTS.get(id)
     if not asm:
         db = get_database()
@@ -513,7 +583,7 @@ async def get_assessment_financial_plan(id: str, current_user: dict = Depends(ge
     explanation = asm.get("computed_explanation")
     p90 = explanation.get("plan_90_days") if explanation else generate_90_day_plan(asm.get("category", "Dairy"), {}, {})
     
-    return {
+    result = {
         "scheme": scheme,
         "financial_summary": {
             "project_cost": project_cost,
@@ -531,6 +601,21 @@ async def get_assessment_financial_plan(id: str, current_user: dict = Depends(ge
         },
         "execution_milestones_90_days": p90
     }
+
+    if lang == "en" or lang not in SUPPORTED_LANGUAGES:
+        return result
+
+    result["scheme"] = dict(result["scheme"])
+    result["scheme"]["name"] = translate_text(result["scheme"].get("name", ""), lang)
+    result["scheme"]["description"] = translate_text(result["scheme"].get("description", ""), lang)
+    summary = dict(result["financial_summary"])
+    summary["affordability_band"] = translate_text(summary.get("affordability_band", ""), lang)
+    result["financial_summary"] = summary
+    result["execution_milestones_90_days"] = {
+        key: translate_batch(value, lang) if isinstance(value, list) else value
+        for key, value in p90.items()
+    }
+    return result
 
 @router.get("/{id}/legal-offices")
 async def get_assessment_legal_offices(id: str, current_user: dict = Depends(get_current_user)):

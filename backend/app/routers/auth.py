@@ -1,4 +1,6 @@
 import uuid
+import json
+from pathlib import Path
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.db import get_database
@@ -7,8 +9,24 @@ from app.models.user import UserSignup, UserLogin, UserResponse, TokenResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-# In-memory fallback store when MongoDB is offline
-IN_MEMORY_USERS = {}
+# Persistent local fallback store when MongoDB is offline.
+USERS_FILE = Path(__file__).resolve().parents[2] / ".users.json"
+
+def _load_local_users():
+    try:
+        if USERS_FILE.exists():
+            return json.loads(USERS_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {}
+
+def _save_local_users():
+    try:
+        USERS_FILE.write_text(json.dumps(IN_MEMORY_USERS, indent=2), encoding="utf-8")
+    except OSError as exc:
+        print(f"Notice: Could not persist local users ({exc})")
+
+IN_MEMORY_USERS = _load_local_users()
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def signup(user_in: UserSignup):
@@ -50,6 +68,7 @@ async def signup(user_in: UserSignup):
         if user_in.email in IN_MEMORY_USERS:
             raise HTTPException(status_code=400, detail="User with this email already exists")
         IN_MEMORY_USERS[user_in.email] = user_doc
+        _save_local_users()
 
     return UserResponse(
         id=user_id,

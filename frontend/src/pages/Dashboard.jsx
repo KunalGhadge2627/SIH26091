@@ -11,7 +11,11 @@ import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 export const Dashboard = () => {
+<<<<<<< HEAD
   const { lang, t } = useLanguage();
+=======
+  const { lang, translate: t } = useLanguage();
+>>>>>>> development
   const [latestAssessment, setLatestAssessment] = useState(null);
   const [report, setReport] = useState(null);
   const [marketMap, setMarketMap] = useState(null);
@@ -56,9 +60,15 @@ export const Dashboard = () => {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
+<<<<<<< HEAD
               <span className="eyebrow">{t('Decision dashboard')}</span>
               <h1 className="text-2xl font-bold text-turf-text">{t('Your business assessment')}</h1>
               <p className="text-xs text-turf-text-muted mt-0.5">{t('Pre-investment advisory overview and village catchment intelligence.')}</p>
+=======
+              <span className="eyebrow">{t('DECISION DASHBOARD')}</span>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Your business assessment')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('Pre-investment advisory overview and village catchment intelligence.')}</p>
+>>>>>>> development
             </div>
 
             <Link
@@ -71,7 +81,11 @@ export const Dashboard = () => {
           </div>
 
           {loading ? (
+<<<<<<< HEAD
             <div className="py-12 text-center text-xs text-turf-text-muted">Loading dashboard intelligence...</div>
+=======
+            <div className="py-12 text-center text-xs text-gray-400">{t('Loading dashboard intelligence...')}</div>
+>>>>>>> development
           ) : !latestAssessment || !report ? (
             /* Empty State */
             <div className="bg-white border border-turf-border rounded-2xl p-12 text-center space-y-4 max-w-md mx-auto my-8">
@@ -79,9 +93,15 @@ export const Dashboard = () => {
                 <Store className="w-8 h-8" />
               </div>
               <div className="space-y-1">
+<<<<<<< HEAD
                 <h3 className="text-lg font-bold text-turf-text">{t('No completed assessments yet')}</h3>
                 <p className="text-xs text-turf-text-muted leading-relaxed">
                   Start your first business feasibility assessment to evaluate local village demand, readiness, and loan EMI affordability.
+=======
+                <h3 className="text-lg font-bold text-gray-900">{t('No completed assessments yet')}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  {t('Start your first business feasibility assessment to evaluate local village demand, readiness, and loan EMI affordability.')}
+>>>>>>> development
                 </p>
               </div>
               <Link
@@ -113,10 +133,17 @@ export const Dashboard = () => {
                     </div>
 
                     <div>
+<<<<<<< HEAD
                       <h2 className="text-xl font-bold text-turf-text">{report.category}</h2>
                       <p className="text-xs text-turf-text-muted flex items-center gap-1 mt-0.5">
                         <MapPin className="w-3.5 h-3.5 text-turf-text-muted" />
                         <span>Village ID: {latestAssessment.village_id}</span>
+=======
+                      <h2 className="text-xl font-bold text-gray-900">{latestAssessment.category}</h2>
+                      <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                        <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                        <span>{t('Village ID:')} {latestAssessment.village_id}</span>
+>>>>>>> development
                       </p>
                     </div>
 
@@ -124,11 +151,19 @@ export const Dashboard = () => {
                     <div className="flex flex-col sm:flex-row items-center gap-6 p-5 rounded-2xl bg-turf-surface border border-turf-border">
                       <ScoreRing score={report.computed_scores?.overall_score || 75} size={110} strokeWidth={9} label={t('Feasibility')} />
                       <div className="space-y-1 text-center sm:text-left">
+<<<<<<< HEAD
                         <div className="text-base font-bold text-turf-text">
                           {report.computed_scores?.verdict_title || 'Proceed after preparation'}
                         </div>
                         <div className="text-xs font-semibold text-turf-primary">
                           {t('Verdict Band')}: {report.computed_scores?.verdict_band || 'Promising'}
+=======
+                        <div className="text-base font-extrabold text-gray-900">
+                          {t(report.computed_scores?.verdict_title || 'Proceed after preparation')}
+                        </div>
+                        <div className="text-xs font-semibold text-primary-700">
+                          {t('Verdict Band:')} {t(report.computed_scores?.verdict_band || 'Promising')}
+>>>>>>> development
                         </div>
                         <p className="text-[11px] text-turf-text-muted max-w-xs leading-relaxed">
                           {report.computed_explanation?.score_narrative || "Feasibility rating derived from 3-way fit model."}
@@ -138,9 +173,15 @@ export const Dashboard = () => {
 
                     {/* Sub-Score Bars */}
                     <div className="space-y-3 pt-2">
+<<<<<<< HEAD
                       <ScoreBar label={`${t('Local Market Fit')} (45%)`} score={report.computed_scores?.market_score || 70} color="bg-turf-primary" />
                       <ScoreBar label={`${t('Entrepreneur Readiness')} (30%)`} score={report.computed_scores?.readiness_score || 65} color="bg-turf-primary" />
                       <ScoreBar label={`${t('Financial Fit')} (25%)`} score={report.computed_scores?.financial_score || 80} color="bg-turf-primary-light" />
+=======
+                      <ScoreBar label={t('Local Market Fit (45%)')} score={report.computed_scores?.market_score || 70} color="bg-primary-600" />
+                      <ScoreBar label={t('Business Readiness (30%)')} score={report.computed_scores?.readiness_score || 65} color="bg-emerald-600" />
+                      <ScoreBar label={t('Financial Fit (25%)')} score={report.computed_scores?.financial_score || 80} color="bg-amber-500" />
+>>>>>>> development
                     </div>
                   </div>
 
@@ -151,11 +192,19 @@ export const Dashboard = () => {
                 <div className="lg:col-span-5 bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-4 flex flex-col justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
+<<<<<<< HEAD
                       <span className="eyebrow !mb-0">{t('Local catchment · 10 km')}</span>
                       <span className="text-[10px] font-semibold text-turf-text-muted bg-white border border-turf-border px-2 py-0.5 rounded-lg">{t('Map view')}</span>
                     </div>
                     <h3 className="text-sm font-bold text-turf-text">
                       Market around {marketMap?.center_village?.name || 'Village'}
+=======
+                      <span className="eyebrow !mb-0">{t('LOCAL CATCHMENT · 10 KM')}</span>
+                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-gray-100 px-2 py-0.5 rounded">{t('MAP VIEW')}</span>
+                    </div>
+                    <h3 className="text-sm font-bold text-gray-900">
+                      {t('Market around')} {marketMap?.center_village?.name || t('Village')}
+>>>>>>> development
                     </h3>
                   </div>
 
@@ -171,9 +220,15 @@ export const Dashboard = () => {
                     />
                   </div>
 
+<<<<<<< HEAD
                   <div className="p-3.5 bg-white border border-turf-border rounded-xl text-[11px] text-turf-text flex items-center justify-between">
                     <span>Nearby villages in 10km: <strong className="stat-number">{marketMap?.catchment_stats?.catchment_village_count || 1}</strong></span>
                     <span>Total population: <strong className="stat-number">{(marketMap?.catchment_stats?.total_population || 12000).toLocaleString()}</strong></span>
+=======
+                  <div className="p-3 bg-gray-50 border border-gray-100 rounded-xl text-[11px] text-gray-600 flex items-center justify-between">
+                    <span>{t('Nearby Villages in 10km:')} <strong>{marketMap?.catchment_stats?.catchment_village_count || 1}</strong></span>
+                    <span>{t('Total Population:')} <strong>{(marketMap?.catchment_stats?.total_population || 12000).toLocaleString()}</strong></span>
+>>>>>>> development
                   </div>
                 </div>
               </div>

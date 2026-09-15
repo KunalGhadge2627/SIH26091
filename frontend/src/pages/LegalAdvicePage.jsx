@@ -7,34 +7,33 @@ import LocationMap from '../components/map/LocationMap';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
+import { getCachedRequest, readCachedData } from '../api/requestCache';
 
 export const LegalAdvicePage = () => {
+  const { lang, translate: t } = useLanguage();
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
   const { t } = useLanguage();
 
-  const [legalData, setLegalData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = `legal-advice:${assessmentId}`;
+  const [legalData, setLegalData] = useState(() => readCachedData(cacheKey));
+  const [loading, setLoading] = useState(() => !readCachedData(cacheKey));
 
   useEffect(() => {
     const fetchLegal = async () => {
-      setLoading(true);
+      if (!readCachedData(cacheKey)) setLoading(true);
       try {
-        let data = null;
-        if (assessmentId && assessmentId !== 'ASM_DEFAULT') {
-          const resp = await api.getAssessmentLegalOffices(assessmentId);
-          data = resp.data;
-        } else {
-          // Default fallback to Pune district legal offices and Dairy checklist
+        const data = await getCachedRequest(`${cacheKey}:${lang}`, async () => {
+          if (assessmentId && assessmentId !== 'ASM_DEFAULT') {
+            const resp = await api.getAssessmentLegalOffices(assessmentId);
+            return resp.data;
+          }
           const [officesResp, checkResp] = await Promise.all([
             api.getLegalOffices('Pune'),
             api.getDocumentChecklist('Dairy')
           ]);
-          data = {
-            nearest_legal_offices: officesResp.data,
-            document_checklist: checkResp.data
-          };
-        }
+          return { nearest_legal_offices: officesResp.data, document_checklist: checkResp.data };
+        });
         setLegalData(data);
       } catch (err) {
         console.error("Legal advice fetch error:", err);
@@ -43,7 +42,7 @@ export const LegalAdvicePage = () => {
       }
     };
     fetchLegal();
-  }, [assessmentId]);
+  }, [assessmentId, lang]);
 
   const offices = legalData?.nearest_legal_offices || [];
   const checklist = legalData?.document_checklist || {};
@@ -57,6 +56,7 @@ export const LegalAdvicePage = () => {
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
+<<<<<<< HEAD
           <div className="border-b border-turf-border pb-4">
             <span className="eyebrow">Regulatory & aid directory</span>
             <h1 className="text-2xl font-bold text-turf-text">{t('Legal Advice & Registration Support')}</h1>
@@ -65,14 +65,30 @@ export const LegalAdvicePage = () => {
 
           {loading ? (
             <div className="py-12 text-center text-xs text-turf-text-muted">Loading nearest legal offices and document checklists...</div>
+=======
+          <div className="border-b border-gray-200 pb-4">
+            <span className="eyebrow">{t('REGULATORY & AID DIRECTORY')}</span>
+            <h1 className="text-2xl font-bold text-gray-900">{t('Legal Advice & Registration Support')}</h1>
+            <p className="text-xs text-gray-500 mt-0.5">{t('Find nearby District Legal Services Authorities and required business registration documents.')}</p>
+          </div>
+
+          {loading ? (
+            <div className="py-12 text-center text-xs text-gray-400">{t('Loading nearest legal offices and document checklists...')}</div>
+>>>>>>> development
           ) : (
             <div className="space-y-8">
               {/* Section 1: Nearest Legal Offices */}
               <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
                 <div>
+<<<<<<< HEAD
                   <span className="eyebrow">District aid centres</span>
                   <h2 className="text-xl font-bold text-turf-text">Legal & registration support near you</h2>
                   <p className="text-xs text-turf-text-muted mt-0.5">Contact official legal services authorities for MSME registration and report review.</p>
+=======
+                  <span className="eyebrow">{t('DISTRICT AID CENTRES')}</span>
+                  <h2 className="text-xl font-bold text-gray-900">{t('Legal & registration support near you')}</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">{t('Contact official legal services authorities for MSME registration and report review.')}</p>
+>>>>>>> development
                 </div>
 
                 {/* Map */}
@@ -122,19 +138,34 @@ export const LegalAdvicePage = () => {
               {/* Section 2: Document Checklist */}
               <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
                 <div>
+<<<<<<< HEAD
                   <span className="eyebrow">Regulatory compliance</span>
                   <h2 className="text-xl font-bold text-turf-text">
                     Documents you'll need to register {checklist.category || 'Business'}
                   </h2>
                   <p className="text-xs text-turf-text-muted mt-0.5">Required identity documents and local government trade licenses.</p>
+=======
+                  <span className="eyebrow">{t('REGULATORY COMPLIANCE')}</span>
+                  <h2 className="text-xl font-bold text-gray-900">
+                    {t("Documents you'll need to register")} {checklist.category || t('Business')}
+                  </h2>
+                  <p className="text-xs text-gray-500 mt-0.5">{t('Required identity documents and local government trade licenses.')}</p>
+>>>>>>> development
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Identity & Bank Documents */}
+<<<<<<< HEAD
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                     <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
                       <FileCheck className="w-4 h-4 text-turf-primary" />
                       <span>Required Identity & Bank Documents</span>
+=======
+                  <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
+                    <div className="flex items-center gap-2 font-bold text-xs text-gray-900 uppercase tracking-wider">
+                      <FileCheck className="w-4 h-4 text-primary-600" />
+                      <span>{t('Required Identity & Bank Documents')}</span>
+>>>>>>> development
                     </div>
 
                     <ul className="space-y-2 text-xs text-turf-text font-medium">
@@ -148,10 +179,17 @@ export const LegalAdvicePage = () => {
                   </div>
 
                   {/* Regulatory & Trade Licenses */}
+<<<<<<< HEAD
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                     <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
                       <ShieldCheck className="w-4 h-4 text-turf-primary" />
                       <span>Regulatory & Trade Requirements</span>
+=======
+                  <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
+                    <div className="flex items-center gap-2 font-bold text-xs text-amber-900 uppercase tracking-wider">
+                      <ShieldCheck className="w-4 h-4 text-amber-600" />
+                      <span>{t('Regulatory & Trade Requirements')}</span>
+>>>>>>> development
                     </div>
 
                     <ul className="space-y-2 text-xs text-turf-text-muted font-medium">

@@ -94,13 +94,28 @@ pip install -r requirements.txt
 
 # Configure environment variables in .env
 # Set ANTHROPIC_API_KEY for live Claude generation (or leave blank for automatic evidence-grounded fallback)
+# Set SARVAM_API_KEY in .env to enable live English-to-Indic translation.
 ```
+
+### Sarvam Translation Setup
+
+Create an account in the [Sarvam dashboard](https://dashboard.sarvam.ai), generate an API key, and copy these values from `.env.example` into `.env`:
+
+```env
+SARVAM_API_KEY="your-sarvam-api-key"
+SARVAM_ENDPOINT="https://api.sarvam.ai/translate"
+SARVAM_MODEL="sarvam-translate:v1"
+```
+
+The report, alternatives, and improvement-plan endpoints use Sarvam when configured. If the key is missing or the service is unavailable, the existing Bhashini, local model, and dictionary fallbacks are used.
 
 ### 3. Seed Database
 Run the seeder script to populate MongoDB with villages, 50 market datasets, business models, legal offices, schemes, and document checklists:
 ```bash
 python -m app.data.seed
 ```
+
+The supplied `mock_data/files.zip` is also loaded into the dedicated `archive_*` collections (schemes, villages, business categories, competitor mapping, market pricing, and entrepreneur cases). Set `MOCK_DATA_ZIP` to use a different archive path.
 
 ### 4. Run Development Server
 ```bash

@@ -9,7 +9,11 @@ import api from '../api/client';
 
 export const ProfilePage = () => {
   const { user, logout } = useAuth();
+<<<<<<< HEAD
   const { lang, setLang, languagesList, t } = useLanguage();
+=======
+  const { lang, setLang, languagesList, translate: t } = useLanguage();
+>>>>>>> development
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -92,9 +96,15 @@ export const ProfilePage = () => {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
+<<<<<<< HEAD
               <span className="eyebrow">Account</span>
               <h1 className="text-2xl font-bold text-turf-text">{t('User Profile')}</h1>
               <p className="text-xs text-turf-text-muted mt-0.5">Manage your personal details, language preferences, and accessibility settings.</p>
+=======
+              <span className="eyebrow">{t('ACCOUNT')}</span>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Your profile')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('Manage your personal details, language preferences, and accessibility settings.')}</p>
+>>>>>>> development
             </div>
 
             <button
@@ -102,7 +112,11 @@ export const ProfilePage = () => {
               className="px-4 py-2 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
             >
               <Edit3 className="w-4 h-4" />
+<<<<<<< HEAD
               <span>{isEditing ? t('Cancel editing') : t('Edit profile')}</span>
+=======
+              <span>{isEditing ? t("Cancel editing") : t("Edit profile")}</span>
+>>>>>>> development
             </button>
           </div>
 
@@ -114,32 +128,55 @@ export const ProfilePage = () => {
               </div>
 
               <div>
+<<<<<<< HEAD
                 <h3 className="text-base font-bold text-turf-text">{profileData.full_name || 'User'}</h3>
                 <span className="text-xs font-semibold text-turf-primary bg-white border border-turf-border px-2.5 py-0.5 rounded-lg inline-block mt-1">
                   Rural Micro-Entrepreneur
+=======
+                <h3 className="text-base font-bold text-gray-900">{profileData.full_name || t('User')}</h3>
+                <span className="text-xs font-semibold text-primary-700 bg-blue-50 px-2.5 py-0.5 rounded-full inline-block mt-1 border border-blue-100">
+                  {t('Rural Micro-Entrepreneur')}
+>>>>>>> development
                 </span>
               </div>
 
               <div className="pt-2">
+<<<<<<< HEAD
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-turf-primary bg-white px-3 py-1 rounded-xl border border-turf-border">
                   <CheckCircle2 className="w-4 h-4 text-turf-primary" />
                   <span>Profile Complete</span>
+=======
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>{t('Profile Complete')}</span>
+>>>>>>> development
                 </span>
               </div>
             </div>
 
             {/* Right Profile Details / Edit Form Card */}
+<<<<<<< HEAD
             <div className="md:col-span-8 bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
               <div className="flex items-center justify-between border-b border-turf-border pb-3">
                 <h3 className="text-xs font-semibold text-turf-text">Profile details</h3>
                 <span className="text-xs text-turf-text-muted">ID: {user?.id}</span>
+=======
+            <div className="md:col-span-8 bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">{t('Profile Details')}</h3>
+                <span className="text-xs text-gray-400 font-mono">{t('ID')}: {user?.id}</span>
+>>>>>>> development
               </div>
 
               {isEditing ? (
                 <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
+<<<<<<< HEAD
                       <label className="block font-semibold text-turf-text mb-1">Full name</label>
+=======
+                      <label className="block font-semibold text-gray-700 mb-1">{t('Full Name')}</label>
+>>>>>>> development
                       <input
                         type="text"
                         value={profileData.full_name}
@@ -148,7 +185,11 @@ export const ProfilePage = () => {
                       />
                     </div>
                     <div>
+<<<<<<< HEAD
                       <label className="block font-semibold text-turf-text mb-1">Mobile</label>
+=======
+                      <label className="block font-semibold text-gray-700 mb-1">{t('Mobile')}</label>
+>>>>>>> development
                       <input
                         type="text"
                         value={profileData.mobile}
@@ -160,7 +201,11 @@ export const ProfilePage = () => {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
+<<<<<<< HEAD
                       <label className="block font-semibold text-turf-text mb-1">State</label>
+=======
+                      <label className="block font-semibold text-gray-700 mb-1">{t('State')}</label>
+>>>>>>> development
                       <input
                         type="text"
                         value={profileData.state}
@@ -169,7 +214,11 @@ export const ProfilePage = () => {
                       />
                     </div>
                     <div>
+<<<<<<< HEAD
                       <label className="block font-semibold text-turf-text mb-1">District</label>
+=======
+                      <label className="block font-semibold text-gray-700 mb-1">{t('District')}</label>
+>>>>>>> development
                       <input
                         type="text"
                         value={profileData.district}
@@ -186,13 +235,14 @@ export const ProfilePage = () => {
                       className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
                     >
                       <Save className="w-4 h-4" />
-                      <span>{saving ? "Saving..." : "Save changes"}</span>
+                      <span>{saving ? t("Saving...") : t("Save changes")}</span>
                     </button>
                   </div>
                 </form>
               ) : (
                 <div className="grid sm:grid-cols-2 gap-6 text-xs">
                   <div>
+<<<<<<< HEAD
                     <span className="text-turf-text-muted font-medium block">Full name</span>
                     <span className="font-bold text-turf-text text-sm">{profileData.full_name}</span>
                   </div>
@@ -210,11 +260,31 @@ export const ProfilePage = () => {
                   <div>
                     <span className="text-turf-text-muted font-medium block">Preferred language</span>
                     <span className="font-bold text-turf-text text-sm">
+=======
+                    <span className="text-gray-400 font-semibold block">{t('Full Name')}</span>
+                    <span className="font-bold text-gray-900 text-sm">{profileData.full_name}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-gray-400 font-semibold block">{t('Email Address')}</span>
+                    <span className="font-bold text-gray-900 text-sm">{profileData.email}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-gray-400 font-semibold block">{t('Mobile Number')}</span>
+                    <span className="font-bold text-gray-900 text-sm">{profileData.mobile}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-gray-400 font-semibold block">{t('Preferred Language')}</span>
+                    <span className="font-bold text-gray-900 text-sm">
+>>>>>>> development
                       {languagesList.find(l => l.code === profileData.preferred_language)?.native || 'English'}
                     </span>
                   </div>
 
                   <div>
+<<<<<<< HEAD
                     <span className="text-turf-text-muted font-medium block">State & district</span>
                     <span className="font-bold text-turf-text text-sm">{profileData.district}, {profileData.state}</span>
                   </div>
@@ -222,6 +292,15 @@ export const ProfilePage = () => {
                   <div>
                     <span className="text-turf-text-muted font-medium block">Prior business experience</span>
                     <span className="font-bold text-turf-text text-sm">{profileData.business_experience}</span>
+=======
+                    <span className="text-gray-400 font-semibold block">{t('State & District')}</span>
+                    <span className="font-bold text-gray-900 text-sm">{profileData.district}, {profileData.state}</span>
+                  </div>
+
+                  <div>
+                    <span className="text-gray-400 font-semibold block">{t('Prior Business Experience')}</span>
+                    <span className="font-bold text-gray-900 text-sm">{t(profileData.business_experience)}</span>
+>>>>>>> development
                   </div>
                 </div>
               )}
@@ -229,9 +308,15 @@ export const ProfilePage = () => {
           </div>
 
           {/* Preferences Section */}
+<<<<<<< HEAD
           <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
             <span className="eyebrow">Preferences & accessibility</span>
             <h2 className="text-xl font-bold text-turf-text">App Preferences</h2>
+=======
+          <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
+            <span className="eyebrow">{t('PREFERENCES & ACCESSIBILITY')}</span>
+            <h2 className="text-xl font-bold text-gray-900">{t('App Preferences')}</h2>
+>>>>>>> development
 
             <div className="space-y-4 divide-y divide-turf-border text-xs">
               {/* Language Row */}
@@ -239,8 +324,13 @@ export const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   <Globe className="w-5 h-5 text-turf-primary shrink-0" />
                   <div>
+<<<<<<< HEAD
                     <div className="font-bold text-turf-text">App language</div>
                     <div className="text-turf-text-muted">English, Hindi and 7 more Indic languages supported</div>
+=======
+                    <div className="font-bold text-gray-900">{t('App Language')}</div>
+                    <div className="text-gray-500">{t('English, Hindi and 7 more Indic languages supported')}</div>
+>>>>>>> development
                   </div>
                 </div>
 
@@ -260,8 +350,13 @@ export const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   <Eye className="w-5 h-5 text-turf-primary shrink-0" />
                   <div>
+<<<<<<< HEAD
                     <div className="font-bold text-turf-text">Accessibility preferences</div>
                     <div className="text-turf-text-muted">High-contrast visuals and reduced animation settings</div>
+=======
+                    <div className="font-bold text-gray-900">{t('Accessibility Preferences')}</div>
+                    <div className="text-gray-500">{t('High-contrast visuals and reduced animation settings')}</div>
+>>>>>>> development
                   </div>
                 </div>
 
@@ -273,7 +368,7 @@ export const ProfilePage = () => {
                       onChange={(e) => handleAccessibilityToggle('highContrast', e.target.checked)}
                       className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                     />
-                    <span>High contrast</span>
+                    <span>{t('High contrast')}</span>
                   </label>
 
                   <label className="flex items-center gap-2 font-semibold text-turf-text">
@@ -283,7 +378,7 @@ export const ProfilePage = () => {
                       onChange={(e) => handleAccessibilityToggle('reducedMotion', e.target.checked)}
                       className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                     />
-                    <span>Reduced motion</span>
+                    <span>{t('Reduced motion')}</span>
                   </label>
                 </div>
               </div>

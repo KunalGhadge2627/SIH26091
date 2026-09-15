@@ -10,7 +10,11 @@ import { useLanguage } from '../../context/LanguageContext';
 
 export const Sidebar = () => {
   const { logout } = useAuth();
+<<<<<<< HEAD
   const { t } = useLanguage();
+=======
+  const { translate: t } = useLanguage();
+>>>>>>> development
 
   const navItems = [
     { path: '/dashboard', label: t('Dashboard'), icon: LayoutDashboard },
@@ -29,12 +33,20 @@ export const Sidebar = () => {
         {/* Brand Header */}
         <div className="p-6 border-b border-turf-border">
           <Logo />
+<<<<<<< HEAD
           <p className="text-xs text-turf-text-muted mt-1">Rural Feasibility & Literacy</p>
+=======
+          <p className="text-[11px] text-gray-500 mt-1">{t('Rural Feasibility & Literacy')}</p>
+>>>>>>> development
         </div>
 
         {/* Section Eyebrow */}
         <div className="px-6 pt-5 pb-2">
+<<<<<<< HEAD
           <span className="eyebrow">{t('Decision tools')}</span>
+=======
+          <span className="eyebrow">{t('DECISION TOOLS')}</span>
+>>>>>>> development
         </div>
 
         {/* Nav Links */}
@@ -55,8 +67,13 @@ export const Sidebar = () => {
                   }`
                 }
               >
+<<<<<<< HEAD
                 <Icon className={`w-4 h-4 ${item.highlight ? 'text-turf-primary' : ''}`} />
                 <span>{item.label}</span>
+=======
+                <Icon className={`w-4 h-4 ${item.highlight ? 'text-primary-600' : ''}`} />
+                <span>{t(item.label)}</span>
+>>>>>>> development
               </NavLink>
             );
           })}
@@ -64,6 +81,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Bottom Pinned Callout & Logout */}
+<<<<<<< HEAD
       <div className="p-4 border-t border-turf-border space-y-3">
         <div className="bg-turf-surface border border-turf-border rounded-2xl p-3.5 text-xs text-turf-text">
           <div className="flex items-center gap-1.5 font-semibold text-turf-primary mb-1">
@@ -72,6 +90,16 @@ export const Sidebar = () => {
           </div>
           <p className="leading-relaxed text-[11px] text-turf-text-muted">
             Recommendations use prototype data and do not guarantee business success.
+=======
+      <div className="p-4 border-t border-gray-100 space-y-3">
+        <div className="bg-amber-50/80 border border-amber-200/80 rounded-xl p-3 text-[11px] text-amber-900">
+          <div className="flex items-center gap-1.5 font-bold text-amber-800 uppercase tracking-wider mb-1">
+            <Info className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span>{t('PROTOTYPE DATA')}</span>
+          </div>
+          <p className="leading-tight text-[10.5px] text-amber-800">
+            {t('Recommendations use prototype data and do not guarantee business success.')}
+>>>>>>> development
           </p>
         </div>
 

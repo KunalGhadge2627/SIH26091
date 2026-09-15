@@ -14,6 +14,7 @@ async def get_all_business_models():
         if db is not None:
             cursor = db["business_models"].find({})
             models = await cursor.to_list(length=20)
+<<<<<<< HEAD
             for m in models:
                 m["_id"] = str(m.get("_id"))
     except Exception:
@@ -22,6 +23,14 @@ async def get_all_business_models():
     if not models:
         models = MOCK_BUSINESS_MODELS
 
+=======
+    except Exception:
+        models = []
+    if not models:
+        models = MOCK_BUSINESS_MODELS
+    for m in models:
+        m["_id"] = str(m.get("_id"))
+>>>>>>> development
     return models
 
 @router.get("/{category}", response_model=CategoryResponse)

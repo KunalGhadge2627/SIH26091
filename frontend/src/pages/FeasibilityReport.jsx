@@ -37,7 +37,7 @@ export const FeasibilityReport = () => {
       }
     };
     if (id) fetchReport();
-  }, [id, lang]);
+  }, [id]);
 
   const handlePrint = () => {
     window.print();

@@ -1,6 +1,12 @@
 import axios from 'axios';
 
+<<<<<<< HEAD
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+=======
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
+
+>>>>>>> development
 
 const client = axios.create({
   baseURL: API_BASE_URL,
@@ -30,6 +36,7 @@ export const api = {
 
   // Locations
   getStates: () => client.get('/locations/states'),
+<<<<<<< HEAD
   getDistricts: (state) => client.get('/locations/districts', { params: { state } }),
   getBlocks: (state, district) => {
     const params = typeof state === 'object' ? state : (district ? { state, district } : { district: state });
@@ -39,6 +46,11 @@ export const api = {
     const params = typeof state === 'object' ? state : { state, district, block };
     return client.get('/locations/villages', { params });
   },
+=======
+  getDistricts: (state) => client.get(`/locations/districts?state=${encodeURIComponent(state)}`),
+  getBlocks: (state, district) => client.get(`/locations/blocks?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}`),
+  getVillages: (state, district, block) => client.get(`/locations/villages?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}&block=${encodeURIComponent(block)}`),
+>>>>>>> development
   getVillageById: (id) => client.get(`/locations/villages/${id}`),
 
   // Business Models
@@ -58,7 +70,7 @@ export const api = {
   getAlternatives: (id, lang = 'en') => client.get(`/assessments/${id}/alternatives?lang=${lang}`),
   getImprovementPlan: (id, lang = 'en') => client.get(`/assessments/${id}/improvement-plan?lang=${lang}`),
   updateImprovementAction: (id, actionId, status) => client.put(`/assessments/${id}/improvement-plan/${actionId}`, { status }),
-  getFinancialPlan: (id) => client.get(`/assessments/${id}/financial-plan`),
+  getFinancialPlan: (id, lang = 'en') => client.get(`/assessments/${id}/financial-plan?lang=${lang}`),
   getAssessmentLegalOffices: (id) => client.get(`/assessments/${id}/legal-offices`),
 
   // Legal Offices & Checklists

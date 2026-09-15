@@ -7,30 +7,49 @@ import DisclaimerBanner from '../components/common/DisclaimerBanner';
 import ScoreRing from '../components/common/ScoreRing';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
+import { getCachedRequest, readCachedData } from '../api/requestCache';
+
+const DIMENSION_LABELS = {
+  hi: { Experience: 'अनुभव', Skill: 'कौशल', Resources: 'संसाधन', Supplier: 'आपूर्तिकर्ता', Customer: 'ग्राहक', 'Financial Preparedness': 'वित्तीय तैयारी' },
+  mr: { Experience: 'अनुभव', Skill: 'कौशल्य', Resources: 'संसाधने', Supplier: 'पुरवठादार', Customer: 'ग्राहक', 'Financial Preparedness': 'आर्थिक तयारी' },
+  ta: { Experience: 'அனுபவம்', Skill: 'திறன்', Resources: 'வளங்கள்', Supplier: 'வழங்குநர்', Customer: 'வாடிக்கையாளர்', 'Financial Preparedness': 'நிதித் தயார்நிலை' },
+  te: { Experience: 'అనుభవం', Skill: 'నైపుణ్యం', Resources: 'వనరులు', Supplier: 'సరఫరాదారు', Customer: 'కస్టమర్', 'Financial Preparedness': 'ఆర్థిక సంసిద్ధత' },
+  kn: { Experience: 'ಅನುಭವ', Skill: 'ಕೌಶಲ್ಯ', Resources: 'ಸಂಪನ್ಮೂಲಗಳು', Supplier: 'ಪೂರೈಕೆದಾರ', Customer: 'ಗ್ರಾಹಕ', 'Financial Preparedness': 'ಹಣಕಾಸಿನ ಸಿದ್ಧತೆ' },
+  bn: { Experience: 'অভিজ্ঞতা', Skill: 'দক্ষতা', Resources: 'সম্পদ', Supplier: 'সরবরাহকারী', Customer: 'গ্রাহক', 'Financial Preparedness': 'আর্থিক প্রস্তুতি' },
+  gu: { Experience: 'અનુભવ', Skill: 'કૌશલ્ય', Resources: 'સંસાધનો', Supplier: 'પુરવઠાકર્તા', Customer: 'ગ્રાહક', 'Financial Preparedness': 'નાણાકીય તૈયારી' },
+  pa: { Experience: 'ਤਜਰਬਾ', Skill: 'ਹੁਨਰ', Resources: 'ਸਰੋਤ', Supplier: 'ਸਪਲਾਇਰ', Customer: 'ਗਾਹਕ', 'Financial Preparedness': 'ਵਿੱਤੀ ਤਿਆਰੀ' }
+};
 
 export const ImprovementPlanPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
+<<<<<<< HEAD
   const { lang, t } = useLanguage();
+=======
+  const { lang, translate: t } = useLanguage();
+  const dimensionLabel = (dimension) => DIMENSION_LABELS[lang]?.[dimension] || t(dimension);
+>>>>>>> development
 
-  const [actions, setActions] = useState([]);
-  const [baseReadinessScore, setBaseReadinessScore] = useState(65);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = `improvement-plan:${assessmentId}`;
+  const languageCacheKey = `${cacheKey}:${lang}`;
+  const [actions, setActions] = useState(() => readCachedData(cacheKey)?.actions || []);
+  const [baseReadinessScore, setBaseReadinessScore] = useState(() => readCachedData(cacheKey)?.score || 65);
+  const [loading, setLoading] = useState(() => !readCachedData(cacheKey));
   const [updatingId, setUpdatingId] = useState(null);
 
   useEffect(() => {
     const fetchPlan = async () => {
-      setLoading(true);
+      if (!readCachedData(cacheKey)) setLoading(true);
       try {
-        const [planResp, repResp] = await Promise.all([
-          api.getImprovementPlan(assessmentId, lang),
-          api.getReport(assessmentId, lang).catch(() => null)
-        ]);
-
-        setActions(planResp.data);
-        if (repResp?.data?.computed_scores?.readiness_score) {
-          setBaseReadinessScore(repResp.data.computed_scores.readiness_score);
-        }
+        const data = await getCachedRequest(languageCacheKey, async () => {
+          const [planResp, repResp] = await Promise.all([
+            api.getImprovementPlan(assessmentId, lang),
+            api.getReport(assessmentId, lang).catch(() => null)
+          ]);
+          return { actions: planResp.data, score: repResp?.data?.computed_scores?.readiness_score || 65 };
+        });
+        setActions(data.actions);
+        setBaseReadinessScore(data.score);
       } catch (err) {
         console.error("Improvement plan fetch error:", err);
       } finally {
@@ -74,15 +93,21 @@ export const ImprovementPlanPage = () => {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
-        <TopBar title="Improvement Plan" />
+              <TopBar title={t('Improvement Plan')} />
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
+<<<<<<< HEAD
               <span className="eyebrow">Preparation before launch</span>
               <h1 className="text-2xl font-bold text-turf-text">{t('Improvement Plan')}</h1>
               <p className="text-xs text-turf-text-muted mt-0.5">Concrete action items to strengthen your entrepreneur readiness before starting.</p>
+=======
+              <span className="eyebrow">{t('PREPARATION BEFORE LAUNCH')}</span>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Improvement Plan')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('Concrete action items to strengthen your entrepreneur readiness before starting.')}</p>
+>>>>>>> development
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
@@ -94,12 +119,17 @@ export const ImprovementPlanPage = () => {
           </div>
 
           {loading ? (
+<<<<<<< HEAD
             <div className="py-12 text-center text-xs text-turf-text-muted">Loading readiness action items...</div>
+=======
+            <div className="py-12 text-center text-xs text-gray-400">{t('Loading readiness action items...')}</div>
+>>>>>>> development
           ) : (
             <div className="space-y-6">
               {/* Summary Strip (Data Card Fills) */}
               <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
+<<<<<<< HEAD
                   <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label="Current" />
                   <ArrowRight className="w-5 h-5 text-turf-primary hidden sm:block" />
                   <ScoreRing score={potentialScore} size={85} strokeWidth={8} label="Potential" />
@@ -107,21 +137,40 @@ export const ImprovementPlanPage = () => {
                     <h3 className="text-sm font-bold text-turf-text">Potential Preparedness</h3>
                     <p className="text-xs text-turf-primary font-semibold mt-0.5 stat-number">
                       +{completedPoints} points gained from completed actions
+=======
+                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label={t('CURRENT')} />
+                  <ArrowRight className="w-6 h-6 text-gray-300 hidden sm:block" />
+                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label={t('POTENTIAL')} />
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900">{t('Potential Preparedness')}</h3>
+                    <p className="text-xs text-emerald-700 font-semibold mt-0.5">
+                      +{completedPoints} {t('points gained from completed actions')}
+>>>>>>> development
                     </p>
                   </div>
                 </div>
 
+<<<<<<< HEAD
                 <div className="bg-white text-turf-primary px-4 py-2 rounded-xl text-xs font-semibold border border-turf-border shrink-0 stat-number">
                   {completedCount} of {actions.length} Actions Completed
+=======
+                <div className="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl text-xs font-bold border border-blue-100 shrink-0">
+                  {completedCount} {t('of')} {actions.length} {t('Actions Completed')}
+>>>>>>> development
                 </div>
               </div>
 
               {/* Numbered Action Cards */}
               <div className="space-y-4">
+<<<<<<< HEAD
                 <h2 className="text-xs font-semibold text-turf-text">Recommended Action Items</h2>
+=======
+                <h2 className="text-xs font-bold text-gray-800 uppercase tracking-wider">{t('Recommended Action Items')}</h2>
+>>>>>>> development
 
                 {actions.map((act, idx) => {
-                  const actKey = act.dimension.toLowerCase().replace(/ /g, '_');
+                      const actionDimension = act.dimension;
+                      const actKey = actionDimension.toLowerCase().replace(/ /g, '_');
                   const isCompleted = act.current_status === 'Completed';
                   const isInProgress = act.current_status === 'In Progress';
 
@@ -144,6 +193,7 @@ export const ImprovementPlanPage = () => {
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
+<<<<<<< HEAD
                             <span className="font-bold text-sm text-turf-text">{act.title}</span>
                             <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg stat-number">
                               +{act.impact_points} Readiness
@@ -152,6 +202,16 @@ export const ImprovementPlanPage = () => {
                           <p className="text-xs text-turf-text-muted leading-relaxed">{act.description}</p>
                           <span className="text-[10px] font-medium text-turf-text-muted block pt-1">
                             Dimension: {act.dimension}
+=======
+                            <span className="font-bold text-sm text-gray-900">{t(act.title)}</span>
+                            <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
+                              +{act.impact_points} {t('Readiness')}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-600 leading-relaxed">{t(act.description)}</p>
+                          <span className="text-[10px] font-semibold text-gray-400 block uppercase tracking-wider pt-1">
+                            {t('Dimension:')} {dimensionLabel(actionDimension)}
+>>>>>>> development
                           </span>
                         </div>
                       </div>
@@ -170,9 +230,15 @@ export const ImprovementPlanPage = () => {
                               : 'bg-white text-turf-text border-turf-border'
                           }`}
                         >
+<<<<<<< HEAD
                           <option value="Not Started" className="bg-white text-turf-text">Not Started</option>
                           <option value="In Progress" className="bg-white text-turf-text">In Progress</option>
                           <option value="Completed" className="bg-white text-turf-text">Completed</option>
+=======
+                          <option value="Not Started" className="bg-white text-gray-800">{t('Not Started')}</option>
+                          <option value="In Progress" className="bg-white text-gray-800">{t('In Progress')}</option>
+                          <option value="Completed" className="bg-white text-gray-800">{t('Completed')}</option>
+>>>>>>> development
                         </select>
                       </div>
                     </div>

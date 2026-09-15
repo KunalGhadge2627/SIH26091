@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Circle, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Fix default Leaflet marker icon path in React/Vite
 delete L.Icon.Default.prototype._getIconUrl;
@@ -12,13 +13,34 @@ L.Icon.Default.mergeOptions({
 });
 
 // Component to dynamically pan/zoom map when coordinates change
-const MapRecenter = ({ lat, lng }) => {
+const MapRecenter = ({ lat, lng, zoom }) => {
   const map = useMap();
   useEffect(() => {
-    if (lat && lng) {
-      map.setView([lat, lng], 12);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+      map.setView([lat, lng], zoom);
     }
-  }, [lat, lng, map]);
+  }, [lat, lng, map, zoom]);
+  return null;
+};
+
+const CatchmentZoomLimit = ({ lat, lng, radiusKm, showCatchment }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!showCatchment || radiusKm !== 10) {
+      map.setMaxZoom(19);
+      return;
+    }
+
+    const catchmentBounds = L.latLng(lat, lng).toBounds(radiusKm * 1000);
+    const maximumCatchmentZoom = map.getBoundsZoom(catchmentBounds, false);
+    map.setMaxZoom(maximumCatchmentZoom);
+
+    if (map.getZoom() > maximumCatchmentZoom) {
+      map.setZoom(maximumCatchmentZoom);
+    }
+  }, [lat, lng, map, radiusKm, showCatchment]);
+
   return null;
 };
 
@@ -26,37 +48,60 @@ export const LocationMap = ({
   lat = 18.6984, 
   lng = 74.1236, 
   villageName = "Shikrapur",
+  zoom = 12,
+  showVillageMarker = true,
+  showCatchment = true,
   radiusKm = 10.0,
   competitors = []
 }) => {
+  const { translate: t } = useLanguage();
   const position = [lat, lng];
 
   return (
     <div className="space-y-2">
+<<<<<<< HEAD
       <div className="h-72 w-full border border-turf-border rounded-2xl overflow-hidden relative">
         <MapContainer center={position} zoom={12} scrollWheelZoom={false} className="h-full w-full">
+=======
+      <div className="h-72 w-full border border-gray-200 rounded-xl overflow-hidden shadow-xs relative">
+        <MapContainer center={position} zoom={zoom} scrollWheelZoom className="h-full w-full">
+>>>>>>> development
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
-          <MapRecenter lat={lat} lng={lng} />
+          <MapRecenter lat={lat} lng={lng} zoom={zoom} />
+          <CatchmentZoomLimit lat={lat} lng={lng} radiusKm={radiusKm} showCatchment={showCatchment} />
 
           {/* Village Center Marker */}
-          <Marker position={position}>
-            <Popup>
-              <div className="text-xs font-semibold">
-                <strong>{villageName}</strong> (Selected Village Center)
-              </div>
-            </Popup>
-          </Marker>
+          {showVillageMarker && (
+            <Marker position={position}>
+              <Popup>
+                <div className="text-xs font-semibold">
+                  <strong>{villageName}</strong> ({t('Selected Village Center')})
+                </div>
+              </Popup>
+            </Marker>
+          )}
 
+<<<<<<< HEAD
           {/* 10km Radius Catchment Circle */}
           <Circle
             center={position}
             radius={radiusKm * 1000}
             pathOptions={{ color: '#16A34A', fillColor: '#86EFAC', fillOpacity: 0.2, weight: 2 }}
           />
+=======
+          {/* Hierarchy-level catchment circle */}
+          {showCatchment && (
+            <Circle
+              center={position}
+              radius={radiusKm * 1000}
+              pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15, weight: 2 }}
+            />
+          )}
+>>>>>>> development
 
           {/* Render Competitor Points */}
           {competitors.map((comp, idx) => (
@@ -73,6 +118,7 @@ export const LocationMap = ({
         </MapContainer>
 
         {/* Map Legend Overlay */}
+<<<<<<< HEAD
         <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-turf-border rounded-xl p-2.5 text-[10.5px] z-[1000] space-y-1">
           <div className="font-semibold text-turf-primary text-[10px] mb-1">Catchment legend</div>
           <div className="flex items-center gap-1.5">
@@ -82,12 +128,28 @@ export const LocationMap = ({
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
             <span>Competitor shops</span>
+=======
+        <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-gray-200 rounded-lg p-2.5 shadow-md text-[10.5px] z-[1000] space-y-1">
+          <div className="font-bold text-gray-800 uppercase tracking-wider text-[9px] mb-1">{t('CATCHMENT LEGEND')}</div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
+            <span>{radiusKm} {t('km Radius Circle')}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+            <span>{t('Competitor Shops')}</span>
+>>>>>>> development
           </div>
         </div>
       </div>
 
+<<<<<<< HEAD
       <p className="text-[11px] text-turf-text-muted leading-snug">
         We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only.
+=======
+      <p className="text-[11px] text-gray-500 leading-snug">
+        {t('We analyse nearby villages, local population, business density, and infrastructure within the selected radius. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.')}
+>>>>>>> development
       </p>
     </div>
   );
