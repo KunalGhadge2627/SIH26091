@@ -70,7 +70,12 @@ export const LandingPage = () => {
       </header>
 
       {/* 2. Hero Section */}
-      <section className="py-16 md:py-24 bg-white border-b border-turf-border">
+      <section
+        className="py-16 md:py-24 bg-white bg-cover bg-center border-b border-turf-border"
+        style={{
+          backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.76) 48%, rgba(255,255,255,0.35) 100%), url('/gram-setu-landing-bg-v2.png')"
+        }}
+      >
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
           <div className="md:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-turf-surface border border-turf-border text-xs font-semibold text-turf-primary">
@@ -83,7 +88,7 @@ export const LandingPage = () => {
             </h1>
 
             <p className="text-base text-turf-text-muted leading-relaxed max-w-2xl">
-              {t('Udyam Gram is a pre-investment advisory platform that tells a rural entrepreneur whether a specific business idea is viable at their village location, whether they are personally ready, and whether they can afford financing — before debt is taken.')}
+              {t('Gram Setu is a pre-investment advisory platform that tells a rural entrepreneur whether a specific business idea is viable at their village location, whether they are personally ready, and whether they can afford financing — before debt is taken.')}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -236,7 +241,7 @@ export const LandingPage = () => {
             “{t('Credit should support a good decision—not create an avoidable burden.')}”
           </blockquote>
           <p className="text-xs text-white/90 max-w-xl mx-auto leading-relaxed">
-            {t('Taking a loan for an unviable business in a low-demand village creates severe debt distress. Udyam Gram helps rural entrepreneurs verify feasibility before signing loan documents.')}
+            {t('Taking a loan for an unviable business in a low-demand village creates severe debt distress. Gram Setu helps rural entrepreneurs verify feasibility before signing loan documents.')}
           </p>
         </div>
       </section>
@@ -246,7 +251,7 @@ export const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <Logo textClassName="text-lg font-bold text-white" />
           <div className="text-turf-border">SIH26091 · {t('Hyper-Local Rural Business Feasibility Prototype')}</div>
-          <div className="text-turf-border">&copy; 2026 Udyam Gram. {t('All rights reserved.')}</div>
+          <div className="text-turf-border">&copy; 2026 Gram Setu. {t('All rights reserved.')}</div>
         </div>
       </footer>
     </div>

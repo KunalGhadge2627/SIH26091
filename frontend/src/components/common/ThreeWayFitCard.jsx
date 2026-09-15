@@ -8,7 +8,6 @@ export const ThreeWayFitCard = () => {
     <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 relative overflow-hidden">
       <div className="flex items-center justify-between mb-4 border-b border-turf-border pb-3">
         <span className="eyebrow !mb-0">{t('Three-way fit analysis')}</span>
-        <span className="text-[10px] font-semibold text-turf-text-muted bg-white border border-turf-border px-2 py-0.5 rounded-lg">{t('Prototype data')}</span>
       </div>
 
       <div className="space-y-3">

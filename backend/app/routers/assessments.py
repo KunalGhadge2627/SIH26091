@@ -19,6 +19,7 @@ from app.services.llm_explainer import (
 from app.services.translation import translate_report_payload, translate_batch, translate_text
 from app.data.document_checklists import DOCUMENT_CHECKLISTS_DATA
 from app.data.mock_villages import MOCK_VILLAGES
+from app.data.mock_location_directory import MOCK_LOCATION_VILLAGES
 from app.data.mock_legal_offices import MOCK_LEGAL_OFFICES
 from app.data.mock_business_stats import MOCK_VILLAGE_BUSINESS_STATS
 
@@ -26,7 +27,8 @@ from app.data.mock_business_stats import MOCK_VILLAGE_BUSINESS_STATS
 router = APIRouter(prefix="/assessments", tags=["Assessments"])
 
 # Fallback in-memory map & store
-MOCK_VILLAGES_MAP = {v["village_id"]: v for v in MOCK_VILLAGES}
+ALL_FALLBACK_VILLAGES = MOCK_LOCATION_VILLAGES + MOCK_VILLAGES
+MOCK_VILLAGES_MAP = {v["village_id"]: v for v in ALL_FALLBACK_VILLAGES}
 IN_MEMORY_ASSESSMENTS = {}
 
 @router.post("", response_model=AssessmentResponse, status_code=status.HTTP_201_CREATED)

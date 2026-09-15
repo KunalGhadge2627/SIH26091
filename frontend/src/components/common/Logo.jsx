@@ -5,11 +5,13 @@ export const Logo = ({ className = "h-8", textClassName = "text-xl font-bold tex
   const { t } = useLanguage();
   return (
     <div className="flex items-center gap-2.5">
-      <div className="w-8 h-8 rounded-xl bg-turf-primary flex items-center justify-center text-white font-extrabold text-lg">
-        U
-      </div>
+      <img
+        src="/gram-setu-logo.png"
+        alt="Gram Setu"
+        className={`${className} w-auto shrink-0 object-contain`}
+      />
       <span className={textClassName}>
-        placeholder <span className="text-xs font-semibold px-2 py-0.5 bg-turf-surface text-turf-primary rounded-lg border border-turf-border">{t('Prototype')}</span>
+        Gram Setu <span className="text-xs font-semibold px-2 py-0.5 bg-turf-surface text-turf-primary rounded-lg border border-turf-border">{t('Prototype')}</span>
       </span>
     </div>
   );

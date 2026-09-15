@@ -3,8 +3,14 @@ from fastapi import APIRouter, Query
 from app.db import get_database
 from app.models.village import VillageModel
 from app.data.mock_villages import MOCK_VILLAGES
+from app.data.mock_location_directory import MOCK_LOCATION_VILLAGES, STATE_DIRECTORY
 
 router = APIRouter(prefix="/locations", tags=["Locations"])
+
+
+def _unique(values):
+    return list(dict.fromkeys(values))
+
 
 @router.get("/states", response_model=List[str])
 async def get_states():
@@ -16,9 +22,7 @@ async def get_states():
     except Exception:
         pass
         
-    if not states:
-        states = list(dict.fromkeys([v["state"] for v in MOCK_VILLAGES]))
-    return states
+    return _unique(states + list(STATE_DIRECTORY) + [v["state"] for v in MOCK_VILLAGES])
 
 @router.get("/districts", response_model=List[str])
 async def get_districts(state: Optional[str] = Query(None)):
@@ -31,12 +35,16 @@ async def get_districts(state: Optional[str] = Query(None)):
     except Exception:
         pass
         
-    if not districts:
-        filtered = [v for v in MOCK_VILLAGES if not state or v["state"] == state]
-        districts = list(dict.fromkeys([v["district"] for v in filtered]))
-        if not districts:
-            districts = ["Pune", "District Center"]
-    return districts
+    directory_districts = STATE_DIRECTORY.get(state, {}).get("districts", []) if state else [
+        district
+        for state_info in STATE_DIRECTORY.values()
+        for district in state_info["districts"]
+    ]
+    mock_districts = [
+        v["district"] for v in MOCK_VILLAGES
+        if not state or v["state"] == state
+    ]
+    return _unique(districts + directory_districts + mock_districts)
 
 @router.get("/blocks", response_model=List[str])
 async def get_blocks(state: Optional[str] = Query(None), district: Optional[str] = Query(None)):
@@ -51,14 +59,17 @@ async def get_blocks(state: Optional[str] = Query(None), district: Optional[str]
     except Exception:
         pass
         
-    if not blocks:
-        filtered = MOCK_VILLAGES
-        if state: filtered = [v for v in filtered if v["state"] == state]
-        if district: filtered = [v for v in filtered if v["district"] == district]
-        blocks = list(dict.fromkeys([v["block"] for v in filtered]))
-        if not blocks:
-            blocks = ["Shirur", "Block Center"]
-    return blocks
+    directory_matches = [
+        v for v in MOCK_LOCATION_VILLAGES
+        if (not state or v["state"] == state)
+        and (not district or v["district"] == district)
+    ]
+    mock_matches = [
+        v for v in MOCK_VILLAGES
+        if (not state or v["state"] == state)
+        and (not district or v["district"] == district)
+    ]
+    return _unique(blocks + [v["block"] for v in directory_matches + mock_matches])
 
 @router.get("/villages", response_model=List[VillageModel])
 async def get_villages(
@@ -80,12 +91,15 @@ async def get_villages(
     except Exception:
         pass
         
-    if not villages:
-        filtered = MOCK_VILLAGES
-        if state: filtered = [v for v in filtered if v["state"] == state]
-        if district: filtered = [v for v in filtered if v["district"] == district]
-        if block: filtered = [v for v in filtered if v["block"] == block]
-        villages = filtered if filtered else MOCK_VILLAGES[:3]
+    fallback_villages = [
+        v for v in MOCK_LOCATION_VILLAGES + MOCK_VILLAGES
+        if (not state or v["state"] == state)
+        and (not district or v["district"] == district)
+        and (not block or v["block"] == block)
+    ]
+    villages_by_id = {v["village_id"]: v for v in fallback_villages}
+    villages_by_id.update({v["village_id"]: v for v in villages})
+    villages = list(villages_by_id.values())
         
     for v in villages:
         if "_id" in v: v["_id"] = str(v.get("_id"))
@@ -102,7 +116,10 @@ async def get_village_by_id(village_id: str):
         pass
         
     if not village:
-        village = next((v for v in MOCK_VILLAGES if v["village_id"] == village_id), MOCK_VILLAGES[0])
+        village = next(
+            (v for v in MOCK_LOCATION_VILLAGES + MOCK_VILLAGES if v["village_id"] == village_id),
+            MOCK_VILLAGES[0]
+        )
         
     if "_id" in village: village["_id"] = str(village.get("_id"))
     return village
