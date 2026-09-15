@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Phone, MapPin, CheckCircle2, FileCheck, ShieldCheck } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { Scale, Phone, MapPin, CheckCircle2, ShieldCheck, FileCheck } from 'lucide-react';
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import LocationMap from '../components/map/LocationMap';
@@ -13,7 +13,6 @@ export const LegalAdvicePage = () => {
   const { lang, translate: t } = useLanguage();
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
-  const { t } = useLanguage();
 
   const cacheKey = `legal-advice:${assessmentId}`;
   const [legalData, setLegalData] = useState(() => readCachedData(cacheKey));
@@ -48,7 +47,7 @@ export const LegalAdvicePage = () => {
   const checklist = legalData?.document_checklist || {};
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-gray-50 flex">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -56,16 +55,6 @@ export const LegalAdvicePage = () => {
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
-<<<<<<< HEAD
-          <div className="border-b border-turf-border pb-4">
-            <span className="eyebrow">Regulatory & aid directory</span>
-            <h1 className="text-2xl font-bold text-turf-text">{t('Legal Advice & Registration Support')}</h1>
-            <p className="text-xs text-turf-text-muted mt-0.5">Find nearby District Legal Services Authorities and required business registration documents.</p>
-          </div>
-
-          {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading nearest legal offices and document checklists...</div>
-=======
           <div className="border-b border-gray-200 pb-4">
             <span className="eyebrow">{t('REGULATORY & AID DIRECTORY')}</span>
             <h1 className="text-2xl font-bold text-gray-900">{t('Legal Advice & Registration Support')}</h1>
@@ -74,59 +63,52 @@ export const LegalAdvicePage = () => {
 
           {loading ? (
             <div className="py-12 text-center text-xs text-gray-400">{t('Loading nearest legal offices and document checklists...')}</div>
->>>>>>> development
           ) : (
             <div className="space-y-8">
               {/* Section 1: Nearest Legal Offices */}
-              <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
+              <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
                 <div>
-<<<<<<< HEAD
-                  <span className="eyebrow">District aid centres</span>
-                  <h2 className="text-xl font-bold text-turf-text">Legal & registration support near you</h2>
-                  <p className="text-xs text-turf-text-muted mt-0.5">Contact official legal services authorities for MSME registration and report review.</p>
-=======
                   <span className="eyebrow">{t('DISTRICT AID CENTRES')}</span>
                   <h2 className="text-xl font-bold text-gray-900">{t('Legal & registration support near you')}</h2>
                   <p className="text-xs text-gray-500 mt-0.5">{t('Contact official legal services authorities for MSME registration and report review.')}</p>
->>>>>>> development
                 </div>
 
                 {/* Map */}
                 <div className="h-64">
-                  <LocationMap 
-                    lat={offices[0]?.latitude || 18.5308} 
-                    lng={offices[0]?.longitude || 73.8474} 
-                    villageName={offices[0]?.district || "District Office"} 
+                  <LocationMap
+                    lat={offices[0]?.latitude || 18.5308}
+                    lng={offices[0]?.longitude || 73.8474}
+                    villageName={offices[0]?.district || "District Office"}
                   />
                 </div>
 
-                {/* Office Cards (Data Cards Fills) */}
+                {/* Office Cards */}
                 <div className="grid md:grid-cols-2 gap-4 pt-2">
                   {offices.map((off) => (
-                    <div key={off.office_id} className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
+                    <div key={off.office_id} className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
                       <div>
-                        <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg">
+                        <span className="text-[10px] font-bold text-primary-700 bg-blue-50 px-2 py-0.5 rounded uppercase tracking-wider">
                           {off.office_type}
                         </span>
-                        <h3 className="text-sm font-bold text-turf-text mt-1.5">{off.name}</h3>
+                        <h3 className="text-sm font-bold text-gray-900 mt-1">{off.name}</h3>
                       </div>
 
-                      <div className="space-y-1.5 text-xs text-turf-text">
+                      <div className="space-y-1.5 text-xs text-gray-600">
                         <div className="flex items-start gap-2">
-                          <MapPin className="w-4 h-4 text-turf-text-muted shrink-0 mt-0.5" />
+                          <MapPin className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
                           <span>{off.address}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-turf-text-muted shrink-0" />
-                          <span className="font-semibold text-turf-text stat-number">{off.phone}</span>
+                          <Phone className="w-4 h-4 text-gray-400 shrink-0" />
+                          <span className="font-semibold text-gray-900">{off.phone}</span>
                         </div>
                       </div>
 
                       {/* Service Offered Tags */}
-                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-turf-border">
+                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-gray-200">
                         {off.services_offered?.map((srv, i) => (
-                          <span key={i} className="text-[10px] font-semibold bg-white text-turf-text-muted px-2 py-0.5 rounded-lg border border-turf-border">
-                            {srv.replace(/_/g, ' ')}
+                          <span key={i} className="text-[10px] font-semibold bg-white text-gray-700 px-2 py-0.5 rounded border border-gray-200">
+                            {srv.replace(/_/g, ' ').toUpperCase()}
                           </span>
                         ))}
                       </div>
@@ -136,42 +118,27 @@ export const LegalAdvicePage = () => {
               </div>
 
               {/* Section 2: Document Checklist */}
-              <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
+              <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
                 <div>
-<<<<<<< HEAD
-                  <span className="eyebrow">Regulatory compliance</span>
-                  <h2 className="text-xl font-bold text-turf-text">
-                    Documents you'll need to register {checklist.category || 'Business'}
-                  </h2>
-                  <p className="text-xs text-turf-text-muted mt-0.5">Required identity documents and local government trade licenses.</p>
-=======
                   <span className="eyebrow">{t('REGULATORY COMPLIANCE')}</span>
                   <h2 className="text-xl font-bold text-gray-900">
                     {t("Documents you'll need to register")} {checklist.category || t('Business')}
                   </h2>
                   <p className="text-xs text-gray-500 mt-0.5">{t('Required identity documents and local government trade licenses.')}</p>
->>>>>>> development
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Identity & Bank Documents */}
-<<<<<<< HEAD
-                  <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
-                      <FileCheck className="w-4 h-4 text-turf-primary" />
-                      <span>Required Identity & Bank Documents</span>
-=======
                   <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
                     <div className="flex items-center gap-2 font-bold text-xs text-gray-900 uppercase tracking-wider">
                       <FileCheck className="w-4 h-4 text-primary-600" />
                       <span>{t('Required Identity & Bank Documents')}</span>
->>>>>>> development
                     </div>
 
-                    <ul className="space-y-2 text-xs text-turf-text font-medium">
+                    <ul className="space-y-2 text-xs text-gray-700 font-medium">
                       {checklist.document_list?.map((doc, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-turf-primary shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                           <span>{doc}</span>
                         </li>
                       ))}
@@ -179,23 +146,16 @@ export const LegalAdvicePage = () => {
                   </div>
 
                   {/* Regulatory & Trade Licenses */}
-<<<<<<< HEAD
-                  <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
-                      <ShieldCheck className="w-4 h-4 text-turf-primary" />
-                      <span>Regulatory & Trade Requirements</span>
-=======
                   <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
                     <div className="flex items-center gap-2 font-bold text-xs text-amber-900 uppercase tracking-wider">
                       <ShieldCheck className="w-4 h-4 text-amber-600" />
                       <span>{t('Regulatory & Trade Requirements')}</span>
->>>>>>> development
                     </div>
 
-                    <ul className="space-y-2 text-xs text-turf-text-muted font-medium">
+                    <ul className="space-y-2 text-xs text-amber-950 font-medium">
                       {checklist.regulatory_requirements?.map((reg, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <span className="text-turf-primary font-bold">•</span>
+                          <span className="text-amber-600 font-bold">•</span>
                           <span>{reg}</span>
                         </li>
                       ))}

@@ -8,7 +8,7 @@ import { LANGUAGES_LIST, useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 const DEFAULT_STATES = [
-  "Maharashtra", "Uttar Pradesh", "Punjab", "Tamil Nadu", 
+  "Maharashtra", "Uttar Pradesh", "Punjab", "Tamil Nadu",
   "Karnataka", "Rajasthan", "West Bengal", "Bihar", "Gujarat", "Odisha"
 ];
 
@@ -137,39 +137,23 @@ export const SignupPage = () => {
     } finally {
       setLoading(false);
     }
+
   };
 
   return (
-    <div className="min-h-screen bg-white flex grid md:grid-cols-12">
+    <div className="min-h-screen bg-gray-50 flex grid md:grid-cols-12">
       {/* Left Panel */}
-      <div className="md:col-span-5 bg-turf-primary text-white p-8 md:p-12 flex flex-col justify-between hidden md:flex">
+      <div className="md:col-span-5 bg-primary-800 text-white p-8 md:p-12 flex flex-col justify-between hidden md:flex">
         <div>
           <Logo textClassName="text-xl font-bold text-white" />
-          
+
           <div className="mt-16 space-y-6">
-<<<<<<< HEAD
-            <h2 className="text-2xl font-bold leading-snug text-white">
-              Create your account to start evaluating business ideas.
-=======
             <h2 className="text-2xl font-bold leading-snug text-blue-50">
               {t('Create your account to start evaluating business ideas.')}
->>>>>>> development
             </h2>
 
-            <div className="space-y-3 text-xs text-white/90 font-medium">
+            <div className="space-y-3 text-xs text-blue-100 font-medium">
               <div className="flex items-center gap-2.5">
-<<<<<<< HEAD
-                <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
-                <span>Instant village-level demand analysis</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
-                <span>Readiness preparation action plan</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
-                <span>Local legal office directory & checklists</span>
-=======
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{t('Instant village-level demand analysis')}</span>
               </div>
@@ -180,14 +164,13 @@ export const SignupPage = () => {
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{t('Local legal office directory & checklists')}</span>
->>>>>>> development
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer Tag Requirement */}
-        <div className="text-[11px] text-white/80 border-t border-white/20 pt-4">
+        <div className="text-[11px] font-mono text-blue-300 border-t border-blue-700/50 pt-4">
           SIH26091 · Frontend Prototype
         </div>
       </div>
@@ -199,22 +182,15 @@ export const SignupPage = () => {
         </div>
         <div className="max-w-lg w-full mx-auto space-y-6">
           <div>
-<<<<<<< HEAD
-            <span className="eyebrow">Get started</span>
-            <h2 className="text-2xl font-bold text-turf-text">Create your account</h2>
-            <p className="text-xs text-turf-text-muted mt-1">
-              Enter your details to generate personalized feasibility reports.
-=======
             <span className="eyebrow">{t('GET STARTED')}</span>
             <h2 className="text-2xl font-bold text-gray-900">{t('Create your account')}</h2>
             <p className="text-xs text-gray-500 mt-1">
               {t('Enter your details to generate personalized feasibility reports.')}
->>>>>>> development
             </p>
           </div>
 
           {error && (
-            <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -223,11 +199,7 @@ export const SignupPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">Full name</label>
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Full Name')}</label>
->>>>>>> development
                 <input
                   type="text"
                   required
@@ -235,16 +207,12 @@ export const SignupPage = () => {
                   value={formData.full_name}
                   onChange={handleChange}
                   placeholder="Kunal Ghadge"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
                 />
               </div>
 
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">Mobile number</label>
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Mobile Number')}</label>
->>>>>>> development
                 <input
                   type="tel"
                   required
@@ -252,17 +220,13 @@ export const SignupPage = () => {
                   value={formData.mobile}
                   onChange={handleChange}
                   placeholder="9876543210"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text stat-number"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
                 />
               </div>
             </div>
 
             <div>
-<<<<<<< HEAD
-              <label className="block text-xs font-semibold text-turf-text mb-1">Email address</label>
-=======
               <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Email Address')}</label>
->>>>>>> development
               <input
                 type="email"
                 required
@@ -270,17 +234,13 @@ export const SignupPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="name@example.com"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
               />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">Password</label>
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Password')}</label>
->>>>>>> development
                 <input
                   type="password"
                   required
@@ -288,16 +248,12 @@ export const SignupPage = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
                 />
               </div>
 
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">Confirm password</label>
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Confirm Password')}</label>
->>>>>>> development
                 <input
                   type="password"
                   required
@@ -305,21 +261,13 @@ export const SignupPage = () => {
                   value={formData.confirm_password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary bg-white text-turf-text"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:border-primary-600"
                 />
               </div>
             </div>
 
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">Preferred language</label>
-                <select
-                  name="preferred_language"
-                  value={formData.preferred_language}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary text-turf-text"
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('Preferred Language')}</label>
                 <select
                   name="preferred_language"
@@ -329,7 +277,6 @@ export const SignupPage = () => {
                     setLang(e.target.value);
                   }}
                   className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600 font-medium"
->>>>>>> development
                 >
                   {LANGUAGES_LIST.map(item => (
                     <option key={item.code} value={item.code}>{item.native} ({item.code.toUpperCase()})</option>
@@ -338,32 +285,24 @@ export const SignupPage = () => {
               </div>
 
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">State</label>
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('State')}</label>
->>>>>>> development
                 <select
                   name="state"
                   value={formData.state}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary text-turf-text"
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600 font-medium"
                 >
                   {states.map(s => <option key={s} value={s}>{t(s)}</option>)}
                 </select>
               </div>
 
               <div>
-<<<<<<< HEAD
-                <label className="block text-xs font-semibold text-turf-text mb-1">District</label>
-=======
                 <label className="block text-xs font-semibold text-gray-700 mb-1">{t('District')}</label>
->>>>>>> development
                 <select
                   name="district"
                   value={formData.district}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary text-turf-text"
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600 font-medium"
                 >
                   {districts.map(d => <option key={d} value={d}>{t(d)}</option>)}
                 </select>
@@ -373,23 +312,16 @@ export const SignupPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition-colors disabled:opacity-50 mt-2"
+              className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors disabled:opacity-50 mt-2"
             >
               {loading ? t('Creating account...') : t('Create account')}
             </button>
           </form>
 
-<<<<<<< HEAD
-          <p className="text-center text-xs text-turf-text-muted">
-            Already have an account?{" "}
-            <Link to="/login" className="font-bold text-turf-primary hover:underline">
-              Log in
-=======
           <p className="text-center text-xs text-gray-500">
             {t('Already have an account?')} {" "}
             <Link to="/login" className="font-bold text-primary-600 hover:underline">
               {t('Log in')}
->>>>>>> development
             </Link>
           </p>
         </div>

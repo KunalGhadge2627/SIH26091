@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { CheckSquare, ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Save } from 'lucide-react';
 import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
@@ -23,12 +23,8 @@ const DIMENSION_LABELS = {
 export const ImprovementPlanPage = () => {
   const [searchParams] = useSearchParams();
   const assessmentId = searchParams.get('assessment') || 'ASM_DEFAULT';
-<<<<<<< HEAD
-  const { lang, t } = useLanguage();
-=======
   const { lang, translate: t } = useLanguage();
   const dimensionLabel = (dimension) => DIMENSION_LABELS[lang]?.[dimension] || t(dimension);
->>>>>>> development
 
   const cacheKey = `improvement-plan:${assessmentId}`;
   const languageCacheKey = `${cacheKey}:${lang}`;
@@ -65,9 +61,9 @@ export const ImprovementPlanPage = () => {
     setUpdatingId(actionKey);
 
     // Optimistic UI update
-    setActions(prev => prev.map(act => 
-      act.dimension.toLowerCase().replace(/ /g, '_') === actionKey 
-        ? { ...act, current_status: newStatus } 
+    setActions(prev => prev.map(act =>
+      act.dimension.toLowerCase().replace(/ /g, '_') === actionKey
+        ? { ...act, current_status: newStatus }
         : act
     ));
 
@@ -89,7 +85,7 @@ export const ImprovementPlanPage = () => {
   const potentialScore = Math.min(100, baseReadinessScore + completedPoints);
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-gray-50 flex">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -97,21 +93,15 @@ export const ImprovementPlanPage = () => {
 
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-turf-border pb-4">
+          <div className="flex items-center justify-between border-b border-gray-200 pb-4">
             <div>
-<<<<<<< HEAD
-              <span className="eyebrow">Preparation before launch</span>
-              <h1 className="text-2xl font-bold text-turf-text">{t('Improvement Plan')}</h1>
-              <p className="text-xs text-turf-text-muted mt-0.5">Concrete action items to strengthen your entrepreneur readiness before starting.</p>
-=======
               <span className="eyebrow">{t('PREPARATION BEFORE LAUNCH')}</span>
               <h1 className="text-2xl font-bold text-gray-900">{t('Improvement Plan')}</h1>
               <p className="text-xs text-gray-500 mt-0.5">{t('Concrete action items to strengthen your entrepreneur readiness before starting.')}</p>
->>>>>>> development
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
-              className="text-xs font-semibold text-turf-primary hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-primary-600 hover:underline flex items-center gap-1"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>{t('Back to results')}</span>
@@ -119,25 +109,12 @@ export const ImprovementPlanPage = () => {
           </div>
 
           {loading ? (
-<<<<<<< HEAD
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading readiness action items...</div>
-=======
             <div className="py-12 text-center text-xs text-gray-400">{t('Loading readiness action items...')}</div>
->>>>>>> development
           ) : (
             <div className="space-y-6">
-              {/* Summary Strip (Data Card Fills) */}
-              <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+              {/* Summary Strip (Current -> Potential Preparedness) */}
+              <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-<<<<<<< HEAD
-                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label="Current" />
-                  <ArrowRight className="w-5 h-5 text-turf-primary hidden sm:block" />
-                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label="Potential" />
-                  <div>
-                    <h3 className="text-sm font-bold text-turf-text">Potential Preparedness</h3>
-                    <p className="text-xs text-turf-primary font-semibold mt-0.5 stat-number">
-                      +{completedPoints} points gained from completed actions
-=======
                   <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label={t('CURRENT')} />
                   <ArrowRight className="w-6 h-6 text-gray-300 hidden sm:block" />
                   <ScoreRing score={potentialScore} size={85} strokeWidth={8} label={t('POTENTIAL')} />
@@ -145,28 +122,18 @@ export const ImprovementPlanPage = () => {
                     <h3 className="text-sm font-bold text-gray-900">{t('Potential Preparedness')}</h3>
                     <p className="text-xs text-emerald-700 font-semibold mt-0.5">
                       +{completedPoints} {t('points gained from completed actions')}
->>>>>>> development
                     </p>
                   </div>
                 </div>
 
-<<<<<<< HEAD
-                <div className="bg-white text-turf-primary px-4 py-2 rounded-xl text-xs font-semibold border border-turf-border shrink-0 stat-number">
-                  {completedCount} of {actions.length} Actions Completed
-=======
                 <div className="bg-blue-50 text-blue-900 px-4 py-2 rounded-xl text-xs font-bold border border-blue-100 shrink-0">
                   {completedCount} {t('of')} {actions.length} {t('Actions Completed')}
->>>>>>> development
                 </div>
               </div>
 
               {/* Numbered Action Cards */}
               <div className="space-y-4">
-<<<<<<< HEAD
-                <h2 className="text-xs font-semibold text-turf-text">Recommended Action Items</h2>
-=======
                 <h2 className="text-xs font-bold text-gray-800 uppercase tracking-wider">{t('Recommended Action Items')}</h2>
->>>>>>> development
 
                 {actions.map((act, idx) => {
                       const actionDimension = act.dimension;
@@ -178,31 +145,21 @@ export const ImprovementPlanPage = () => {
                     <div
                       key={idx}
                       className={`p-5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                        isCompleted 
-                          ? 'bg-turf-surface border-turf-border' 
-                          : isInProgress 
-                          ? 'bg-turf-surface/50 border-turf-border' 
-                          : 'bg-white border-turf-border'
+                        isCompleted
+                          ? 'bg-emerald-50/50 border-emerald-200 shadow-xs'
+                          : isInProgress
+                          ? 'bg-blue-50/40 border-blue-200'
+                          : 'bg-white border-gray-200'
                       }`}
                     >
                       <div className="flex items-start gap-3">
                         <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 ${
-                          isCompleted ? 'bg-turf-primary text-white' : 'bg-turf-surface text-turf-text border border-turf-border'
+                          isCompleted ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-700'
                         }`}>
                           {idx + 1}
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-<<<<<<< HEAD
-                            <span className="font-bold text-sm text-turf-text">{act.title}</span>
-                            <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg stat-number">
-                              +{act.impact_points} Readiness
-                            </span>
-                          </div>
-                          <p className="text-xs text-turf-text-muted leading-relaxed">{act.description}</p>
-                          <span className="text-[10px] font-medium text-turf-text-muted block pt-1">
-                            Dimension: {act.dimension}
-=======
                             <span className="font-bold text-sm text-gray-900">{t(act.title)}</span>
                             <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
                               +{act.impact_points} {t('Readiness')}
@@ -211,7 +168,6 @@ export const ImprovementPlanPage = () => {
                           <p className="text-xs text-gray-600 leading-relaxed">{t(act.description)}</p>
                           <span className="text-[10px] font-semibold text-gray-400 block uppercase tracking-wider pt-1">
                             {t('Dimension:')} {dimensionLabel(actionDimension)}
->>>>>>> development
                           </span>
                         </div>
                       </div>
@@ -222,23 +178,17 @@ export const ImprovementPlanPage = () => {
                           value={act.current_status}
                           onChange={(e) => handleStatusChange(act.dimension, e.target.value)}
                           disabled={updatingId === actKey}
-                          className={`px-3 py-2 rounded-xl text-xs font-semibold outline-none cursor-pointer border ${
-                            isCompleted 
-                              ? 'bg-turf-primary text-white border-turf-primary' 
-                              : isInProgress 
-                              ? 'bg-gray-800 text-white border-gray-800' 
-                              : 'bg-white text-turf-text border-turf-border'
+                          className={`px-3 py-2 rounded-xl text-xs font-bold outline-none cursor-pointer border ${
+                            isCompleted
+                              ? 'bg-emerald-600 text-white border-emerald-600'
+                              : isInProgress
+                              ? 'bg-primary-600 text-white border-primary-600'
+                              : 'bg-white text-gray-700 border-gray-200'
                           }`}
                         >
-<<<<<<< HEAD
-                          <option value="Not Started" className="bg-white text-turf-text">Not Started</option>
-                          <option value="In Progress" className="bg-white text-turf-text">In Progress</option>
-                          <option value="Completed" className="bg-white text-turf-text">Completed</option>
-=======
                           <option value="Not Started" className="bg-white text-gray-800">{t('Not Started')}</option>
                           <option value="In Progress" className="bg-white text-gray-800">{t('In Progress')}</option>
                           <option value="Completed" className="bg-white text-gray-800">{t('Completed')}</option>
->>>>>>> development
                         </select>
                       </div>
                     </div>

@@ -44,9 +44,9 @@ const CatchmentZoomLimit = ({ lat, lng, radiusKm, showCatchment }) => {
   return null;
 };
 
-export const LocationMap = ({ 
-  lat = 18.6984, 
-  lng = 74.1236, 
+export const LocationMap = ({
+  lat = 18.6984,
+  lng = 74.1236,
   villageName = "Shikrapur",
   zoom = 12,
   showVillageMarker = true,
@@ -59,18 +59,13 @@ export const LocationMap = ({
 
   return (
     <div className="space-y-2">
-<<<<<<< HEAD
-      <div className="h-72 w-full border border-turf-border rounded-2xl overflow-hidden relative">
-        <MapContainer center={position} zoom={12} scrollWheelZoom={false} className="h-full w-full">
-=======
       <div className="h-72 w-full border border-gray-200 rounded-xl overflow-hidden shadow-xs relative">
         <MapContainer center={position} zoom={zoom} scrollWheelZoom className="h-full w-full">
->>>>>>> development
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          
+
           <MapRecenter lat={lat} lng={lng} zoom={zoom} />
           <CatchmentZoomLimit lat={lat} lng={lng} radiusKm={radiusKm} showCatchment={showCatchment} />
 
@@ -85,14 +80,6 @@ export const LocationMap = ({
             </Marker>
           )}
 
-<<<<<<< HEAD
-          {/* 10km Radius Catchment Circle */}
-          <Circle
-            center={position}
-            radius={radiusKm * 1000}
-            pathOptions={{ color: '#16A34A', fillColor: '#86EFAC', fillOpacity: 0.2, weight: 2 }}
-          />
-=======
           {/* Hierarchy-level catchment circle */}
           {showCatchment && (
             <Circle
@@ -101,7 +88,6 @@ export const LocationMap = ({
               pathOptions={{ color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15, weight: 2 }}
             />
           )}
->>>>>>> development
 
           {/* Render Competitor Points */}
           {competitors.map((comp, idx) => (
@@ -118,17 +104,6 @@ export const LocationMap = ({
         </MapContainer>
 
         {/* Map Legend Overlay */}
-<<<<<<< HEAD
-        <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-turf-border rounded-xl p-2.5 text-[10.5px] z-[1000] space-y-1">
-          <div className="font-semibold text-turf-primary text-[10px] mb-1">Catchment legend</div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-turf-primary inline-block"></span>
-            <span>10 km radius circle</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-            <span>Competitor shops</span>
-=======
         <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-gray-200 rounded-lg p-2.5 shadow-md text-[10.5px] z-[1000] space-y-1">
           <div className="font-bold text-gray-800 uppercase tracking-wider text-[9px] mb-1">{t('CATCHMENT LEGEND')}</div>
           <div className="flex items-center gap-1.5">
@@ -138,18 +113,12 @@ export const LocationMap = ({
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
             <span>{t('Competitor Shops')}</span>
->>>>>>> development
           </div>
         </div>
       </div>
 
-<<<<<<< HEAD
-      <p className="text-[11px] text-turf-text-muted leading-snug">
-        We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only.
-=======
       <p className="text-[11px] text-gray-500 leading-snug">
         {t('We analyse nearby villages, local population, business density, and infrastructure within the selected radius. Location choices are a limited demo directory for now; full Census and LGD coverage can be connected later.')}
->>>>>>> development
       </p>
     </div>
   );
