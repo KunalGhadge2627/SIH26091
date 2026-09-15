@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import { useAuth } from '../context/AuthContext';
-import { LANGUAGES_LIST } from '../context/LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 const DEFAULT_STATES = [
@@ -26,6 +26,7 @@ const DEFAULT_DISTRICTS = {
 
 export const SignupPage = () => {
   const { signup } = useAuth();
+  const { t, setLang, languagesList } = useLanguage();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -146,21 +147,21 @@ export const SignupPage = () => {
           
           <div className="mt-16 space-y-6">
             <h2 className="text-2xl font-bold leading-snug text-white">
-              Create your account to start evaluating business ideas.
+              {t('Create your account to start evaluating business ideas.')}
             </h2>
 
             <div className="space-y-3 text-xs text-white/90 font-medium">
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
-                <span>Instant village-level demand analysis</span>
+                <span>{t('Instant village-level demand analysis')}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
-                <span>Readiness preparation action plan</span>
+                <span>{t('Readiness preparation action plan')}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-turf-primary-light shrink-0" />
-                <span>Local legal office directory & checklists</span>
+                <span>{t('Local legal office directory & checklists')}</span>
               </div>
             </div>
           </div>
@@ -176,24 +177,24 @@ export const SignupPage = () => {
       <div className="md:col-span-7 p-6 sm:p-12 bg-white flex flex-col justify-center overflow-y-auto">
         <div className="max-w-lg w-full mx-auto space-y-6">
           <div>
-            <span className="eyebrow">Get started</span>
-            <h2 className="text-2xl font-bold text-turf-text">Create your account</h2>
+            <span className="eyebrow">{t('Get started')}</span>
+            <h2 className="text-2xl font-bold text-turf-text">{t('Create your account')}</h2>
             <p className="text-xs text-turf-text-muted mt-1">
-              Enter your details to generate personalized feasibility reports.
+              {t('Enter your details to generate personalized feasibility reports.')}
             </p>
           </div>
 
           {error && (
             <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
+              <span>{t(error)}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">Full name</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('Full name')}</label>
                 <input
                   type="text"
                   required
@@ -206,7 +207,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">Mobile number</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('Mobile number')}</label>
                 <input
                   type="tel"
                   required
@@ -220,7 +221,7 @@ export const SignupPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-turf-text mb-1">Email address</label>
+              <label className="block text-xs font-semibold text-turf-text mb-1">{t('Email address')}</label>
               <input
                 type="email"
                 required
@@ -234,7 +235,7 @@ export const SignupPage = () => {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">Password</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('Password')}</label>
                 <input
                   type="password"
                   required
@@ -247,7 +248,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">Confirm password</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('Confirm password')}</label>
                 <input
                   type="password"
                   required
@@ -262,21 +263,24 @@ export const SignupPage = () => {
 
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">Preferred language</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('Preferred language')}</label>
                 <select
                   name="preferred_language"
                   value={formData.preferred_language}
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    handleChange(event);
+                    setLang(event.target.value);
+                  }}
                   className="w-full px-3 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary text-turf-text"
                 >
-                  {LANGUAGES_LIST.map(lang => (
+                  {languagesList.map(lang => (
                     <option key={lang.code} value={lang.code}>{lang.native}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">State</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('State')}</label>
                 <select
                   name="state"
                   value={formData.state}
@@ -288,7 +292,7 @@ export const SignupPage = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-turf-text mb-1">District</label>
+                <label className="block text-xs font-semibold text-turf-text mb-1">{t('District')}</label>
                 <select
                   name="district"
                   value={formData.district}
@@ -305,14 +309,14 @@ export const SignupPage = () => {
               disabled={loading}
               className="w-full py-3 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition-colors disabled:opacity-50 mt-2"
             >
-              {loading ? "Creating account..." : "Create account"}
+              {t(loading ? 'Creating account...' : 'Create account')}
             </button>
           </form>
 
           <p className="text-center text-xs text-turf-text-muted">
-            Already have an account?{" "}
+            {t('Already have an account?')}{" "}
             <Link to="/login" className="font-bold text-turf-primary hover:underline">
-              Log in
+              {t('Log in')}
             </Link>
           </p>
         </div>

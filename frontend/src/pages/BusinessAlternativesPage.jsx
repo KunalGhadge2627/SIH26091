@@ -44,11 +44,11 @@ export const BusinessAlternativesPage = () => {
           <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="eyebrow !mb-0">Business ↔ Person ↔ Location</span>
-                <span className="text-[10px] font-semibold text-turf-text-muted bg-turf-surface border border-turf-border px-2 py-0.5 rounded-lg">Demo estimates</span>
+                <span className="eyebrow !mb-0">{t('Business ↔ Person ↔ Location')}</span>
+                <span className="text-[10px] font-semibold text-turf-text-muted bg-turf-surface border border-turf-border px-2 py-0.5 rounded-lg">{t('Demo estimates')}</span>
               </div>
               <h1 className="text-2xl font-bold text-turf-text">{t('Business Alternatives')}</h1>
-              <p className="text-xs text-turf-text-muted mt-0.5">Ranked comparison of 5 business categories for your village location and capital.</p>
+              <p className="text-xs text-turf-text-muted mt-0.5">{t('Ranked comparison of 5 business categories for your village location and capital.')}</p>
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
@@ -60,7 +60,7 @@ export const BusinessAlternativesPage = () => {
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Evaluating 5 business alternatives...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">{t('Evaluating 5 business alternatives...')}</div>
           ) : (
             <div className="space-y-6">
               {/* Ranked #1..#5 Cards */}
@@ -85,35 +85,35 @@ export const BusinessAlternativesPage = () => {
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="text-base font-bold text-turf-text">{alt.display_name}</h3>
+                              <h3 className="text-base font-bold text-turf-text">{t(alt.display_name)}</h3>
                               {isBestFit && (
                                 <span className="text-[10px] font-semibold text-white bg-turf-primary px-2 py-0.5 rounded-lg">
-                                  Best fit
+                                  {t('Best fit')}
                                 </span>
                               )}
                               <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg">
-                                {alt.status_label}
+                                {t(alt.status_label)}
                               </span>
                             </div>
                           </div>
                         </div>
 
                         <p className="text-xs text-turf-text-muted leading-relaxed italic">
-                          "{alt.explanation_blurb}"
+                          “{t(alt.explanation_blurb)}”
                         </p>
 
                         {/* 3-Part Sub-Scores */}
                         <div className="grid grid-cols-3 gap-3 text-[11px] pt-1">
                           <div className="bg-white border border-turf-border rounded-xl p-2 text-center">
-                            <span className="text-turf-text-muted block text-[9px] font-medium">Market Fit</span>
+                            <span className="text-turf-text-muted block text-[9px] font-medium">{t('Market Fit')}</span>
                             <span className="stat-number text-turf-text">{alt.market_fit_score}/100</span>
                           </div>
                           <div className="bg-white border border-turf-border rounded-xl p-2 text-center">
-                            <span className="text-turf-text-muted block text-[9px] font-medium">Capital Fit</span>
+                            <span className="text-turf-text-muted block text-[9px] font-medium">{t('Capital Fit')}</span>
                             <span className="stat-number text-turf-text">{alt.capital_fit_score}/100</span>
                           </div>
                           <div className="bg-white border border-turf-border rounded-xl p-2 text-center">
-                            <span className="text-turf-text-muted block text-[9px] font-medium">Resource Fit</span>
+                            <span className="text-turf-text-muted block text-[9px] font-medium">{t('Resource Fit')}</span>
                             <span className="stat-number text-turf-text">{alt.resource_fit_score}/100</span>
                           </div>
                         </div>
@@ -123,14 +123,14 @@ export const BusinessAlternativesPage = () => {
                       <div className="flex md:flex-col items-center justify-between md:justify-center gap-4 shrink-0 border-t md:border-t-0 md:border-l border-turf-border pt-4 md:pt-0 md:pl-6">
                         <div className="text-center">
                           <div className="text-3xl stat-number text-turf-primary">{alt.alternative_score}</div>
-                          <div className="text-[9px] font-medium text-turf-text-muted">Fit score</div>
+                          <div className="text-[9px] font-medium text-turf-text-muted">{t('Fit score')}</div>
                         </div>
 
                         <button
                           onClick={() => setSelectedCategoryModal(alt.category)}
                           className="px-4 py-2 bg-white hover:bg-turf-surface text-turf-primary font-semibold text-xs rounded-xl border border-turf-border transition-colors"
                         >
-                          Explore This Business →
+                          {t('Explore This Business →')}
                         </button>
                       </div>
                     </div>

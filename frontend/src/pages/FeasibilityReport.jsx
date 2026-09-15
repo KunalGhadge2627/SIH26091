@@ -49,7 +49,7 @@ export const FeasibilityReport = () => {
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0">
           <TopBar title="Feasibility Report" />
-          <div className="p-12 text-center text-xs text-turf-text-muted">Loading full feasibility report payload...</div>
+          <div className="p-12 text-center text-xs text-turf-text-muted">{t('Loading full feasibility report payload...')}</div>
         </div>
       </div>
     );
@@ -61,7 +61,7 @@ export const FeasibilityReport = () => {
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0">
           <TopBar title="Feasibility Report" />
-          <div className="p-12 text-center text-xs text-turf-text-muted">Assessment report not found.</div>
+          <div className="p-12 text-center text-xs text-turf-text-muted">{t('Assessment report not found.')}</div>
         </div>
       </div>
     );
@@ -85,13 +85,13 @@ export const FeasibilityReport = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-turf-border pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="eyebrow !mb-0">{report.category} · Focused assessment</span>
+                <span className="eyebrow !mb-0">{t(report.category)} · {t('Focused assessment')}</span>
                 <span className="text-[10px] font-semibold text-turf-text-muted bg-turf-surface border border-turf-border px-2 py-0.5 rounded-lg">{t('Prototype data')}</span>
               </div>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-turf-text">{report.category} Business Feasibility Report</h1>
+              <h1 className="text-2xl md:text-3xl font-extrabold text-turf-text">{t(report.category)} {t('Business Feasibility Report')}</h1>
               <p className="text-xs text-turf-text-muted flex items-center gap-1 mt-1">
                 <MapPin className="w-3.5 h-3.5 text-turf-text-muted" />
-                <span>{village.name || 'Village'}, {village.district || 'District'}, {village.state || 'State'} · Village ID: {village.village_id}</span>
+                <span>{village.name || t('Village')}, {village.district || t('District')}, {village.state || t('State')} · {t('Village ID:')} {village.village_id}</span>
               </p>
             </div>
 
@@ -118,13 +118,13 @@ export const FeasibilityReport = () => {
             <div className="max-w-md mx-auto flex flex-col items-center space-y-3">
               <ScoreRing score={scores.overall_score || 75} size={150} strokeWidth={12} label={t('Feasibility')} />
               <div className="space-y-1">
-                <h2 className="text-2xl font-bold text-turf-text">{scores.verdict_title || 'Proceed after preparation'}</h2>
+                <h2 className="text-2xl font-bold text-turf-text">{t(scores.verdict_title || 'Proceed after preparation')}</h2>
                 <div className="text-xs font-semibold text-turf-primary bg-white border border-turf-border px-3 py-1 rounded-xl w-fit mx-auto">
-                  {t('Verdict Band')}: {scores.verdict_band || 'Promising'}
+                  {t('Verdict Band')}: {t(scores.verdict_band || 'Promising')}
                 </div>
               </div>
               <p className="text-xs text-turf-text-muted leading-relaxed italic max-w-lg">
-                "{explanation.score_narrative || 'Your business feasibility rating is derived from a 3-way fit analysis.'}"
+                “{t(explanation.score_narrative || 'Your business feasibility rating is derived from a 3-way fit analysis.')}”
               </p>
             </div>
 
@@ -136,34 +136,34 @@ export const FeasibilityReport = () => {
             <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex items-center gap-4">
               <ScoreRing score={scores.market_score || 70} size={85} strokeWidth={8} label={t('Feasibility')} />
               <div>
-                <span className="eyebrow !mb-0">Weight 45%</span>
+                <span className="eyebrow !mb-0">{t('Weight')} 45%</span>
                 <h3 className="text-sm font-bold text-turf-text">{t('Local Market Fit')}</h3>
-                <p className="text-[11px] text-turf-text-muted mt-1">10km radius demand, competitor density & roads.</p>
+                <p className="text-[11px] text-turf-text-muted mt-1">{t('10km radius demand, competitor density & roads.')}</p>
               </div>
             </div>
 
             <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex items-center gap-4">
               <ScoreRing score={scores.readiness_score || 65} size={85} strokeWidth={8} label={t('Feasibility')} />
               <div>
-                <span className="eyebrow !mb-0">Weight 30%</span>
+                <span className="eyebrow !mb-0">{t('Weight')} 30%</span>
                 <h3 className="text-sm font-bold text-turf-text">{t('Entrepreneur Readiness')}</h3>
-                <p className="text-[11px] text-turf-text-muted mt-1">Skills, workspace, supplier links & customers.</p>
+                <p className="text-[11px] text-turf-text-muted mt-1">{t('Skills, workspace, supplier links & customers.')}</p>
               </div>
             </div>
 
             <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex items-center gap-4">
               <ScoreRing score={scores.financial_score || 80} size={85} strokeWidth={8} label={t('Feasibility')} />
               <div>
-                <span className="eyebrow !mb-0">Weight 25%</span>
+                <span className="eyebrow !mb-0">{t('Weight')} 25%</span>
                 <h3 className="text-sm font-bold text-turf-text">{t('Financial Fit')}</h3>
-                <p className="text-[11px] text-turf-text-muted mt-1">Margin capital coverage & monthly EMI capacity.</p>
+                <p className="text-[11px] text-turf-text-muted mt-1">{t('Margin capital coverage & monthly EMI capacity.')}</p>
               </div>
             </div>
           </div>
 
           {/* Section 3: Why This Score? (Explainability Summary Content Card) */}
           <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-4">
-            <span className="eyebrow">Explainability summary</span>
+            <span className="eyebrow">{t('Explainability summary')}</span>
             <h2 className="text-xl font-bold text-turf-text">{t('Why this score?')}</h2>
 
             <div className="grid md:grid-cols-2 gap-6 pt-2">
@@ -171,13 +171,13 @@ export const FeasibilityReport = () => {
               <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                 <div className="flex items-center gap-2 font-semibold text-xs text-turf-primary">
                   <CheckCircle2 className="w-4 h-4 text-turf-primary" />
-                  <span>Supports this business</span>
+                  <span>{t('Supports this business')}</span>
                 </div>
                 <ul className="space-y-2 text-xs text-turf-text font-medium">
                   {scores.positive_factors?.map((fact, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <span className="text-turf-primary font-bold">•</span>
-                      <span>{fact}</span>
+                      <span>{t(fact)}</span>
                     </li>
                   ))}
                 </ul>
@@ -187,13 +187,13 @@ export const FeasibilityReport = () => {
               <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                 <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span>Needs attention</span>
+                  <span>{t('Needs attention')}</span>
                 </div>
                 <ul className="space-y-2 text-xs text-turf-text-muted font-medium">
                   {scores.attention_areas?.map((att, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <span className="text-amber-600 font-bold">•</span>
-                      <span>{att}</span>
+                      <span>{t(att)}</span>
                     </li>
                   ))}
                 </ul>
@@ -205,11 +205,11 @@ export const FeasibilityReport = () => {
           <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-turf-border pb-3">
               <div>
-                <span className="eyebrow">10 km catchment radius</span>
-                <h2 className="text-xl font-bold text-turf-text">Hyper-local market picture</h2>
+                <span className="eyebrow">{t('10 km catchment radius')}</span>
+                <h2 className="text-xl font-bold text-turf-text">{t('Hyper-local market picture')}</h2>
               </div>
               <span className="text-xs font-semibold text-turf-primary bg-turf-surface px-3 py-1 rounded-xl border border-turf-border w-fit">
-                Competitor pressure: {stats.competitor_breakdown?.total_competitors <= 2 ? 'Low' : 'Moderate'}
+                {t('Competitor pressure:')} {t(stats.competitor_breakdown?.total_competitors <= 2 ? 'Low' : 'Moderate')}
               </span>
             </div>
 
@@ -225,23 +225,23 @@ export const FeasibilityReport = () => {
             {/* Stat Summary Panel (Data Card Fills) */}
             <div className="grid sm:grid-cols-5 gap-3 text-center">
               <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl">
-                <div className="text-[10px] font-medium text-turf-text-muted">Villages</div>
+                <div className="text-[10px] font-medium text-turf-text-muted">{t('Villages')}</div>
                 <div className="text-lg stat-number text-turf-text">{marketMap?.catchment_stats?.catchment_village_count || 1}</div>
               </div>
               <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl">
-                <div className="text-[10px] font-medium text-turf-text-muted">Population</div>
+                <div className="text-[10px] font-medium text-turf-text-muted">{t('Population')}</div>
                 <div className="text-lg stat-number text-turf-text">{(marketMap?.catchment_stats?.total_population || village.population || 12000).toLocaleString()}</div>
               </div>
               <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl">
-                <div className="text-[10px] font-medium text-turf-text-muted">Households</div>
+                <div className="text-[10px] font-medium text-turf-text-muted">{t('Households')}</div>
                 <div className="text-lg stat-number text-turf-text">{(marketMap?.catchment_stats?.total_households || village.households || 2500).toLocaleString()}</div>
               </div>
               <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl">
-                <div className="text-[10px] font-medium text-turf-text-muted">Workers</div>
+                <div className="text-[10px] font-medium text-turf-text-muted">{t('Workers')}</div>
                 <div className="text-lg stat-number text-turf-text">{(marketMap?.catchment_stats?.total_workers || 5000).toLocaleString()}</div>
               </div>
               <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl">
-                <div className="text-[10px] font-medium text-turf-text-muted">Competitors</div>
+                <div className="text-[10px] font-medium text-turf-text-muted">{t('Competitors')}</div>
                 <div className="text-lg stat-number text-turf-primary">{stats.competitor_breakdown?.total_competitors || 3}</div>
               </div>
             </div>
@@ -249,12 +249,12 @@ export const FeasibilityReport = () => {
             {/* Named Competitor Cards */}
             {stats.named_competitors && (
               <div className="space-y-2 pt-2">
-                <span className="text-xs font-semibold text-turf-text block">Nearby competitors</span>
+                <span className="text-xs font-semibold text-turf-text block">{t('Nearby competitors')}</span>
                 <div className="grid sm:grid-cols-3 gap-3">
                   {stats.named_competitors.map((comp, idx) => (
                     <div key={idx} className="p-3.5 rounded-xl bg-turf-surface border border-turf-border text-xs">
                       <div className="font-bold text-turf-text">{comp.name}</div>
-                      <div className="text-turf-text-muted text-[11px] mt-0.5">Distance: {comp.distance_km} km · {comp.subcategory}</div>
+                      <div className="text-turf-text-muted text-[11px] mt-0.5">{t('Distance:')} {comp.distance_km} km · {t(comp.subcategory)}</div>
                     </div>
                   ))}
                 </div>
@@ -265,67 +265,67 @@ export const FeasibilityReport = () => {
           {/* Section 5: Three Stat Tiles (Data Cards) */}
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-3">
-              <span className="eyebrow !mb-0">Market demand</span>
-              <h3 className="text-sm font-bold text-turf-text">Demand & Supply</h3>
+              <span className="eyebrow !mb-0">{t('Market demand')}</span>
+              <h3 className="text-sm font-bold text-turf-text">{t('Demand & Supply')}</h3>
               <div className="space-y-1.5 text-xs text-turf-text">
                 <div className="flex justify-between">
-                  <span className="text-turf-text-muted">Daily Demand:</span>
-                  <span className="font-bold text-turf-primary">{stats.demand_level || 'High'}</span>
+                  <span className="text-turf-text-muted">{t('Daily Demand:')}</span>
+                  <span className="font-bold text-turf-primary">{t(stats.demand_level || 'High')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-turf-text-muted">Local Supply Gap:</span>
-                  <span className="font-bold text-turf-primary">{stats.supply_gap_level || 'High'}</span>
+                  <span className="text-turf-text-muted">{t('Local Supply Gap:')}</span>
+                  <span className="font-bold text-turf-primary">{t(stats.supply_gap_level || 'High')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-turf-text-muted">Repeat Purchase:</span>
-                  <span className="font-semibold">{stats.repeat_purchase_likelihood || 'High'}</span>
+                  <span className="text-turf-text-muted">{t('Repeat Purchase:')}</span>
+                  <span className="font-semibold">{t(stats.repeat_purchase_likelihood || 'High')}</span>
                 </div>
               </div>
             </div>
 
             <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-3">
-              <span className="eyebrow !mb-0">Infrastructure</span>
-              <h3 className="text-sm font-bold text-turf-text">Infrastructure Signals</h3>
+              <span className="eyebrow !mb-0">{t('Infrastructure')}</span>
+              <h3 className="text-sm font-bold text-turf-text">{t('Infrastructure Signals')}</h3>
               <div className="space-y-1.5 text-xs text-turf-text">
                 <div className="flex justify-between">
-                  <span className="text-turf-text-muted">Road Connectivity:</span>
-                  <span className="font-semibold text-turf-text">{village.amenities?.road ? 'Good' : 'Fair'}</span>
+                  <span className="text-turf-text-muted">{t('Road Connectivity:')}</span>
+                  <span className="font-semibold text-turf-text">{t(village.amenities?.road ? 'Good' : 'Fair')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-turf-text-muted">Power Access:</span>
+                  <span className="text-turf-text-muted">{t('Power Access:')}</span>
                   <span className="font-semibold text-turf-text">{stats.infrastructure_signals?.power || '18h/day'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-turf-text-muted">Bank Branch:</span>
-                  <span className="font-semibold text-turf-text">{village.amenities?.bank ? 'Available' : 'Nearby'}</span>
+                  <span className="text-turf-text-muted">{t('Bank Branch:')}</span>
+                  <span className="font-semibold text-turf-text">{t(village.amenities?.bank ? 'Available' : 'Nearby')}</span>
                 </div>
               </div>
             </div>
 
             <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-3">
-              <span className="eyebrow !mb-0">Data evidence</span>
-              <h3 className="text-sm font-bold text-turf-text">Evidence Confidence</h3>
+              <span className="eyebrow !mb-0">{t('Data evidence')}</span>
+              <h3 className="text-sm font-bold text-turf-text">{t('Evidence Confidence')}</h3>
               <div className="text-2xl stat-number text-turf-primary">{stats.evidence_confidence || 88}/100</div>
               <div className="flex flex-wrap gap-1">
                 {stats.sources?.map((s, i) => (
                   <span key={i} className="text-[10px] bg-white border border-turf-border text-turf-text-muted px-2 py-0.5 rounded-lg font-medium">{s}</span>
                 ))}
               </div>
-              <p className="text-[10px] text-turf-text-muted leading-tight">Confidence reflects dataset coverage—not business success probability.</p>
+              <p className="text-[10px] text-turf-text-muted leading-tight">{t('Confidence reflects dataset coverage—not business success probability.')}</p>
             </div>
           </div>
 
           {/* Section 6: SWOT Analysis (4-Quadrant Grid Data Cards) */}
           <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-4">
-            <span className="eyebrow">Strategic analysis</span>
-            <h2 className="text-xl font-bold text-turf-text">SWOT Analysis</h2>
+            <span className="eyebrow">{t('Strategic analysis')}</span>
+            <h2 className="text-xl font-bold text-turf-text">{t('SWOT Analysis')}</h2>
 
             <div className="grid sm:grid-cols-2 gap-4 pt-2">
               {/* Strengths */}
               <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-2">
                 <div className="font-semibold text-xs text-turf-primary">{t('Strengths')}</div>
                 <ul className="space-y-1.5 text-xs text-turf-text">
-                  {swot.strengths?.map((s, i) => <li key={i}>• {s}</li>)}
+                  {swot.strengths?.map((s, i) => <li key={i}>• {t(s)}</li>)}
                 </ul>
               </div>
 
@@ -333,7 +333,7 @@ export const FeasibilityReport = () => {
               <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-2">
                 <div className="font-semibold text-xs text-turf-text">{t('Weaknesses')}</div>
                 <ul className="space-y-1.5 text-xs text-turf-text-muted">
-                  {swot.weaknesses?.map((w, i) => <li key={i}>• {w}</li>)}
+                  {swot.weaknesses?.map((w, i) => <li key={i}>• {t(w)}</li>)}
                 </ul>
               </div>
 
@@ -341,7 +341,7 @@ export const FeasibilityReport = () => {
               <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-2">
                 <div className="font-semibold text-xs text-turf-primary">{t('Opportunities')}</div>
                 <ul className="space-y-1.5 text-xs text-turf-text">
-                  {swot.opportunities?.map((o, i) => <li key={i}>• {o}</li>)}
+                  {swot.opportunities?.map((o, i) => <li key={i}>• {t(o)}</li>)}
                 </ul>
               </div>
 
@@ -349,7 +349,7 @@ export const FeasibilityReport = () => {
               <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-2">
                 <div className="font-semibold text-xs text-turf-text">{t('Threats')}</div>
                 <ul className="space-y-1.5 text-xs text-turf-text-muted">
-                  {swot.threats?.map((t, i) => <li key={i}>• {t}</li>)}
+                  {swot.threats?.map((threat, i) => <li key={i}>• {t(threat)}</li>)}
                 </ul>
               </div>
             </div>
@@ -358,18 +358,18 @@ export const FeasibilityReport = () => {
           {/* Section 7: Entrepreneur Readiness Breakdown */}
           <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
             <div className="space-y-1">
-              <span className="eyebrow">6 dimensions</span>
-              <h2 className="text-xl font-bold text-turf-text">Entrepreneur Readiness Breakdown</h2>
-              <p className="text-xs text-turf-primary font-medium">Education is intentionally not scored or used to reduce readiness.</p>
+              <span className="eyebrow">{t('6 dimensions')}</span>
+              <h2 className="text-xl font-bold text-turf-text">{t('Entrepreneur Readiness Breakdown')}</h2>
+              <p className="text-xs text-turf-primary font-medium">{t('Education is intentionally not scored or used to reduce readiness.')}</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              <ScoreBar label="Domain Experience" score={70} color="bg-turf-primary" />
-              <ScoreBar label="Technical Skill" score={85} color="bg-turf-primary" />
-              <ScoreBar label="Workspace & Resources" score={60} color="bg-turf-primary" />
-              <ScoreBar label="Supplier Linkages" score={50} color="bg-turf-primary-light" />
-              <ScoreBar label="Customer Commitments" score={90} color="bg-turf-primary" />
-              <ScoreBar label="Financial Preparedness" score={65} color="bg-turf-primary" />
+              <ScoreBar label={t('Domain Experience')} score={70} color="bg-turf-primary" />
+              <ScoreBar label={t('Technical Skill')} score={85} color="bg-turf-primary" />
+              <ScoreBar label={t('Workspace & Resources')} score={60} color="bg-turf-primary" />
+              <ScoreBar label={t('Supplier Linkages')} score={50} color="bg-turf-primary-light" />
+              <ScoreBar label={t('Customer Commitments')} score={90} color="bg-turf-primary" />
+              <ScoreBar label={t('Financial Preparedness')} score={65} color="bg-turf-primary" />
             </div>
           </div>
 
@@ -383,7 +383,7 @@ export const FeasibilityReport = () => {
                 <span>{t('Improvement Plan')}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-turf-primary" />
               </div>
-              <p className="text-[11px] text-turf-text-muted">Action items to raise your readiness score.</p>
+              <p className="text-[11px] text-turf-text-muted">{t('Action items to raise your readiness score.')}</p>
             </Link>
 
             <Link
@@ -394,7 +394,7 @@ export const FeasibilityReport = () => {
                 <span>{t('Business Alternatives')}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-turf-primary" />
               </div>
-              <p className="text-[11px] text-turf-text-muted">Ranked 5 category comparisons for your village.</p>
+              <p className="text-[11px] text-turf-text-muted">{t('Ranked 5 category comparisons for your village.')}</p>
             </Link>
 
             <Link
@@ -405,7 +405,7 @@ export const FeasibilityReport = () => {
                 <span>{t('Financial Plan')}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-turf-primary" />
               </div>
-              <p className="text-[11px] text-turf-text-muted">Scheme details, EMI calculation & 90-day plan.</p>
+              <p className="text-[11px] text-turf-text-muted">{t('Scheme details, EMI calculation & 90-day plan.')}</p>
             </Link>
 
             <Link
@@ -416,7 +416,7 @@ export const FeasibilityReport = () => {
                 <span>{t('Legal Advice')}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-turf-primary" />
               </div>
-              <p className="text-[11px] text-turf-text-muted">Nearest legal offices & document checklist.</p>
+              <p className="text-[11px] text-turf-text-muted">{t('Nearest legal offices & document checklist.')}</p>
             </Link>
           </div>
         </main>

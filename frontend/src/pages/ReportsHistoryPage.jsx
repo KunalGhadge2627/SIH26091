@@ -56,7 +56,7 @@ export const ReportsHistoryPage = () => {
             <div>
               <span className="eyebrow">{t('Assessment history')}</span>
               <h1 className="text-2xl font-bold text-turf-text">{t('Reports')}</h1>
-              <p className="text-xs text-turf-text-muted mt-0.5">All your saved and completed business feasibility assessments.</p>
+              <p className="text-xs text-turf-text-muted mt-0.5">{t('All your saved and completed business feasibility assessments.')}</p>
             </div>
 
             <div className="flex items-center gap-3">
@@ -66,7 +66,7 @@ export const ReportsHistoryPage = () => {
                   className="px-4 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
                   <Layers className="w-4 h-4" />
-                  <span>Compare selected (2)</span>
+                  <span>{t('Compare selected (2)')}</span>
                 </button>
               )}
 
@@ -75,40 +75,40 @@ export const ReportsHistoryPage = () => {
                 className="px-4 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>New assessment</span>
+                <span>{t('New assessment')}</span>
               </Link>
             </div>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading assessment history...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">{t('Loading assessment history...')}</div>
           ) : assessments.length === 0 ? (
             <div className="bg-white border border-turf-border rounded-2xl p-12 text-center space-y-4 max-w-md mx-auto my-8">
               <FileText className="w-12 h-12 text-turf-text-muted mx-auto" />
-              <h3 className="text-base font-bold text-turf-text">No reports generated yet</h3>
-              <p className="text-xs text-turf-text-muted">Run a feasibility assessment to save and compare reports.</p>
+              <h3 className="text-base font-bold text-turf-text">{t('No reports generated yet')}</h3>
+              <p className="text-xs text-turf-text-muted">{t('Run a feasibility assessment to save and compare reports.')}</p>
               <Link to="/assessment/new" className="inline-block px-5 py-2.5 bg-turf-primary text-white font-semibold text-xs rounded-xl hover:bg-emerald-700 transition-colors">
-                Start Assessment
+                {t('Begin assessment')}
               </Link>
             </div>
           ) : (
             <div className="bg-white border border-turf-border rounded-2xl overflow-hidden">
               <div className="p-4 bg-turf-surface border-b border-turf-border text-xs text-turf-text-muted flex items-center justify-between">
-                <span>Select any 2 assessments to compare side-by-side.</span>
-                <span className="font-semibold text-turf-primary stat-number">{assessments.length} Total Assessments</span>
+                <span>{t('Select any 2 assessments to compare side-by-side.')}</span>
+                <span className="font-semibold text-turf-primary stat-number">{assessments.length} {t('Total Assessments')}</span>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-turf-surface text-turf-text-muted font-semibold border-b border-turf-border text-xs">
                     <tr>
-                      <th className="p-4">Select</th>
-                      <th className="p-4">Business category</th>
-                      <th className="p-4">Village ID</th>
-                      <th className="p-4">Feasibility score</th>
-                      <th className="p-4">Status</th>
-                      <th className="p-4">Date</th>
-                      <th className="p-4 text-right">Actions</th>
+                      <th className="p-4">{t('Select')}</th>
+                      <th className="p-4">{t('Business category')}</th>
+                      <th className="p-4">{t('Village ID')}</th>
+                      <th className="p-4">{t('Feasibility score')}</th>
+                      <th className="p-4">{t('Status')}</th>
+                      <th className="p-4">{t('Date')}</th>
+                      <th className="p-4 text-right">{t('Actions')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-turf-border text-turf-text">
@@ -125,7 +125,7 @@ export const ReportsHistoryPage = () => {
                               className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                             />
                           </td>
-                          <td className="p-4 font-bold text-turf-text">{asm.category}</td>
+                          <td className="p-4 font-bold text-turf-text">{t(asm.category)}</td>
                           <td className="p-4 font-mono text-turf-text-muted">{asm.village_id}</td>
                           <td className="p-4">
                             {isComplete && asm.computed_scores ? (
@@ -133,14 +133,14 @@ export const ReportsHistoryPage = () => {
                                 {asm.computed_scores.overall_score}/100
                               </span>
                             ) : (
-                              <span className="text-turf-text-muted font-mono">Draft</span>
+                              <span className="text-turf-text-muted font-mono">{t('Draft')}</span>
                             )}
                           </td>
                           <td className="p-4">
                             <span className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold border border-turf-border ${
                               isComplete ? 'bg-white text-turf-primary' : 'bg-turf-surface text-turf-text-muted'
                             }`}>
-                              {asm.status}
+                              {t(asm.status)}
                             </span>
                           </td>
                           <td className="p-4 text-turf-text-muted">{asm.created_at?.slice(0, 10)}</td>
@@ -148,14 +148,14 @@ export const ReportsHistoryPage = () => {
                             <Link
                               to={`/assessments/${asm.id}/report`}
                               className="p-1.5 rounded-lg text-turf-text-muted hover:text-turf-primary hover:bg-turf-surface inline-block"
-                              title="View Report"
+                              title={t('View Report')}
                             >
                               <Eye className="w-4 h-4" />
                             </Link>
                             <button
                               onClick={() => window.print()}
                               className="p-1.5 rounded-lg text-turf-text-muted hover:text-turf-text hover:bg-turf-surface inline-block"
-                              title="Download Report"
+                              title={t('Download Report')}
                             >
                               <Download className="w-4 h-4" />
                             </button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { useLanguage } from './context/LanguageContext';
 
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -18,11 +19,12 @@ import ProfilePage from './pages/ProfilePage';
 // Protected Route Guard
 const ProtectedRoute = ({ children }) => {
   const { user, token, loading } = useAuth();
+  const { t } = useLanguage();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-xs font-semibold text-gray-500">
-        Loading Udyam Gram...
+        {t('Loading Udyam Gram...')}
       </div>
     );
   }

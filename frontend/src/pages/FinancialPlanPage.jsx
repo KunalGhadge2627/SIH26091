@@ -49,11 +49,11 @@ export const FinancialPlanPage = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-turf-border pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="eyebrow !mb-0">Financial fit · Demo estimate</span>
-                <span className="text-[10px] font-semibold text-turf-text-muted bg-turf-surface border border-turf-border px-2 py-0.5 rounded-lg">Scheme matching</span>
+                <span className="eyebrow !mb-0">{t('Financial fit · Demo estimate')}</span>
+                <span className="text-[10px] font-semibold text-turf-text-muted bg-turf-surface border border-turf-border px-2 py-0.5 rounded-lg">{t('Scheme matching')}</span>
               </div>
               <h1 className="text-2xl font-bold text-turf-text">{t('Financial Plan')}</h1>
-              <p className="text-xs text-turf-text-muted mt-0.5">Government loan scheme details, reducing-balance EMI calculation, and 90-day roadmap.</p>
+              <p className="text-xs text-turf-text-muted mt-0.5">{t('Government loan scheme details, reducing-balance EMI calculation, and 90-day roadmap.')}</p>
             </div>
 
             <div className="flex items-center gap-2 print:hidden">
@@ -75,23 +75,23 @@ export const FinancialPlanPage = () => {
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading financial plan calculations...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">{t('Loading financial plan calculations...')}</div>
           ) : (
             <div className="space-y-6">
               {/* Summary Strip (Margin -> Cost -> Loan) (Data Card Fills) */}
               <div className="grid sm:grid-cols-3 gap-4 bg-turf-surface border border-turf-border rounded-2xl p-6">
                 <div className="p-4 rounded-2xl bg-white border border-turf-border">
-                  <span className="text-[10px] font-medium text-turf-text-muted block mb-1">Your margin</span>
+                  <span className="text-[10px] font-medium text-turf-text-muted block mb-1">{t('Your margin')}</span>
                   <div className="text-2xl stat-number text-turf-primary">₹{(summary.margin_available || 50000).toLocaleString()}</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-turf-border">
-                  <span className="text-[10px] font-medium text-turf-text-muted block mb-1">Project cost</span>
+                  <span className="text-[10px] font-medium text-turf-text-muted block mb-1">{t('Project cost')}</span>
                   <div className="text-2xl stat-number text-turf-text">₹{(summary.project_cost || 350000).toLocaleString()}</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-turf-border">
-                  <span className="text-[10px] font-medium text-turf-text-muted block mb-1">Indicative loan</span>
+                  <span className="text-[10px] font-medium text-turf-text-muted block mb-1">{t('Indicative loan')}</span>
                   <div className="text-2xl stat-number text-turf-text">₹{(summary.loan_amount || 300000).toLocaleString()}</div>
                 </div>
               </div>
@@ -101,39 +101,39 @@ export const FinancialPlanPage = () => {
                 {/* Scheme Card */}
                 <div className="md:col-span-7 bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-4">
                   <div className="flex items-center justify-between border-b border-turf-border pb-3">
-                    <span className="eyebrow !mb-0">Indicative scheme</span>
+                    <span className="eyebrow !mb-0">{t('Indicative scheme')}</span>
                     <span className="text-xs font-semibold text-turf-primary bg-turf-surface border border-turf-border px-2.5 py-0.5 rounded-lg">
-                      Government tier
+                      {t('Government tier')}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-turf-text">{scheme.name || 'Government Rural Term Loan Scheme'}</h3>
-                  <p className="text-xs text-turf-text-muted leading-relaxed">{scheme.description}</p>
+                  <h3 className="text-lg font-bold text-turf-text">{t(scheme.name || 'Government Rural Term Loan Scheme')}</h3>
+                  <p className="text-xs text-turf-text-muted leading-relaxed">{t(scheme.description)}</p>
 
                   <div className="grid grid-cols-2 gap-3 text-xs pt-2">
                     <div className="p-3 bg-turf-surface border border-turf-border rounded-xl">
-                      <span className="text-turf-text-muted text-[10px] font-medium block">Interest rate</span>
+                      <span className="text-turf-text-muted text-[10px] font-medium block">{t('Interest rate')}</span>
                       <span className="stat-number text-turf-text">{scheme.interest_rate_pa || 8.0}% p.a.</span>
                     </div>
 
                     <div className="p-3 bg-turf-surface border border-turf-border rounded-xl">
-                      <span className="text-turf-text-muted text-[10px] font-medium block">Tenure</span>
-                      <span className="stat-number text-turf-text">{scheme.tenure_years || 7} Years ({scheme.tenure_years * 12} Mos)</span>
+                      <span className="text-turf-text-muted text-[10px] font-medium block">{t('Tenure')}</span>
+                      <span className="stat-number text-turf-text">{scheme.tenure_years || 7} {t('Years')} ({(scheme.tenure_years || 7) * 12} {t('Mos')})</span>
                     </div>
 
                     <div className="p-3 bg-turf-surface border border-turf-border rounded-xl">
-                      <span className="text-turf-text-muted text-[10px] font-medium block">Moratorium period</span>
-                      <span className="stat-number text-turf-primary">{scheme.moratorium_months || 6} Months</span>
+                      <span className="text-turf-text-muted text-[10px] font-medium block">{t('Moratorium period')}</span>
+                      <span className="stat-number text-turf-primary">{scheme.moratorium_months || 6} {t('Months')}</span>
                     </div>
 
                     <div className="p-3 bg-turf-surface border border-turf-border rounded-xl">
-                      <span className="text-turf-primary text-[10px] font-medium block">Monthly EMI</span>
+                      <span className="text-turf-primary text-[10px] font-medium block">{t('Monthly EMI')}</span>
                       <span className="stat-number text-turf-primary text-sm">₹{(summary.monthly_emi || 4500).toLocaleString()}</span>
                     </div>
                   </div>
 
                   <p className="text-[10.5px] text-turf-text-muted italic">
-                    Scheme terms are illustrative and must be verified at your local bank branch before applying.
+                    {t('Scheme terms are illustrative and must be verified at your local bank branch before applying.')}
                   </p>
                 </div>
 
@@ -141,9 +141,9 @@ export const FinancialPlanPage = () => {
                 <div className="md:col-span-5 bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-4 flex flex-col justify-between">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="eyebrow !mb-0">Monthly affordability</span>
+                      <span className="eyebrow !mb-0">{t('Monthly affordability')}</span>
                       <span className="text-xs font-semibold px-2.5 py-0.5 rounded-lg bg-white border border-turf-border text-turf-primary">
-                        {summary.affordability_band || 'Good'}
+                        {t(summary.affordability_band || 'Good')}
                       </span>
                     </div>
 
@@ -156,61 +156,61 @@ export const FinancialPlanPage = () => {
                         />
                       </div>
                       <div className="flex justify-between text-[9px] font-semibold text-turf-text-muted pt-1">
-                        <span>Safe (&lt;40%)</span>
-                        <span>Moderate (40-60%)</span>
-                        <span>High Risk (&gt;60%)</span>
+                        <span>{t('Safe (<40%)')}</span>
+                        <span>{t('Moderate (40-60%)')}</span>
+                        <span>{t('High Risk (>60%)')}</span>
                       </div>
                     </div>
 
                     <div className="space-y-2 text-xs pt-2">
                       <div className="flex justify-between">
-                        <span className="text-turf-text-muted">Estimated EMI:</span>
+                        <span className="text-turf-text-muted">{t('Estimated EMI:')}</span>
                         <span className="stat-number text-turf-text">₹{(summary.monthly_emi || 4500).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-turf-text-muted">Household Expenses:</span>
+                        <span className="text-turf-text-muted">{t('Household Expenses:')}</span>
                         <span className="stat-number text-turf-text">₹{(summary.household_expenses || 12000).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
 
                   <p className="text-[10.5px] text-turf-text-muted italic">
-                    This indicator highlights potential debt pressure; it is not loan approval.
+                    {t('This indicator highlights potential debt pressure; it is not loan approval.')}
                   </p>
                 </div>
               </div>
 
               {/* Know Before You Borrow — 4 Explainer Cards */}
               <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-4">
-                <span className="eyebrow">Know before you borrow</span>
-                <h2 className="text-xl font-bold text-turf-text">Financial Literacy Notes</h2>
+                <span className="eyebrow">{t('Know before you borrow')}</span>
+                <h2 className="text-xl font-bold text-turf-text">{t('Financial Literacy Notes')}</h2>
 
                 <div className="grid sm:grid-cols-2 gap-4 pt-2">
                   <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                    <div className="font-bold text-xs text-turf-text">What is EMI?</div>
+                    <div className="font-bold text-xs text-turf-text">{t('What is EMI?')}</div>
                     <p className="text-xs text-turf-text-muted leading-relaxed">
-                      Equated Monthly Installment is a fixed monthly payment covering principal and reducing-balance interest.
+                      {t('Equated Monthly Installment is a fixed monthly payment covering principal and reducing-balance interest.')}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                    <div className="font-bold text-xs text-turf-text">What is a Moratorium?</div>
+                    <div className="font-bold text-xs text-turf-text">{t('What is a Moratorium?')}</div>
                     <p className="text-xs text-turf-text-muted leading-relaxed">
-                      A grace period (3 to 6 months) allowing you to set up operations before monthly principal EMI begins.
+                      {t('A grace period (3 to 6 months) allowing you to set up operations before monthly principal EMI begins.')}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                    <div className="font-bold text-xs text-turf-text">Repayment Risk</div>
+                    <div className="font-bold text-xs text-turf-text">{t('Repayment Risk')}</div>
                     <p className="text-xs text-turf-text-muted leading-relaxed">
-                      Keeping total monthly debt payments under 40% of disposable capacity prevents default in low-income months.
+                      {t('Keeping total monthly debt payments under 40% of disposable capacity prevents default in low-income months.')}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                    <div className="font-bold text-xs text-turf-text">Emergency Reserve</div>
+                    <div className="font-bold text-xs text-turf-text">{t('Emergency Reserve')}</div>
                     <p className="text-xs text-turf-text-muted leading-relaxed">
-                      Maintain ₹15,000+ liquid reserve to cushion inventory spikes or equipment repairs without missing EMIs.
+                      {t('Maintain ₹15,000+ liquid reserve to cushion inventory spikes or equipment repairs without missing EMIs.')}
                     </p>
                   </div>
                 </div>
@@ -219,44 +219,44 @@ export const FinancialPlanPage = () => {
                 <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl text-xs text-turf-text flex items-start gap-2.5">
                   <Info className="w-4 h-4 text-turf-primary shrink-0 mt-0.5" />
                   <span>
-                    <strong>Moratorium interest note:</strong> Interest of ₹{(summary.moratorium_interest || 6000).toLocaleString()} accrues during the {scheme.moratorium_months || 6}-month moratorium and is capitalized into your principal prior to EMI calculation.
+                    <strong>{t('Moratorium interest note:')}</strong> {t('Interest of')} ₹{(summary.moratorium_interest || 6000).toLocaleString()} {t('accrues during the')} {scheme.moratorium_months || 6}-{t('month moratorium and is capitalized into your principal prior to EMI calculation.')}
                   </span>
                 </div>
               </div>
 
               {/* 90-Day Execution Roadmap */}
               <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-4">
-                <span className="eyebrow">From preparation to launch</span>
-                <h2 className="text-xl font-bold text-turf-text">90-Day Execution Roadmap</h2>
+                <span className="eyebrow">{t('From preparation to launch')}</span>
+                <h2 className="text-xl font-bold text-turf-text">{t('90-Day Execution Roadmap')}</h2>
 
                 <div className="grid md:grid-cols-3 gap-6 pt-2">
                   {/* Days 1-30 */}
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
-                    <div className="font-semibold text-xs text-turf-primary">Days 1–30</div>
+                    <div className="font-semibold text-xs text-turf-primary">{t('Days 1–30')}</div>
                     <ul className="space-y-2 text-xs text-turf-text">
-                      <li className="flex items-start gap-2">• Submit loan application at bank branch.</li>
-                      <li className="flex items-start gap-2">• Apply for Udyam MSME & Panchayat NOC.</li>
-                      <li className="flex items-start gap-2">• Secure workspace lease agreement.</li>
+                      <li className="flex items-start gap-2">• {t('Submit loan application at bank branch.')}</li>
+                      <li className="flex items-start gap-2">• {t('Apply for Udyam MSME & Panchayat NOC.')}</li>
+                      <li className="flex items-start gap-2">• {t('Secure workspace lease agreement.')}</li>
                     </ul>
                   </div>
 
                   {/* Days 31-60 */}
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
-                    <div className="font-semibold text-xs text-turf-primary">Days 31–60</div>
+                    <div className="font-semibold text-xs text-turf-primary">{t('Days 31–60')}</div>
                     <ul className="space-y-2 text-xs text-turf-text">
-                      <li className="flex items-start gap-2">• Deposit entrepreneur margin contribution.</li>
-                      <li className="flex items-start gap-2">• Procure machinery & raw material inventory.</li>
-                      <li className="flex items-start gap-2">• Install equipment and test trials.</li>
+                      <li className="flex items-start gap-2">• {t('Deposit entrepreneur margin contribution.')}</li>
+                      <li className="flex items-start gap-2">• {t('Procure machinery & raw material inventory.')}</li>
+                      <li className="flex items-start gap-2">• {t('Install equipment and test trials.')}</li>
                     </ul>
                   </div>
 
                   {/* Days 61-90 */}
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
-                    <div className="font-semibold text-xs text-turf-primary">Days 61–90</div>
+                    <div className="font-semibold text-xs text-turf-primary">{t('Days 61–90')}</div>
                     <ul className="space-y-2 text-xs text-turf-text">
-                      <li className="flex items-start gap-2">• Distribute local launch pamphlets.</li>
-                      <li className="flex items-start gap-2">• Official commercial business launch.</li>
-                      <li className="flex items-start gap-2">• Prepare for post-moratorium EMI repayment.</li>
+                      <li className="flex items-start gap-2">• {t('Distribute local launch pamphlets.')}</li>
+                      <li className="flex items-start gap-2">• {t('Official commercial business launch.')}</li>
+                      <li className="flex items-start gap-2">• {t('Prepare for post-moratorium EMI repayment.')}</li>
                     </ul>
                   </div>
                 </div>

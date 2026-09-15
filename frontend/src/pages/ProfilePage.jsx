@@ -71,6 +71,17 @@ export const ProfilePage = () => {
     localStorage.setItem(`pref_${key}`, val);
   };
 
+  const handleLanguageChange = async (nextLanguage) => {
+    setLang(nextLanguage);
+    const updatedProfile = { ...profileData, preferred_language: nextLanguage };
+    setProfileData(updatedProfile);
+    try {
+      await api.updateMe(updatedProfile);
+    } catch (err) {
+      console.error('Preferred language save error:', err);
+    }
+  };
+
   const handleSignOut = () => {
     logout();
     navigate('/');
@@ -92,9 +103,9 @@ export const ProfilePage = () => {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
-              <span className="eyebrow">Account</span>
+              <span className="eyebrow">{t('Account')}</span>
               <h1 className="text-2xl font-bold text-turf-text">{t('User Profile')}</h1>
-              <p className="text-xs text-turf-text-muted mt-0.5">Manage your personal details, language preferences, and accessibility settings.</p>
+              <p className="text-xs text-turf-text-muted mt-0.5">{t('Manage your personal details, language preferences, and accessibility settings.')}</p>
             </div>
 
             <button
@@ -116,14 +127,14 @@ export const ProfilePage = () => {
               <div>
                 <h3 className="text-base font-bold text-turf-text">{profileData.full_name || 'User'}</h3>
                 <span className="text-xs font-semibold text-turf-primary bg-white border border-turf-border px-2.5 py-0.5 rounded-lg inline-block mt-1">
-                  Rural Micro-Entrepreneur
+                  {t('Rural Micro-Entrepreneur')}
                 </span>
               </div>
 
               <div className="pt-2">
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-turf-primary bg-white px-3 py-1 rounded-xl border border-turf-border">
                   <CheckCircle2 className="w-4 h-4 text-turf-primary" />
-                  <span>Profile Complete</span>
+                  <span>{t('Profile Complete')}</span>
                 </span>
               </div>
             </div>
@@ -131,7 +142,7 @@ export const ProfilePage = () => {
             {/* Right Profile Details / Edit Form Card */}
             <div className="md:col-span-8 bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
               <div className="flex items-center justify-between border-b border-turf-border pb-3">
-                <h3 className="text-xs font-semibold text-turf-text">Profile details</h3>
+                <h3 className="text-xs font-semibold text-turf-text">{t('Profile details')}</h3>
                 <span className="text-xs text-turf-text-muted">ID: {user?.id}</span>
               </div>
 
@@ -139,7 +150,7 @@ export const ProfilePage = () => {
                 <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-turf-text mb-1">Full name</label>
+                      <label className="block font-semibold text-turf-text mb-1">{t('Full name')}</label>
                       <input
                         type="text"
                         value={profileData.full_name}
@@ -148,7 +159,7 @@ export const ProfilePage = () => {
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-turf-text mb-1">Mobile</label>
+                      <label className="block font-semibold text-turf-text mb-1">{t('Mobile')}</label>
                       <input
                         type="text"
                         value={profileData.mobile}
@@ -160,7 +171,7 @@ export const ProfilePage = () => {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-turf-text mb-1">State</label>
+                      <label className="block font-semibold text-turf-text mb-1">{t('State')}</label>
                       <input
                         type="text"
                         value={profileData.state}
@@ -169,7 +180,7 @@ export const ProfilePage = () => {
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-turf-text mb-1">District</label>
+                      <label className="block font-semibold text-turf-text mb-1">{t('District')}</label>
                       <input
                         type="text"
                         value={profileData.district}
@@ -186,42 +197,42 @@ export const ProfilePage = () => {
                       className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
                     >
                       <Save className="w-4 h-4" />
-                      <span>{saving ? "Saving..." : "Save changes"}</span>
+                      <span>{t(saving ? 'Saving...' : 'Save changes')}</span>
                     </button>
                   </div>
                 </form>
               ) : (
                 <div className="grid sm:grid-cols-2 gap-6 text-xs">
                   <div>
-                    <span className="text-turf-text-muted font-medium block">Full name</span>
+                    <span className="text-turf-text-muted font-medium block">{t('Full name')}</span>
                     <span className="font-bold text-turf-text text-sm">{profileData.full_name}</span>
                   </div>
 
                   <div>
-                    <span className="text-turf-text-muted font-medium block">Email address</span>
+                    <span className="text-turf-text-muted font-medium block">{t('Email address')}</span>
                     <span className="font-bold text-turf-text text-sm">{profileData.email}</span>
                   </div>
 
                   <div>
-                    <span className="text-turf-text-muted font-medium block">Mobile number</span>
+                    <span className="text-turf-text-muted font-medium block">{t('Mobile number')}</span>
                     <span className="font-bold text-turf-text text-sm stat-number">{profileData.mobile}</span>
                   </div>
 
                   <div>
-                    <span className="text-turf-text-muted font-medium block">Preferred language</span>
+                    <span className="text-turf-text-muted font-medium block">{t('Preferred language')}</span>
                     <span className="font-bold text-turf-text text-sm">
-                      {languagesList.find(l => l.code === profileData.preferred_language)?.native || 'English'}
+                      {t(languagesList.find(l => l.code === lang)?.name || 'English')}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-turf-text-muted font-medium block">State & district</span>
+                    <span className="text-turf-text-muted font-medium block">{t('State & district')}</span>
                     <span className="font-bold text-turf-text text-sm">{profileData.district}, {profileData.state}</span>
                   </div>
 
                   <div>
-                    <span className="text-turf-text-muted font-medium block">Prior business experience</span>
-                    <span className="font-bold text-turf-text text-sm">{profileData.business_experience}</span>
+                    <span className="text-turf-text-muted font-medium block">{t('Prior business experience')}</span>
+                    <span className="font-bold text-turf-text text-sm">{t(profileData.business_experience)}</span>
                   </div>
                 </div>
               )}
@@ -230,8 +241,8 @@ export const ProfilePage = () => {
 
           {/* Preferences Section */}
           <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
-            <span className="eyebrow">Preferences & accessibility</span>
-            <h2 className="text-xl font-bold text-turf-text">App Preferences</h2>
+            <span className="eyebrow">{t('Preferences & accessibility')}</span>
+            <h2 className="text-xl font-bold text-turf-text">{t('App Preferences')}</h2>
 
             <div className="space-y-4 divide-y divide-turf-border text-xs">
               {/* Language Row */}
@@ -239,18 +250,18 @@ export const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   <Globe className="w-5 h-5 text-turf-primary shrink-0" />
                   <div>
-                    <div className="font-bold text-turf-text">App language</div>
-                    <div className="text-turf-text-muted">English, Hindi and 7 more Indic languages supported</div>
+                    <div className="font-bold text-turf-text">{t('App language')}</div>
+                    <div className="text-turf-text-muted">{t('English, Hindi and Marathi supported')}</div>
                   </div>
                 </div>
 
                 <select
                   value={lang}
-                  onChange={(e) => setLang(e.target.value)}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
                   className="px-3 py-2 rounded-xl border border-turf-border font-semibold bg-white text-xs text-turf-text"
                 >
                   {languagesList.map(l => (
-                    <option key={l.code} value={l.code}>{l.native} ({l.name})</option>
+                    <option key={l.code} value={l.code}>{l.native} ({t(l.name)})</option>
                   ))}
                 </select>
               </div>
@@ -260,8 +271,8 @@ export const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   <Eye className="w-5 h-5 text-turf-primary shrink-0" />
                   <div>
-                    <div className="font-bold text-turf-text">Accessibility preferences</div>
-                    <div className="text-turf-text-muted">High-contrast visuals and reduced animation settings</div>
+                    <div className="font-bold text-turf-text">{t('Accessibility preferences')}</div>
+                    <div className="text-turf-text-muted">{t('High-contrast visuals and reduced animation settings')}</div>
                   </div>
                 </div>
 
@@ -273,7 +284,7 @@ export const ProfilePage = () => {
                       onChange={(e) => handleAccessibilityToggle('highContrast', e.target.checked)}
                       className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                     />
-                    <span>High contrast</span>
+                    <span>{t('High contrast')}</span>
                   </label>
 
                   <label className="flex items-center gap-2 font-semibold text-turf-text">
@@ -283,7 +294,7 @@ export const ProfilePage = () => {
                       onChange={(e) => handleAccessibilityToggle('reducedMotion', e.target.checked)}
                       className="rounded border-turf-border text-turf-primary focus:ring-turf-primary"
                     />
-                    <span>Reduced motion</span>
+                    <span>{t('Reduced motion')}</span>
                   </label>
                 </div>
               </div>
@@ -293,8 +304,8 @@ export const ProfilePage = () => {
           {/* Sign Out Card */}
           <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-turf-text">Sign Out of Account</h3>
-              <p className="text-xs text-turf-text-muted mt-0.5">Clears active session token from browser local storage.</p>
+              <h3 className="text-sm font-bold text-turf-text">{t('Sign Out of Account')}</h3>
+              <p className="text-xs text-turf-text-muted mt-0.5">{t('Clears active session token from browser local storage.')}</p>
             </div>
 
             <button
@@ -302,7 +313,7 @@ export const ProfilePage = () => {
               className="px-6 py-2.5 bg-gray-800 hover:bg-gray-900 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
+              <span>{t('Sign Out')}</span>
             </button>
           </div>
         </main>

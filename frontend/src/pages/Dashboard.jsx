@@ -71,7 +71,7 @@ export const Dashboard = () => {
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading dashboard intelligence...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">{t('Loading dashboard intelligence...')}</div>
           ) : !latestAssessment || !report ? (
             /* Empty State */
             <div className="bg-white border border-turf-border rounded-2xl p-12 text-center space-y-4 max-w-md mx-auto my-8">
@@ -81,7 +81,7 @@ export const Dashboard = () => {
               <div className="space-y-1">
                 <h3 className="text-lg font-bold text-turf-text">{t('No completed assessments yet')}</h3>
                 <p className="text-xs text-turf-text-muted leading-relaxed">
-                  Start your first business feasibility assessment to evaluate local village demand, readiness, and loan EMI affordability.
+                  {t('Start your first business feasibility assessment to evaluate local village demand, readiness, and loan EMI affordability.')}
                 </p>
               </div>
               <Link
@@ -113,10 +113,10 @@ export const Dashboard = () => {
                     </div>
 
                     <div>
-                      <h2 className="text-xl font-bold text-turf-text">{report.category}</h2>
+                      <h2 className="text-xl font-bold text-turf-text">{t(report.category)}</h2>
                       <p className="text-xs text-turf-text-muted flex items-center gap-1 mt-0.5">
                         <MapPin className="w-3.5 h-3.5 text-turf-text-muted" />
-                        <span>Village ID: {latestAssessment.village_id}</span>
+                        <span>{t('Village ID:')} {latestAssessment.village_id}</span>
                       </p>
                     </div>
 
@@ -125,13 +125,13 @@ export const Dashboard = () => {
                       <ScoreRing score={report.computed_scores?.overall_score || 75} size={110} strokeWidth={9} label={t('Feasibility')} />
                       <div className="space-y-1 text-center sm:text-left">
                         <div className="text-base font-bold text-turf-text">
-                          {report.computed_scores?.verdict_title || 'Proceed after preparation'}
+                          {t(report.computed_scores?.verdict_title || 'Proceed after preparation')}
                         </div>
                         <div className="text-xs font-semibold text-turf-primary">
-                          {t('Verdict Band')}: {report.computed_scores?.verdict_band || 'Promising'}
+                          {t('Verdict Band')}: {t(report.computed_scores?.verdict_band || 'Promising')}
                         </div>
                         <p className="text-[11px] text-turf-text-muted max-w-xs leading-relaxed">
-                          {report.computed_explanation?.score_narrative || "Feasibility rating derived from 3-way fit model."}
+                          {t(report.computed_explanation?.score_narrative || 'Feasibility rating derived from 3-way fit model.')}
                         </p>
                       </div>
                     </div>
@@ -144,7 +144,7 @@ export const Dashboard = () => {
                     </div>
                   </div>
 
-                  <DisclaimerBanner text="Recommendations use prototype data and deterministic calculation models. Guidance does not guarantee loan approval or business success." />
+                  <DisclaimerBanner text="Recommendations use prototype data and deterministic scoring models. Guidance does not guarantee business financial success or loan approval." />
                 </div>
 
                 {/* Right Card: Local Catchment Leaflet Map (Data Card) */}
@@ -155,7 +155,7 @@ export const Dashboard = () => {
                       <span className="text-[10px] font-semibold text-turf-text-muted bg-white border border-turf-border px-2 py-0.5 rounded-lg">{t('Map view')}</span>
                     </div>
                     <h3 className="text-sm font-bold text-turf-text">
-                      Market around {marketMap?.center_village?.name || 'Village'}
+                      {t('Market around')} {marketMap?.center_village?.name || t('Village')}
                     </h3>
                   </div>
 
@@ -172,8 +172,8 @@ export const Dashboard = () => {
                   </div>
 
                   <div className="p-3.5 bg-white border border-turf-border rounded-xl text-[11px] text-turf-text flex items-center justify-between">
-                    <span>Nearby villages in 10km: <strong className="stat-number">{marketMap?.catchment_stats?.catchment_village_count || 1}</strong></span>
-                    <span>Total population: <strong className="stat-number">{(marketMap?.catchment_stats?.total_population || 12000).toLocaleString()}</strong></span>
+                    <span>{t('Nearby villages in 10km:')} <strong className="stat-number">{marketMap?.catchment_stats?.catchment_village_count || 1}</strong></span>
+                    <span>{t('Total population:')} <strong className="stat-number">{(marketMap?.catchment_stats?.total_population || 12000).toLocaleString()}</strong></span>
                   </div>
                 </div>
               </div>

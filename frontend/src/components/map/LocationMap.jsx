@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Circle, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Fix default Leaflet marker icon path in React/Vite
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,6 +30,7 @@ export const LocationMap = ({
   radiusKm = 10.0,
   competitors = []
 }) => {
+  const { t } = useLanguage();
   const position = [lat, lng];
 
   return (
@@ -46,7 +48,7 @@ export const LocationMap = ({
           <Marker position={position}>
             <Popup>
               <div className="text-xs font-semibold">
-                <strong>{villageName}</strong> (Selected Village Center)
+                <strong>{villageName}</strong> ({t('Selected Village Center')})
               </div>
             </Popup>
           </Marker>
@@ -65,7 +67,7 @@ export const LocationMap = ({
                 <div className="text-xs">
                   <strong>{comp.name}</strong>
                   <br />
-                  Distance: {comp.distance_km || 2.0} km
+                  {t('Distance:')} {comp.distance_km || 2.0} km
                 </div>
               </Popup>
             </Marker>
@@ -74,20 +76,20 @@ export const LocationMap = ({
 
         {/* Map Legend Overlay */}
         <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur border border-turf-border rounded-xl p-2.5 text-[10.5px] z-[1000] space-y-1">
-          <div className="font-semibold text-turf-primary text-[10px] mb-1">Catchment legend</div>
+          <div className="font-semibold text-turf-primary text-[10px] mb-1">{t('Catchment legend')}</div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-turf-primary inline-block"></span>
-            <span>10 km radius circle</span>
+            <span>{t('10 km radius circle')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-            <span>Competitor shops</span>
+            <span>{t('Competitor shops')}</span>
           </div>
         </div>
       </div>
 
       <p className="text-[11px] text-turf-text-muted leading-snug">
-        We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only.
+        {t('We analyse nearby villages, local population, business density, and infrastructure within approximately 10 km for the selected business only.')}
       </p>
     </div>
   );

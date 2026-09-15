@@ -58,21 +58,21 @@ export const LegalAdvicePage = () => {
         <main className="p-6 md:p-10 max-w-5xl mx-auto w-full space-y-8">
           {/* Header */}
           <div className="border-b border-turf-border pb-4">
-            <span className="eyebrow">Regulatory & aid directory</span>
+            <span className="eyebrow">{t('Regulatory & aid directory')}</span>
             <h1 className="text-2xl font-bold text-turf-text">{t('Legal Advice & Registration Support')}</h1>
-            <p className="text-xs text-turf-text-muted mt-0.5">Find nearby District Legal Services Authorities and required business registration documents.</p>
+            <p className="text-xs text-turf-text-muted mt-0.5">{t('Find nearby District Legal Services Authorities and required business registration documents.')}</p>
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading nearest legal offices and document checklists...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">{t('Loading nearest legal offices and document checklists...')}</div>
           ) : (
             <div className="space-y-8">
               {/* Section 1: Nearest Legal Offices */}
               <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
                 <div>
-                  <span className="eyebrow">District aid centres</span>
-                  <h2 className="text-xl font-bold text-turf-text">Legal & registration support near you</h2>
-                  <p className="text-xs text-turf-text-muted mt-0.5">Contact official legal services authorities for MSME registration and report review.</p>
+                  <span className="eyebrow">{t('District aid centres')}</span>
+                  <h2 className="text-xl font-bold text-turf-text">{t('Legal & registration support near you')}</h2>
+                  <p className="text-xs text-turf-text-muted mt-0.5">{t('Contact official legal services authorities for MSME registration and report review.')}</p>
                 </div>
 
                 {/* Map */}
@@ -80,7 +80,7 @@ export const LegalAdvicePage = () => {
                   <LocationMap 
                     lat={offices[0]?.latitude || 18.5308} 
                     lng={offices[0]?.longitude || 73.8474} 
-                    villageName={offices[0]?.district || "District Office"} 
+                    villageName={offices[0]?.district || t('District Office')}
                   />
                 </div>
 
@@ -90,9 +90,9 @@ export const LegalAdvicePage = () => {
                     <div key={off.office_id} className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                       <div>
                         <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg">
-                          {off.office_type}
+                          {t(off.office_type)}
                         </span>
-                        <h3 className="text-sm font-bold text-turf-text mt-1.5">{off.name}</h3>
+                        <h3 className="text-sm font-bold text-turf-text mt-1.5">{t(off.name)}</h3>
                       </div>
 
                       <div className="space-y-1.5 text-xs text-turf-text">
@@ -110,7 +110,7 @@ export const LegalAdvicePage = () => {
                       <div className="flex flex-wrap gap-1.5 pt-2 border-t border-turf-border">
                         {off.services_offered?.map((srv, i) => (
                           <span key={i} className="text-[10px] font-semibold bg-white text-turf-text-muted px-2 py-0.5 rounded-lg border border-turf-border">
-                            {srv.replace(/_/g, ' ')}
+                            {t(srv.replace(/_/g, ' '))}
                           </span>
                         ))}
                       </div>
@@ -122,11 +122,11 @@ export const LegalAdvicePage = () => {
               {/* Section 2: Document Checklist */}
               <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-8 space-y-6">
                 <div>
-                  <span className="eyebrow">Regulatory compliance</span>
+                  <span className="eyebrow">{t('Regulatory compliance')}</span>
                   <h2 className="text-xl font-bold text-turf-text">
-                    Documents you'll need to register {checklist.category || 'Business'}
+                    {t("Documents you'll need to register")} {t(checklist.category || 'Business')}
                   </h2>
-                  <p className="text-xs text-turf-text-muted mt-0.5">Required identity documents and local government trade licenses.</p>
+                  <p className="text-xs text-turf-text-muted mt-0.5">{t('Required identity documents and local government trade licenses.')}</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -134,14 +134,14 @@ export const LegalAdvicePage = () => {
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                     <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
                       <FileCheck className="w-4 h-4 text-turf-primary" />
-                      <span>Required Identity & Bank Documents</span>
+                      <span>{t('Required Identity & Bank Documents')}</span>
                     </div>
 
                     <ul className="space-y-2 text-xs text-turf-text font-medium">
                       {checklist.document_list?.map((doc, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <CheckCircle2 className="w-4 h-4 text-turf-primary shrink-0 mt-0.5" />
-                          <span>{doc}</span>
+                          <span>{t(doc)}</span>
                         </li>
                       ))}
                     </ul>
@@ -151,14 +151,14 @@ export const LegalAdvicePage = () => {
                   <div className="p-5 rounded-2xl bg-turf-surface border border-turf-border space-y-3">
                     <div className="flex items-center gap-2 font-semibold text-xs text-turf-text">
                       <ShieldCheck className="w-4 h-4 text-turf-primary" />
-                      <span>Regulatory & Trade Requirements</span>
+                      <span>{t('Regulatory & Trade Requirements')}</span>
                     </div>
 
                     <ul className="space-y-2 text-xs text-turf-text-muted font-medium">
                       {checklist.regulatory_requirements?.map((reg, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <span className="text-turf-primary font-bold">•</span>
-                          <span>{reg}</span>
+                          <span>{t(reg)}</span>
                         </li>
                       ))}
                     </ul>

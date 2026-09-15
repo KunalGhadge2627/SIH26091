@@ -8,10 +8,12 @@ import TopBar from '../components/common/TopBar';
 import Sidebar from '../components/common/Sidebar';
 import DisclaimerBanner from '../components/common/DisclaimerBanner';
 import LocationMap from '../components/map/LocationMap';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
 
 export const AssessmentWizard = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Assessment & Wizard State
   const [assessmentId, setAssessmentId] = useState(null);
@@ -272,7 +274,7 @@ export const AssessmentWizard = () => {
             <div key={key} className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <span className="text-xs font-medium text-turf-text">
                 <strong className="text-turf-primary mr-2">{qIdx + 1}.</strong>
-                {qText}
+                {t(qText)}
               </span>
 
               {isNumeric ? (
@@ -297,7 +299,7 @@ export const AssessmentWizard = () => {
                       currentVal === 'Yes' ? 'bg-turf-primary text-white' : 'bg-white text-turf-text-muted border border-turf-border'
                     }`}
                   >
-                    Yes
+                    {t('Yes')}
                   </button>
                   <button
                     type="button"
@@ -309,7 +311,7 @@ export const AssessmentWizard = () => {
                       currentVal === 'No' ? 'bg-gray-800 text-white' : 'bg-white text-turf-text-muted border border-turf-border'
                     }`}
                   >
-                    No
+                    {t('No')}
                   </button>
                 </div>
               )}
@@ -333,14 +335,14 @@ export const AssessmentWizard = () => {
             <div className="bg-white border border-turf-border rounded-2xl p-4">
               <div className="flex items-center justify-between border-b border-turf-border pb-3 mb-4">
                 <div className="flex items-center gap-2">
-                  <span className="eyebrow !mb-0">Assessment progress</span>
+                  <span className="eyebrow !mb-0">{t('Assessment progress')}</span>
                   {savedIndicator && (
                     <span className="flex items-center gap-1 text-[11px] text-turf-primary font-semibold bg-turf-surface px-2 py-0.5 rounded-lg border border-turf-border animate-pulse">
-                      <Save className="w-3 h-3" /> Draft saved
+                      <Save className="w-3 h-3" /> {t('Draft saved')}
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-semibold text-turf-text-muted">Step {currentStep} of 5</span>
+                <span className="text-xs font-semibold text-turf-text-muted">{t('Step')} {currentStep} {t('of')} 5</span>
               </div>
 
               {/* 5-Step Indicators */}
@@ -368,7 +370,7 @@ export const AssessmentWizard = () => {
                       <span className={`text-[11px] font-semibold mt-1 hidden sm:inline-block ${
                         isCurrent ? 'text-turf-primary' : 'text-turf-text-muted'
                       }`}>
-                        {st.label}
+                        {t(st.label)}
                       </span>
                     </div>
                   );
@@ -381,12 +383,12 @@ export const AssessmentWizard = () => {
           {currentStep === 0 && (
             <div className="bg-white border border-turf-border rounded-2xl p-8 md:p-12 space-y-8">
               <div className="space-y-3">
-                <span className="eyebrow">Pre-investment advisory</span>
+                <span className="eyebrow">{t('Pre-investment advisory')}</span>
                 <h1 className="text-3xl font-extrabold text-turf-text leading-tight">
-                  Business Feasibility Assessment
+                  {t('Business Feasibility Assessment')}
                 </h1>
                 <p className="text-sm text-turf-text-muted leading-relaxed max-w-2xl">
-                  Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.
+                  {t('Answer a few questions about your background, intended business, and local village location. We evaluate your proposal across Market Feasibility, Entrepreneur Readiness, and Financial Fit before you take on debt.')}
                 </p>
               </div>
 
@@ -394,27 +396,27 @@ export const AssessmentWizard = () => {
               <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-turf-text">
                 <div className="flex items-center gap-2 bg-turf-surface text-turf-primary px-3 py-2 rounded-xl border border-turf-border">
                   <Clock className="w-4 h-4 text-turf-primary" />
-                  <span>Takes 5–7 minutes</span>
+                  <span>{t('Takes 5–7 minutes')}</span>
                 </div>
                 <div className="flex items-center gap-2 bg-turf-surface text-turf-primary px-3 py-2 rounded-xl border border-turf-border">
                   <ShieldCheck className="w-4 h-4 text-turf-primary" />
-                  <span>Answers stored securely</span>
+                  <span>{t('Answers stored securely')}</span>
                 </div>
               </div>
 
               {/* 3 Recap Mini Data Cards */}
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                  <div className="text-xs font-bold text-turf-primary">1. Market Feasibility</div>
-                  <p className="text-[11px] text-turf-text-muted">Evaluates 10km village demand, competitor density & infrastructure.</p>
+                  <div className="text-xs font-bold text-turf-primary">{t('1. Market Feasibility')}</div>
+                  <p className="text-[11px] text-turf-text-muted">{t('Evaluates 10km village demand, competitor density & infrastructure.')}</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                  <div className="text-xs font-bold text-turf-primary">2. Entrepreneur Readiness</div>
-                  <p className="text-[11px] text-turf-text-muted">Assesses your skills, workspace, supplier contacts & customers.</p>
+                  <div className="text-xs font-bold text-turf-primary">{t('2. Entrepreneur Readiness')}</div>
+                  <p className="text-[11px] text-turf-text-muted">{t('Assesses your skills, workspace, supplier contacts & customers.')}</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-1">
-                  <div className="text-xs font-bold text-turf-primary">3. Financial Fit</div>
-                  <p className="text-[11px] text-turf-text-muted">Verifies margin sufficiency & monthly disposable EMI capacity.</p>
+                  <div className="text-xs font-bold text-turf-primary">{t('3. Financial Fit')}</div>
+                  <p className="text-[11px] text-turf-text-muted">{t('Verifies margin sufficiency & monthly disposable EMI capacity.')}</p>
                 </div>
               </div>
 
@@ -424,7 +426,7 @@ export const AssessmentWizard = () => {
                 onClick={() => triggerAutosave(1)}
                 className="w-full sm:w-auto px-8 py-3.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
               >
-                <span>Begin assessment</span>
+                <span>{t('Begin assessment')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -434,68 +436,68 @@ export const AssessmentWizard = () => {
           {currentStep === 1 && (
             <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">Step 1 of 5</span>
-                <h2 className="text-2xl font-bold text-turf-text">Personal Profile & Resources</h2>
-                <p className="text-xs text-turf-text-muted mt-1">Tell us about your background and available operational assets.</p>
+                <span className="eyebrow">{t('Step 1 of 5')}</span>
+                <h2 className="text-2xl font-bold text-turf-text">{t('Personal Profile & Resources')}</h2>
+                <p className="text-xs text-turf-text-muted mt-1">{t('Tell us about your background and available operational assets.')}</p>
               </div>
 
               {/* Sub-Section 1: Personal Profile */}
               <div className="space-y-4 pt-2">
                 <h3 className="text-xs font-semibold text-turf-text border-b border-turf-border pb-2">
-                  Personal background
+                  {t('Personal background')}
                 </h3>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Age group</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Age group')}</label>
                     <select
                       value={profile.age_group}
                       onChange={(e) => setProfile({ ...profile, age_group: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary"
                     >
-                      <option value="18-24">18–24 years</option>
-                      <option value="25-34">25–34 years</option>
-                      <option value="35-44">35–44 years</option>
-                      <option value="45+">45+ years</option>
+                      <option value="18-24">{t('18–24 years')}</option>
+                      <option value="25-34">{t('25–34 years')}</option>
+                      <option value="35-44">{t('35–44 years')}</option>
+                      <option value="45+">{t('45+ years')}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Education level</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Education level')}</label>
                     <select
                       value={profile.education}
                       onChange={(e) => setProfile({ ...profile, education: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary"
                     >
-                      <option value="Primary">Primary school</option>
-                      <option value="Secondary">Secondary (Class 10/12)</option>
-                      <option value="Graduate">Graduate / higher</option>
-                      <option value="No Formal">No formal education</option>
+                      <option value="Primary">{t('Primary school')}</option>
+                      <option value="Secondary">{t('Secondary (Class 10/12)')}</option>
+                      <option value="Graduate">{t('Graduate / higher')}</option>
+                      <option value="No Formal">{t('No formal education')}</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Current occupation</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Current occupation')}</label>
                     <input
                       type="text"
                       value={profile.occupation}
                       onChange={(e) => setProfile({ ...profile, occupation: e.target.value })}
-                      placeholder="e.g. Agriculture / Self-employed"
+                      placeholder={t('e.g. Agriculture / Self-employed')}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs focus:outline-none focus:border-turf-primary"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Prior business experience</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Prior business experience')}</label>
                     <select
                       value={profile.business_experience}
                       onChange={(e) => setProfile({ ...profile, business_experience: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white focus:outline-none focus:border-turf-primary"
                     >
-                      <option value="None">None (First-time)</option>
-                      <option value="0-2 years">0–2 years</option>
-                      <option value="3-5 years">3–5 years</option>
-                      <option value="5+ years">5+ years</option>
+                      <option value="None">{t('None (First-time)')}</option>
+                      <option value="0-2 years">{t('0–2 years')}</option>
+                      <option value="3-5 years">{t('3–5 years')}</option>
+                      <option value="5+ years">{t('5+ years')}</option>
                     </select>
                   </div>
                 </div>
@@ -503,7 +505,7 @@ export const AssessmentWizard = () => {
                 <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl text-xs text-turf-text flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-turf-primary shrink-0 mt-0.5" />
                   <span>
-                    <strong>Education guarantee:</strong> Education level does not reduce your feasibility score. It is used strictly to personalize explanation complexity, skill training guidance, and financial-literacy support.
+                    <strong>{t('Education guarantee:')}</strong> {t('Education level does not reduce your feasibility score. It is used strictly to personalize explanation complexity, skill training guidance, and financial-literacy support.')}
                   </span>
                 </div>
               </div>
@@ -511,7 +513,7 @@ export const AssessmentWizard = () => {
               {/* Sub-Section 2: Resources You Can Use */}
               <div className="space-y-4 pt-2">
                 <h3 className="text-xs font-semibold text-turf-text border-b border-turf-border pb-2">
-                  Resources you can use (multi-select)
+                  {t('Resources you can use (multi-select)')}
                 </h3>
 
                 <div className="flex flex-wrap gap-2.5">
@@ -537,7 +539,7 @@ export const AssessmentWizard = () => {
                         }`}
                       >
                         {isSelected && <Check className="w-3.5 h-3.5" />}
-                        <span>{res}</span>
+                        <span>{t(res)}</span>
                       </button>
                     );
                   })}
@@ -547,21 +549,21 @@ export const AssessmentWizard = () => {
               {/* Time Commitment & Financial Resilience */}
               <div className="grid sm:grid-cols-2 gap-4 pt-2">
                 <div>
-                  <label className="block text-xs font-semibold text-turf-text mb-1">Time commitment</label>
+                  <label className="block text-xs font-semibold text-turf-text mb-1">{t('Time commitment')}</label>
                   <select
                     value={profile.time_commitment}
                     onChange={(e) => setProfile({ ...profile, time_commitment: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-turf-border text-xs bg-white"
                   >
-                    <option value="Full-time">Full-time commitment</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Seasonal">Seasonal</option>
-                    <option value="Family-managed">Family-managed</option>
+                    <option value="Full-time">{t('Full-time commitment')}</option>
+                    <option value="Part-time">{t('Part-time')}</option>
+                    <option value="Seasonal">{t('Seasonal')}</option>
+                    <option value="Family-managed">{t('Family-managed')}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-turf-text mb-1">Existing monthly loan EMI (₹)</label>
+                  <label className="block text-xs font-semibold text-turf-text mb-1">{t('Existing monthly loan EMI (₹)')}</label>
                   <input
                     type="number"
                     value={profile.existing_emi}
@@ -578,13 +580,13 @@ export const AssessmentWizard = () => {
                   onClick={() => setCurrentStep(0)}
                   className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
-                  Back
+                  {t('Back')}
                 </button>
                 <button
                   onClick={() => triggerAutosave(2)}
                   className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to business</span>
+                  <span>{t('Continue to business')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -595,15 +597,15 @@ export const AssessmentWizard = () => {
           {currentStep === 2 && (
             <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">Step 2 of 5</span>
-                <h2 className="text-2xl font-bold text-turf-text">Select Business Category & Location</h2>
-                <p className="text-xs text-turf-text-muted mt-1">Pick your target business and village location for catchment analysis.</p>
+                <span className="eyebrow">{t('Step 2 of 5')}</span>
+                <h2 className="text-2xl font-bold text-turf-text">{t('Select Business Category & Location')}</h2>
+                <p className="text-xs text-turf-text-muted mt-1">{t('Pick your target business and village location for catchment analysis.')}</p>
               </div>
 
               {/* 5 Radio-Selectable Category Cards */}
               <div className="space-y-3">
                 <label className="block text-xs font-semibold text-turf-text">
-                  Select business category
+                  {t('Select business category')}
                 </label>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {businessModels.map((bm) => {
@@ -623,11 +625,11 @@ export const AssessmentWizard = () => {
                             <span className="text-2xl">{categoryIcons[bm.category] || "🏪"}</span>
                             {isSelected && <CheckCircle2 className="w-5 h-5 text-turf-primary" />}
                           </div>
-                          <div className="font-bold text-xs text-turf-text">{bm.display_name}</div>
-                          <p className="text-[11px] text-turf-text-muted line-clamp-2">{bm.description}</p>
+                          <div className="font-bold text-xs text-turf-text">{t(bm.display_name)}</div>
+                          <p className="text-[11px] text-turf-text-muted line-clamp-2">{t(bm.description)}</p>
                         </div>
                         <div className="mt-3 pt-2 border-t border-turf-border text-[10.5px] font-semibold text-turf-primary stat-number">
-                          Capital: ₹{(bm.capital_min/100000).toFixed(1)}L – ₹{(bm.capital_max/100000).toFixed(1)}L
+                          {t('Capital:')} ₹{(bm.capital_min/100000).toFixed(1)}L – ₹{(bm.capital_max/100000).toFixed(1)}L
                         </div>
                       </div>
                     );
@@ -639,7 +641,7 @@ export const AssessmentWizard = () => {
               <div className="space-y-4 pt-4 border-t border-turf-border">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-semibold text-turf-text">
-                    Target village location
+                    {t('Target village location')}
                   </h3>
                   <button
                     type="button"
@@ -647,13 +649,13 @@ export const AssessmentWizard = () => {
                     className="text-[11px] font-semibold text-turf-primary hover:underline flex items-center gap-1"
                   >
                     <MapPin className="w-3.5 h-3.5" />
-                    <span>Use current location (Mock)</span>
+                    <span>{t('Use current location (Mock)')}</span>
                   </button>
                 </div>
 
                 <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">State</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">{t('State')}</label>
                     <select
                       value={selectedState}
                       onChange={(e) => setSelectedState(e.target.value)}
@@ -664,7 +666,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">District</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">{t('District')}</label>
                     <select
                       value={selectedDistrict}
                       onChange={(e) => setSelectedDistrict(e.target.value)}
@@ -675,7 +677,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">Block / Sub-District</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">{t('Block / Sub-District')}</label>
                     <select
                       value={selectedBlock}
                       onChange={(e) => setSelectedBlock(e.target.value)}
@@ -686,7 +688,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">Village</label>
+                    <label className="block text-[11px] font-semibold text-turf-text-muted mb-1">{t('Village')}</label>
                     <select
                       value={selectedVillageId}
                       onChange={(e) => setSelectedVillageId(e.target.value)}
@@ -713,13 +715,13 @@ export const AssessmentWizard = () => {
                   onClick={() => setCurrentStep(1)}
                   className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
-                  Back
+                  {t('Back')}
                 </button>
                 <button
                   onClick={() => triggerAutosave(3)}
                   className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to readiness</span>
+                  <span>{t('Continue to readiness')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -730,12 +732,12 @@ export const AssessmentWizard = () => {
           {currentStep === 3 && (
             <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">Step 3 of 5</span>
+                <span className="eyebrow">{t('Step 3 of 5')}</span>
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{categoryIcons[selectedCategory]}</span>
                   <div>
-                    <h2 className="text-2xl font-bold text-turf-text">{selectedCategory} Readiness Questionnaire</h2>
-                    <p className="text-xs text-turf-text-muted mt-0.5">Answer based on what is available today—not what you hope to arrange later.</p>
+                    <h2 className="text-2xl font-bold text-turf-text">{t(selectedCategory)} {t('Readiness Questionnaire')}</h2>
+                    <p className="text-xs text-turf-text-muted mt-0.5">{t('Answer based on what is available today—not what you hope to arrange later.')}</p>
                   </div>
                 </div>
               </div>
@@ -743,7 +745,7 @@ export const AssessmentWizard = () => {
               {renderReadinessQuestions()}
 
               <div className="p-3.5 bg-turf-surface border border-turf-border rounded-xl text-xs text-turf-text">
-                <strong>Readiness Advisory:</strong> Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.
+                <strong>{t('Readiness Advisory:')}</strong> {t('Honest answers make the preparation guidance more useful. Entrepreneur readiness is scored separately from village market feasibility.')}
               </div>
 
               {/* Buttons */}
@@ -752,13 +754,13 @@ export const AssessmentWizard = () => {
                   onClick={() => setCurrentStep(2)}
                   className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
-                  Back
+                  {t('Back')}
                 </button>
                 <button
                   onClick={() => triggerAutosave(4)}
                   className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to finance</span>
+                  <span>{t('Continue to finance')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -769,16 +771,16 @@ export const AssessmentWizard = () => {
           {currentStep === 4 && (
             <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">Step 4 of 5</span>
-                <h2 className="text-2xl font-bold text-turf-text">Understand Your Financial Fit</h2>
-                <p className="text-xs text-turf-text-muted mt-1">Provide your available capital and monthly household obligations.</p>
+                <span className="eyebrow">{t('Step 4 of 5')}</span>
+                <h2 className="text-2xl font-bold text-turf-text">{t('Understand Your Financial Fit')}</h2>
+                <p className="text-xs text-turf-text-muted mt-1">{t('Provide your available capital and monthly household obligations.')}</p>
               </div>
 
               <div className="grid md:grid-cols-12 gap-6">
                 {/* Left Form Inputs */}
                 <div className="md:col-span-7 space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Project cost estimate (₹)</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Project cost estimate (₹)')}</label>
                     <input
                       type="number"
                       value={finance.project_cost}
@@ -788,7 +790,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Available entrepreneur margin capital (₹)</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Available entrepreneur margin capital (₹)')}</label>
                     <input
                       type="number"
                       value={finance.available_margin}
@@ -798,7 +800,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-turf-text mb-1">Monthly household expenses (₹)</label>
+                    <label className="block text-xs font-semibold text-turf-text mb-1">{t('Monthly household expenses (₹)')}</label>
                     <input
                       type="number"
                       value={finance.household_expenses}
@@ -809,10 +811,10 @@ export const AssessmentWizard = () => {
 
                   {/* Financial Understanding Self-Assessment */}
                   <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border space-y-3 pt-3">
-                    <span className="eyebrow !mb-0">Financial understanding</span>
+                    <span className="eyebrow !mb-0">{t('Financial understanding')}</span>
                     
                     <div className="space-y-2">
-                      <label className="block text-xs text-turf-text font-medium">Do you understand how EMI works?</label>
+                      <label className="block text-xs text-turf-text font-medium">{t('Do you understand how EMI works?')}</label>
                       <div className="flex gap-2">
                         {["Yes", "Somewhat", "No"].map(opt => (
                           <button
@@ -823,7 +825,7 @@ export const AssessmentWizard = () => {
                               finance.understands_emi === opt ? 'bg-turf-primary text-white' : 'bg-white text-turf-text-muted border border-turf-border'
                             }`}
                           >
-                            {opt}
+                            {t(opt)}
                           </button>
                         ))}
                       </div>
@@ -834,25 +836,25 @@ export const AssessmentWizard = () => {
                 {/* Right Card: Live Preview Calculation (Data Card) */}
                 <div className="md:col-span-5 bg-turf-surface border border-turf-border rounded-2xl p-6 flex flex-col justify-between">
                   <div className="space-y-4">
-                    <span className="eyebrow">Preliminary demo estimate</span>
+                    <span className="eyebrow">{t('Preliminary demo estimate')}</span>
                     
                     <div className="space-y-3 border-b border-turf-border pb-4">
                       <div className="flex justify-between text-xs">
-                        <span className="text-turf-text-muted">Project cost:</span>
+                        <span className="text-turf-text-muted">{t('Project cost:')}</span>
                         <span className="stat-number text-turf-text">₹{finance.project_cost.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-xs">
-                        <span className="text-turf-text-muted">Your available margin:</span>
+                        <span className="text-turf-text-muted">{t('Your available margin:')}</span>
                         <span className="stat-number text-turf-primary">₹{finance.available_margin.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-xs">
-                        <span className="text-turf-text-muted">Min margin needed (10%):</span>
+                        <span className="text-turf-text-muted">{t('Min margin needed (10%):')}</span>
                         <span className="stat-number text-turf-text">₹{(finance.project_cost * 0.1).toLocaleString()}</span>
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <div className="text-xs text-turf-text-muted font-medium">Indicative loan amount</div>
+                      <div className="text-xs text-turf-text-muted font-medium">{t('Indicative loan amount')}</div>
                       <div className="text-2xl stat-number text-turf-primary">
                         ₹{Math.max(0, finance.project_cost - finance.available_margin).toLocaleString()}
                       </div>
@@ -860,7 +862,7 @@ export const AssessmentWizard = () => {
                   </div>
 
                   <p className="text-[10.5px] text-turf-text-muted italic mt-4">
-                    Final calculations, reducing balance interest, moratorium period, and exact EMI figures will come from the financial engine when you click Run.
+                    {t('Final calculations, reducing balance interest, moratorium period, and exact EMI figures will come from the financial engine when you click Run.')}
                   </p>
                 </div>
               </div>
@@ -871,13 +873,13 @@ export const AssessmentWizard = () => {
                   onClick={() => setCurrentStep(3)}
                   className="px-4 py-2.5 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                 >
-                  Back
+                  {t('Back')}
                 </button>
                 <button
                   onClick={() => triggerAutosave(5)}
                   className="px-6 py-2.5 bg-turf-primary hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
                 >
-                  <span>Continue to review</span>
+                  <span>{t('Continue to review')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -888,50 +890,50 @@ export const AssessmentWizard = () => {
           {currentStep === 5 && (
             <div className="bg-white border border-turf-border rounded-2xl p-6 md:p-10 space-y-8">
               <div>
-                <span className="eyebrow">Step 5 of 5</span>
-                <h2 className="text-2xl font-bold text-turf-text">Review Your Inputs</h2>
-                <p className="text-xs text-turf-text-muted mt-1">Check your assessment inputs before running the feasibility engine.</p>
+                <span className="eyebrow">{t('Step 5 of 5')}</span>
+                <h2 className="text-2xl font-bold text-turf-text">{t('Review Your Inputs')}</h2>
+                <p className="text-xs text-turf-text-muted mt-1">{t('Check your assessment inputs before running the feasibility engine.')}</p>
               </div>
 
               {/* 5 Summary Cards */}
               <div className="space-y-3">
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-turf-text">1. Personal profile</div>
-                    <div className="text-[11.5px] text-turf-text-muted">Age {profile.age_group} · {profile.education} · {profile.business_experience} experience</div>
+                    <div className="text-xs font-bold text-turf-text">{t('1. Personal profile')}</div>
+                    <div className="text-[11.5px] text-turf-text-muted">{t('Age')} {profile.age_group} · {t(profile.education)} · {t(profile.business_experience)} {t('experience')}</div>
                   </div>
-                  <button onClick={() => setCurrentStep(1)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(1)} className="text-xs font-bold text-turf-primary hover:underline">{t('Edit')}</button>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-turf-text">2. Business & location</div>
-                    <div className="text-[11.5px] text-turf-text-muted">{selectedCategory} · {selectedVillageObj.name || 'Shikrapur'}, {selectedDistrict}, {selectedState}</div>
+                    <div className="text-xs font-bold text-turf-text">{t('2. Business & location')}</div>
+                    <div className="text-[11.5px] text-turf-text-muted">{t(selectedCategory)} · {selectedVillageObj.name || 'Shikrapur'}, {selectedDistrict}, {selectedState}</div>
                   </div>
-                  <button onClick={() => setCurrentStep(2)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(2)} className="text-xs font-bold text-turf-primary hover:underline">{t('Edit')}</button>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-turf-text">3. {selectedCategory} readiness</div>
-                    <div className="text-[11.5px] text-turf-text-muted">Category questionnaire completed</div>
+                    <div className="text-xs font-bold text-turf-text">3. {t(selectedCategory)} {t('readiness')}</div>
+                    <div className="text-[11.5px] text-turf-text-muted">{t('Category questionnaire completed')}</div>
                   </div>
-                  <button onClick={() => setCurrentStep(3)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(3)} className="text-xs font-bold text-turf-primary hover:underline">{t('Edit')}</button>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-turf-surface border border-turf-border flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-bold text-turf-text">4. Financial setup</div>
-                    <div className="text-[11.5px] text-turf-text-muted">Project cost: ₹{finance.project_cost.toLocaleString()} · Available margin: ₹{finance.available_margin.toLocaleString()}</div>
+                    <div className="text-xs font-bold text-turf-text">{t('4. Financial setup')}</div>
+                    <div className="text-[11.5px] text-turf-text-muted">{t('Project cost:')} ₹{finance.project_cost.toLocaleString()} · {t('Available margin:')} ₹{finance.available_margin.toLocaleString()}</div>
                   </div>
-                  <button onClick={() => setCurrentStep(4)} className="text-xs font-bold text-turf-primary hover:underline">Edit</button>
+                  <button onClick={() => setCurrentStep(4)} className="text-xs font-bold text-turf-primary hover:underline">{t('Edit')}</button>
                 </div>
               </div>
 
               {/* Bottom Run Action */}
               <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 space-y-4">
                 <div className="text-xs text-turf-text leading-relaxed">
-                  Ready to analyse? Our deterministic engines will evaluate 10km village catchment demand, entrepreneur readiness, loan scheme options, and EMI affordability.
+                  {t('Ready to analyse? Our deterministic engines will evaluate 10km village catchment demand, entrepreneur readiness, loan scheme options, and EMI affordability.')}
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
@@ -939,14 +941,14 @@ export const AssessmentWizard = () => {
                     onClick={() => setCurrentStep(4)}
                     className="px-4 py-2 text-xs font-semibold text-turf-text-muted hover:text-turf-text"
                   >
-                    Back
+                    {t('Back')}
                   </button>
                   <button
                     onClick={handleRunAnalysis}
                     className="px-8 py-3.5 bg-turf-primary hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition-all flex items-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>Run Feasibility Analysis →</span>
+                    <span>{t('Run Feasibility Analysis →')}</span>
                   </button>
                 </div>
               </div>
@@ -962,10 +964,10 @@ export const AssessmentWizard = () => {
               </div>
 
               <div className="space-y-2">
-                <span className="eyebrow">Prototype analysis</span>
-                <h2 className="text-2xl font-bold text-turf-text">Building your feasibility picture</h2>
+                <span className="eyebrow">{t('Prototype analysis')}</span>
+                <h2 className="text-2xl font-bold text-turf-text">{t('Building your feasibility picture')}</h2>
                 <p className="text-xs text-turf-text-muted max-w-md mx-auto leading-relaxed">
-                  Keeping market feasibility, entrepreneur readiness, and financial fit separate for clear explainability.
+                  {t('Keeping market feasibility, entrepreneur readiness, and financial fit separate for clear explainability.')}
                 </p>
               </div>
 
@@ -991,7 +993,7 @@ export const AssessmentWizard = () => {
                       }`}>
                         {isFinished ? <Check className="w-3 h-3" /> : idx + 1}
                       </div>
-                      <span>{txt}</span>
+                      <span>{t(txt)}</span>
                     </div>
                   );
                 })}

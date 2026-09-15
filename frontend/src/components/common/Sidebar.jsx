@@ -29,7 +29,7 @@ export const Sidebar = () => {
         {/* Brand Header */}
         <div className="p-6 border-b border-turf-border">
           <Logo />
-          <p className="text-xs text-turf-text-muted mt-1">Rural Feasibility & Literacy</p>
+          <p className="text-xs text-turf-text-muted mt-1">{t('Rural Feasibility & Literacy')}</p>
         </div>
 
         {/* Section Eyebrow */}
@@ -71,7 +71,7 @@ export const Sidebar = () => {
             <span>{t('Prototype data')}</span>
           </div>
           <p className="leading-relaxed text-[11px] text-turf-text-muted">
-            Recommendations use prototype data and do not guarantee business success.
+            {t('Recommendations use prototype data and do not guarantee business success.')}
           </p>
         </div>
 

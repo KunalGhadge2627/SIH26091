@@ -80,9 +80,9 @@ export const ImprovementPlanPage = () => {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-turf-border pb-4">
             <div>
-              <span className="eyebrow">Preparation before launch</span>
+              <span className="eyebrow">{t('Preparation before launch')}</span>
               <h1 className="text-2xl font-bold text-turf-text">{t('Improvement Plan')}</h1>
-              <p className="text-xs text-turf-text-muted mt-0.5">Concrete action items to strengthen your entrepreneur readiness before starting.</p>
+              <p className="text-xs text-turf-text-muted mt-0.5">{t('Concrete action items to strengthen your entrepreneur readiness before starting.')}</p>
             </div>
             <Link
               to={`/assessments/${assessmentId}/report`}
@@ -94,36 +94,37 @@ export const ImprovementPlanPage = () => {
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-xs text-turf-text-muted">Loading readiness action items...</div>
+            <div className="py-12 text-center text-xs text-turf-text-muted">{t('Loading readiness action items...')}</div>
           ) : (
             <div className="space-y-6">
               {/* Summary Strip (Data Card Fills) */}
               <div className="bg-turf-surface border border-turf-border rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label="Current" />
+                  <ScoreRing score={baseReadinessScore} size={85} strokeWidth={8} label={t('Current')} />
                   <ArrowRight className="w-5 h-5 text-turf-primary hidden sm:block" />
-                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label="Potential" />
+                  <ScoreRing score={potentialScore} size={85} strokeWidth={8} label={t('Potential')} />
                   <div>
-                    <h3 className="text-sm font-bold text-turf-text">Potential Preparedness</h3>
+                    <h3 className="text-sm font-bold text-turf-text">{t('Potential Preparedness')}</h3>
                     <p className="text-xs text-turf-primary font-semibold mt-0.5 stat-number">
-                      +{completedPoints} points gained from completed actions
+                      +{completedPoints} {t('points gained from completed actions')}
                     </p>
                   </div>
                 </div>
 
                 <div className="bg-white text-turf-primary px-4 py-2 rounded-xl text-xs font-semibold border border-turf-border shrink-0 stat-number">
-                  {completedCount} of {actions.length} Actions Completed
+                  {completedCount} {t('of')} {actions.length} {t('Actions Completed')}
                 </div>
               </div>
 
               {/* Numbered Action Cards */}
               <div className="space-y-4">
-                <h2 className="text-xs font-semibold text-turf-text">Recommended Action Items</h2>
+                <h2 className="text-xs font-semibold text-turf-text">{t('Recommended Action Items')}</h2>
 
                 {actions.map((act, idx) => {
                   const actKey = act.dimension.toLowerCase().replace(/ /g, '_');
-                  const isCompleted = act.current_status === 'Completed';
-                  const isInProgress = act.current_status === 'In Progress';
+                  const normalizedStatus = act.current_status === 'Pending' ? 'Not Started' : act.current_status;
+                  const isCompleted = normalizedStatus === 'Completed';
+                  const isInProgress = normalizedStatus === 'In Progress';
 
                   return (
                     <div
@@ -144,14 +145,14 @@ export const ImprovementPlanPage = () => {
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-sm text-turf-text">{act.title}</span>
+                            <span className="font-bold text-sm text-turf-text">{t(act.title)}</span>
                             <span className="text-[10px] font-semibold text-turf-primary bg-white border border-turf-border px-2 py-0.5 rounded-lg stat-number">
-                              +{act.impact_points} Readiness
+                              +{act.impact_points} {t('Readiness')}
                             </span>
                           </div>
-                          <p className="text-xs text-turf-text-muted leading-relaxed">{act.description}</p>
+                          <p className="text-xs text-turf-text-muted leading-relaxed">{t(act.description)}</p>
                           <span className="text-[10px] font-medium text-turf-text-muted block pt-1">
-                            Dimension: {act.dimension}
+                            {t('Dimension:')} {t(act.dimension)}
                           </span>
                         </div>
                       </div>
@@ -159,7 +160,7 @@ export const ImprovementPlanPage = () => {
                       {/* Status Dropdown */}
                       <div className="shrink-0">
                         <select
-                          value={act.current_status}
+                          value={normalizedStatus}
                           onChange={(e) => handleStatusChange(act.dimension, e.target.value)}
                           disabled={updatingId === actKey}
                           className={`px-3 py-2 rounded-xl text-xs font-semibold outline-none cursor-pointer border ${
@@ -170,9 +171,9 @@ export const ImprovementPlanPage = () => {
                               : 'bg-white text-turf-text border-turf-border'
                           }`}
                         >
-                          <option value="Not Started" className="bg-white text-turf-text">Not Started</option>
-                          <option value="In Progress" className="bg-white text-turf-text">In Progress</option>
-                          <option value="Completed" className="bg-white text-turf-text">Completed</option>
+                          <option value="Not Started" className="bg-white text-turf-text">{t('Not Started')}</option>
+                          <option value="In Progress" className="bg-white text-turf-text">{t('In Progress')}</option>
+                          <option value="Completed" className="bg-white text-turf-text">{t('Completed')}</option>
                         </select>
                       </div>
                     </div>
