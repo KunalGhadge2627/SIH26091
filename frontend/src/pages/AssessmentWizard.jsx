@@ -921,8 +921,8 @@ export const AssessmentWizard = () => {
                       }}
                       className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white"
                     >
-                      <option value="">Select state</option>
-                      {states.map(s => <option key={s} value={s}>{s}</option>)}
+                      <option value="">{t('Select state')}</option>
+                      {states.map(s => <option key={s} value={s}>{t(s)}</option>)}
                     </select>
                   </div>
 
@@ -943,8 +943,8 @@ export const AssessmentWizard = () => {
                       }}
                       className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white"
                     >
-                      <option value="">Select district</option>
-                      {districts.map(d => <option key={d} value={d}>{d}</option>)}
+                      <option value="">{t('Select district')}</option>
+                      {districts.map(d => <option key={d} value={d}>{t(d)}</option>)}
                     </select>
                   </div>
 
@@ -965,8 +965,8 @@ export const AssessmentWizard = () => {
                       }}
                       className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white"
                     >
-                      <option value="">Select sub-district</option>
-                      {blocks.map(b => <option key={b} value={b}>{b}</option>)}
+                      <option value="">{t('Select sub-district')}</option>
+                      {blocks.map(b => <option key={b} value={b}>{t(b)}</option>)}
                     </select>
                   </div>
 
@@ -986,7 +986,7 @@ export const AssessmentWizard = () => {
                       }}
                       className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white font-bold text-primary-700"
                     >
-                      <option value="">Select village</option>
+                      <option value="">{t('Select village')}</option>
                       {villages.map(v => <option key={v.village_id} value={v.village_id}>{v.name}</option>)}
                     </select>
                   </div>

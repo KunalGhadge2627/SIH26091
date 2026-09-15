@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 import Logo from '../components/common/Logo';
+import LanguageSelector from '../components/common/LanguageSelector';
 import { useAuth } from '../context/AuthContext';
 import { LANGUAGES_LIST, useLanguage } from '../context/LanguageContext';
 import api from '../api/client';
@@ -25,7 +26,7 @@ const DEFAULT_DISTRICTS = {
 };
 
 export const SignupPage = () => {
-  const { translate: t } = useLanguage();
+  const { translate: t, setLang } = useLanguage();
   const { signup } = useAuth();
   const navigate = useNavigate();
 
@@ -175,7 +176,10 @@ export const SignupPage = () => {
       </div>
 
       {/* Right Panel (Form) */}
-      <div className="md:col-span-7 p-6 sm:p-12 bg-white flex flex-col justify-center overflow-y-auto">
+      <div className="md:col-span-7 p-6 sm:p-12 bg-white flex flex-col justify-center overflow-y-auto relative">
+        <div className="absolute top-6 right-6">
+          <LanguageSelector />
+        </div>
         <div className="max-w-lg w-full mx-auto space-y-6">
           <div>
             <span className="eyebrow">{t('GET STARTED')}</span>
@@ -268,11 +272,14 @@ export const SignupPage = () => {
                 <select
                   name="preferred_language"
                   value={formData.preferred_language}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600"
+                  onChange={(e) => {
+                    handleChange(e);
+                    setLang(e.target.value);
+                  }}
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600 font-medium"
                 >
-                  {LANGUAGES_LIST.map(lang => (
-                    <option key={lang.code} value={lang.code}>{lang.native}</option>
+                  {LANGUAGES_LIST.map(item => (
+                    <option key={item.code} value={item.code}>{item.native} ({item.code.toUpperCase()})</option>
                   ))}
                 </select>
               </div>
@@ -285,7 +292,7 @@ export const SignupPage = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600 font-medium"
                 >
-                  {states.map(s => <option key={s} value={s}>{s}</option>)}
+                  {states.map(s => <option key={s} value={s}>{t(s)}</option>)}
                 </select>
               </div>
 
@@ -297,7 +304,7 @@ export const SignupPage = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs bg-white focus:outline-none focus:border-primary-600 font-medium"
                 >
-                  {districts.map(d => <option key={d} value={d}>{d}</option>)}
+                  {districts.map(d => <option key={d} value={d}>{t(d)}</option>)}
                 </select>
               </div>
             </div>

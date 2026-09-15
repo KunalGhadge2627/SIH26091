@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
 import Logo from '../components/common/Logo';
+import LanguageSelector from '../components/common/LanguageSelector';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -68,7 +69,10 @@ export const LoginPage = () => {
       </div>
 
       {/* Right Panel (Form) */}
-      <div className="md:col-span-7 p-6 sm:p-12 flex flex-col justify-center bg-white">
+      <div className="md:col-span-7 p-6 sm:p-12 flex flex-col justify-center bg-white relative">
+        <div className="absolute top-6 right-6">
+          <LanguageSelector />
+        </div>
         <div className="max-w-md w-full mx-auto space-y-6">
           <div>
             <span className="eyebrow">{t('WELCOME BACK')}</span>

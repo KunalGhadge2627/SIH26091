@@ -358,9 +358,39 @@ const ENGLISH_BY_TRANSLATION = Object.fromEntries(
   Object.entries(TRANSLATIONS).flatMap(([language, dictionary]) => language === 'en' ? [] : Object.entries(dictionary).map(([english, translated]) => [translated, english]))
 );
 
+export const triggerGoogleTranslate = (langCode) => {
+  try {
+    const hostname = window.location.hostname;
+    if (langCode === 'en') {
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`;
+      if (hostname && hostname.includes('.')) {
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${hostname};`;
+      }
+    } else {
+      const cookieVal = `/en/${langCode}`;
+      document.cookie = `googtrans=${cookieVal}; path=/;`;
+      document.cookie = `googtrans=${cookieVal}; path=/; domain=${hostname};`;
+      if (hostname && hostname.includes('.')) {
+        document.cookie = `googtrans=${cookieVal}; path=/; domain=.${hostname};`;
+      }
+    }
+
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = langCode;
+      select.dispatchEvent(new Event('change'));
+    }
+  } catch (err) {
+    console.warn('Google Translate sync error:', err);
+  }
+};
+
 const translatePage = (language) => {
+  if (language === 'en') return;
   const translations = TRANSLATIONS[language] || ENGLISH_TRANSLATIONS;
 
+  // Translate text nodes
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const textNodes = [];
   let node;
@@ -368,32 +398,81 @@ const translatePage = (language) => {
 
   textNodes.forEach((textNode) => {
     const source = textNode.textContent.trim();
+    if (!source) return;
     const englishKey = ENGLISH_BY_TRANSLATION[source] || source;
     if (translations[englishKey] && translations[englishKey] !== source) {
-      textNode.textContent = textNode.textContent.replace(source, translations[englishKey]);
+      try {
+        textNode.textContent = textNode.textContent.replace(source, translations[englishKey]);
+      } catch (e) {}
     }
   });
 
+  // Translate select dropdown options specifically
+  document.querySelectorAll('select option').forEach((opt) => {
+    const source = opt.textContent.trim();
+    if (!source) return;
+    const englishKey = ENGLISH_BY_TRANSLATION[source] || source;
+    if (translations[englishKey] && translations[englishKey] !== source) {
+      opt.textContent = translations[englishKey];
+    }
+  });
+
+  // Translate input placeholders, titles, aria-labels
   document.querySelectorAll('[title], [aria-label], [placeholder]').forEach((element) => {
     ['title', 'aria-label', 'placeholder'].forEach((attribute) => {
       const value = element.getAttribute(attribute);
+      if (!value) return;
       const englishKey = ENGLISH_BY_TRANSLATION[value] || value;
-      if (value && translations[englishKey] && translations[englishKey] !== value) element.setAttribute(attribute, translations[englishKey]);
+      if (translations[englishKey] && translations[englishKey] !== value) {
+        element.setAttribute(attribute, translations[englishKey]);
+      }
     });
   });
 };
 
 export const LanguageProvider = ({ children }) => {
   const { pathname } = useLocation();
-  const [lang, setLangState] = useState('en');
+  const [lang, setLangState] = useState(() => {
+    return localStorage.getItem('app_lang') || 'en';
+  });
 
   const setLang = (code) => {
+    localStorage.setItem('app_lang', code);
     startTransition(() => setLangState(code));
+    triggerGoogleTranslate(code);
+    setTimeout(() => {
+      translatePage(code);
+    }, 60);
+    setTimeout(() => {
+      translatePage(code);
+    }, 400);
   };
 
   useEffect(() => {
-    const isAuthenticatedScreen = pathname.startsWith('/dashboard') || pathname.startsWith('/assessment') || pathname.startsWith('/assessments') || pathname.startsWith('/improvement-plan') || pathname.startsWith('/alternatives') || pathname.startsWith('/financial-plan') || pathname.startsWith('/reports') || pathname.startsWith('/legal-advice') || pathname.startsWith('/profile');
-    if (!isAuthenticatedScreen && lang !== 'en') setLangState('en');
+    const saved = localStorage.getItem('app_lang') || 'en';
+    if (saved !== 'en') {
+      triggerGoogleTranslate(saved);
+      const timer = setInterval(() => {
+        const combo = document.querySelector('.goog-te-combo');
+        if (combo) {
+          if (combo.value !== saved) {
+            combo.value = saved;
+            combo.dispatchEvent(new Event('change'));
+          }
+          clearInterval(timer);
+        }
+      }, 300);
+      setTimeout(() => clearInterval(timer), 6000);
+      translatePage(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (lang !== 'en') {
+      translatePage(lang);
+      const timer = setTimeout(() => translatePage(lang), 300);
+      return () => clearTimeout(timer);
+    }
   }, [lang, pathname]);
 
   return (
@@ -404,3 +483,4 @@ export const LanguageProvider = ({ children }) => {
 };
 
 export const useLanguage = () => useContext(LanguageContext);
+

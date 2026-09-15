@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Globe, User, ChevronDown } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 export const TopBar = ({ title = "Dashboard" }) => {
   const { user } = useAuth();
-  const { lang, setLang, languagesList, translate: t } = useLanguage();
+  const { translate: t } = useLanguage();
   const [showBellMenu, setShowBellMenu] = useState(false);
 
   const getInitials = (name) => {
@@ -22,20 +23,7 @@ export const TopBar = ({ title = "Dashboard" }) => {
       {/* Right Controls */}
       <div className="flex items-center gap-4">
         {/* Language Selector */}
-        <div className="relative flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700">
-          <Globe className="w-4 h-4 text-gray-500" />
-          <select 
-            value={lang} 
-            onChange={(e) => setLang(e.target.value)}
-            className="bg-transparent text-xs font-semibold text-gray-800 outline-none cursor-pointer pr-1"
-          >
-            {languagesList.map((item) => (
-              <option key={item.code} value={item.code}>
-                {item.native} ({item.code.toUpperCase()})
-              </option>
-            ))}
-          </select>
-        </div>
+        <LanguageSelector />
 
         {/* Notification Bell */}
         <div className="relative">

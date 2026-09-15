@@ -6,24 +6,28 @@ import {
 } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import ThreeWayFitCard from '../components/common/ThreeWayFitCard';
+import LanguageSelector from '../components/common/LanguageSelector';
+import { useLanguage } from '../context/LanguageContext';
 
 export const LandingPage = () => {
+  const { translate: t } = useLanguage();
+
   const featureGrid = [
-    { icon: MapPin, title: "Hyper-Local Market Analysis", desc: "Evaluate demand drivers, competitor density, and infrastructure within 10 km radius." },
-    { icon: UserCheck, title: "Entrepreneur Readiness", desc: "Assess domain skill, workspace access, supplier networks, and customer commitments." },
-    { icon: Wallet, title: "Financial Fit & EMI Ratio", desc: "Verify disposable capacity against reducing-balance EMI to prevent loan default." },
-    { icon: PieChart, title: "Business Alternatives", desc: "Rank 5 business categories to uncover stronger alternative opportunities." },
-    { icon: AlertCircle, title: "Risk Awareness", desc: "Identify local market risk factors before committing margin capital." },
-    { icon: HelpCircle, title: "Scheme Guidance", desc: "Match official government loan schemes (Micro Finance & Term Loan tiers)." },
-    { icon: BarChart3, title: "Financial Literacy Notes", desc: "Plain-language explanations of EMI, moratorium interest, and cash reserves." },
-    { icon: Award, title: "Explainable Recommendations", desc: "Clear positive factors and attention areas for every feasibility score." }
+    { icon: MapPin, title: t("Hyper-Local Market Analysis"), desc: t("Evaluate demand drivers, competitor density, and infrastructure within 10 km radius.") },
+    { icon: UserCheck, title: t("Entrepreneur Readiness"), desc: t("Assess domain skill, workspace access, supplier networks, and customer commitments.") },
+    { icon: Wallet, title: t("Financial Fit & EMI Ratio"), desc: t("Verify disposable capacity against reducing-balance EMI to prevent loan default.") },
+    { icon: PieChart, title: t("Business Alternatives"), desc: t("Rank 5 business categories to uncover stronger alternative opportunities.") },
+    { icon: AlertCircle, title: t("Risk Awareness"), desc: t("Identify local market risk factors before committing margin capital.") },
+    { icon: HelpCircle, title: t("Scheme Guidance"), desc: t("Match official government loan schemes (Micro Finance & Term Loan tiers).") },
+    { icon: BarChart3, title: t("Financial Literacy Notes"), desc: t("Plain-language explanations of EMI, moratorium interest, and cash reserves.") },
+    { icon: Award, title: t("Explainable Recommendations"), desc: t("Clear positive factors and attention areas for every feasibility score.") }
   ];
 
   const steps = [
-    { step: "01", title: "Tell us about yourself", desc: "Share your business experience, available resources, and financial background." },
-    { step: "02", title: "Select business & location", desc: "Choose from 5 business categories and pick your village location." },
-    { step: "03", title: "Analyse local fit", desc: "Our deterministic engines process local market signals, readiness, and EMI capacity." },
-    { step: "04", title: "Receive practical action plan", desc: "Get an actionable preparation checklist and legal office guidance." }
+    { step: "01", title: t("Tell us about yourself"), desc: t("Share your business experience, available resources, and financial background.") },
+    { step: "02", title: t("Select business & location"), desc: t("Choose from 5 business categories and pick your village location.") },
+    { step: "03", title: t("Analyse local fit"), desc: t("Our deterministic engines process local market signals, readiness, and EMI capacity.") },
+    { step: "04", title: t("Receive practical action plan"), desc: t("Get an actionable preparation checklist and legal office guidance.") }
   ];
 
   return (
@@ -34,23 +38,24 @@ export const LandingPage = () => {
           <Logo />
           
           <div className="hidden md:flex items-center gap-8 text-xs font-semibold text-gray-600">
-            <a href="#how-it-works" className="hover:text-primary-600 transition-colors">How it works</a>
-            <a href="#what-we-assess" className="hover:text-primary-600 transition-colors">What we assess</a>
-            <a href="#why-it-matters" className="hover:text-primary-600 transition-colors">Why it matters</a>
+            <a href="#how-it-works" className="hover:text-primary-600 transition-colors">{t("How it works")}</a>
+            <a href="#what-we-assess" className="hover:text-primary-600 transition-colors">{t("What we assess")}</a>
+            <a href="#why-it-matters" className="hover:text-primary-600 transition-colors">{t("Why it matters")}</a>
           </div>
 
           <div className="flex items-center gap-3">
+            <LanguageSelector />
             <Link 
               to="/login" 
               className="px-4 py-2 text-xs font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
             >
-              Log in
+              {t("Log in")}
             </Link>
             <Link 
               to="/signup" 
               className="px-4 py-2 text-xs font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
             >
-              <span>Start assessment</span>
+              <span>{t("Start assessment")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -63,15 +68,15 @@ export const LandingPage = () => {
           <div className="md:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-xs font-semibold text-primary-700">
               <ShieldCheck className="w-4 h-4 text-primary-600" />
-              <span>Data-driven guidance before debt</span>
+              <span>{t("Data-driven guidance before debt")}</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
-              Make better business decisions <span className="text-primary-600">before</span> taking a loan.
+              {t("Make better business decisions")} <span className="text-primary-600">{t("before")}</span> {t("taking a loan.")}
             </h1>
 
             <p className="text-base text-gray-600 leading-relaxed max-w-2xl">
-              Udyam Gram is a pre-investment advisory platform that tells a rural entrepreneur whether a specific business idea is viable at their village location, whether they are personally ready, and whether they can afford financing — before debt is taken.
+              {t("Udyam Gram is a pre-investment advisory platform that tells a rural entrepreneur whether a specific business idea is viable at their village location, whether they are personally ready, and whether they can afford financing — before debt is taken.")}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -79,14 +84,14 @@ export const LandingPage = () => {
                 to="/signup" 
                 className="px-6 py-3 text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-xl shadow-sm transition-all flex items-center gap-2"
               >
-                <span>Start assessment</span>
+                <span>{t("Start assessment")}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a 
                 href="#how-it-works" 
                 className="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
               >
-                See how it works
+                {t("See how it works")}
               </a>
             </div>
 
@@ -94,15 +99,15 @@ export const LandingPage = () => {
             <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-gray-100 text-xs font-medium text-gray-600">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Clear recommendations</span>
+                <span>{t("Clear recommendations")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Practical action plan</span>
+                <span>{t("Practical action plan")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>No guaranteed outcomes</span>
+                <span>{t("No guaranteed outcomes")}</span>
               </div>
             </div>
           </div>
@@ -118,12 +123,12 @@ export const LandingPage = () => {
       <section id="what-we-assess" className="py-16 bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="eyebrow">THE THREE-WAY FIT</span>
+            <span className="eyebrow">{t("THE THREE-WAY FIT")}</span>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              A business can look good on paper and still be wrong for you.
+              {t("A business can look good on paper and still be wrong for you.")}
             </h2>
             <p className="text-xs text-gray-600">
-              We evaluate feasibility through three distinct, un-blended perspectives.
+              {t("We evaluate feasibility through three distinct, un-blended perspectives.")}
             </p>
           </div>
 
@@ -133,9 +138,9 @@ export const LandingPage = () => {
               <div className="p-3 rounded-xl bg-blue-50 text-primary-600 w-fit">
                 <Store className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-gray-900">Business ↔ Location</h3>
+              <h3 className="text-base font-bold text-gray-900">{t("Business ↔ Location")}</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Is there sufficient unmet demand, local population, and road infrastructure in the 10km catchment?
+                {t("Is there sufficient unmet demand, local population, and road infrastructure in the 10km catchment?")}
               </p>
             </div>
 
@@ -144,9 +149,9 @@ export const LandingPage = () => {
               <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600 w-fit">
                 <UserCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-gray-900">Person ↔ Business</h3>
+              <h3 className="text-base font-bold text-gray-900">{t("Person ↔ Business")}</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Do you personally possess the skills, workspace, supplier links, and committed customers to run it?
+                {t("Do you personally possess the skills, workspace, supplier links, and committed customers to run it?")}
               </p>
             </div>
 
@@ -155,9 +160,9 @@ export const LandingPage = () => {
               <div className="p-3 rounded-xl bg-amber-50 text-amber-600 w-fit">
                 <Wallet className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-gray-900">Person ↔ Finance</h3>
+              <h3 className="text-base font-bold text-gray-900">{t("Person ↔ Finance")}</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Can your monthly disposable income support loan EMI repayments without straining household expenses?
+                {t("Can your monthly disposable income support loan EMI repayments without straining household expenses?")}
               </p>
             </div>
           </div>
@@ -168,12 +173,12 @@ export const LandingPage = () => {
       <section className="py-16 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="eyebrow">TRANSPARENT ADVISORY</span>
+            <span className="eyebrow">{t("TRANSPARENT ADVISORY")}</span>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Every recommendation shows its reasoning.
+              {t("Every recommendation shows its reasoning.")}
             </h2>
             <p className="text-xs text-gray-600">
-              No black-box scoring. Every score comes with positive drivers and attention areas.
+              {t("No black-box scoring. Every score comes with positive drivers and attention areas.")}
             </p>
           </div>
 
@@ -198,8 +203,8 @@ export const LandingPage = () => {
       <section id="how-it-works" className="py-16 bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="eyebrow">SIMPLE 4-STEP PROCESS</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">How it works</h2>
+            <span className="eyebrow">{t("SIMPLE 4-STEP PROCESS")}</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t("How it works")}</h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
@@ -219,12 +224,12 @@ export const LandingPage = () => {
       {/* 6. Why This Matters Quote Callout */}
       <section id="why-it-matters" className="py-16 bg-primary-800 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
-          <span className="eyebrow !text-blue-300">OUR MISSION</span>
+          <span className="eyebrow !text-blue-300">{t("OUR MISSION")}</span>
           <blockquote className="text-xl md:text-2xl font-serif italic text-blue-50 leading-relaxed">
-            "Credit should support a good decision—not create an avoidable burden."
+            "{t("Credit should support a good decision—not create an avoidable burden.")}"
           </blockquote>
           <p className="text-xs text-blue-200 max-w-xl mx-auto leading-relaxed">
-            Taking a loan for an unviable business in a low-demand village creates severe debt distress. Udyam Gram helps rural entrepreneurs verify feasibility before signing loan documents.
+            {t("Taking a loan for an unviable business in a low-demand village creates severe debt distress. Udyam Gram helps rural entrepreneurs verify feasibility before signing loan documents.")}
           </p>
         </div>
       </section>
@@ -233,8 +238,8 @@ export const LandingPage = () => {
       <footer className="bg-gray-900 text-gray-400 py-10 border-t border-gray-800 text-xs">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <Logo textClassName="text-lg font-bold text-white" />
-          <div>SIH26091 · Hyper-Local Rural Business Feasibility Prototype</div>
-          <div>&copy; 2026 Udyam Gram. All rights reserved.</div>
+          <div>{t("SIH26091 · Hyper-Local Rural Business Feasibility Prototype")}</div>
+          <div>&copy; 2026 Udyam Gram. {t("All rights reserved.")}</div>
         </div>
       </footer>
     </div>

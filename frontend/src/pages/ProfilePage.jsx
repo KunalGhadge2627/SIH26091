@@ -9,7 +9,7 @@ import api from '../api/client';
 
 export const ProfilePage = () => {
   const { user, logout } = useAuth();
-  const { lang, setLang, languagesList } = useLanguage();
+  const { lang, setLang, languagesList, translate: t } = useLanguage();
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -92,9 +92,9 @@ export const ProfilePage = () => {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-200 pb-4">
             <div>
-              <span className="eyebrow">ACCOUNT</span>
-              <h1 className="text-2xl font-bold text-gray-900">Your profile</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Manage your personal details, language preferences, and accessibility settings.</p>
+              <span className="eyebrow">{t('ACCOUNT')}</span>
+              <h1 className="text-2xl font-bold text-gray-900">{t('Your profile')}</h1>
+              <p className="text-xs text-gray-500 mt-0.5">{t('Manage your personal details, language preferences, and accessibility settings.')}</p>
             </div>
 
             <button
@@ -102,7 +102,7 @@ export const ProfilePage = () => {
               className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5"
             >
               <Edit3 className="w-4 h-4" />
-              <span>{isEditing ? "Cancel editing" : "Edit profile"}</span>
+              <span>{isEditing ? t("Cancel editing") : t("Edit profile")}</span>
             </button>
           </div>
 
@@ -114,16 +114,16 @@ export const ProfilePage = () => {
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-gray-900">{profileData.full_name || 'User'}</h3>
+                <h3 className="text-base font-bold text-gray-900">{profileData.full_name || t('User')}</h3>
                 <span className="text-xs font-semibold text-primary-700 bg-blue-50 px-2.5 py-0.5 rounded-full inline-block mt-1 border border-blue-100">
-                  Rural Micro-Entrepreneur
+                  {t('Rural Micro-Entrepreneur')}
                 </span>
               </div>
 
               <div className="pt-2">
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Profile Complete</span>
+                  <span>{t('Profile Complete')}</span>
                 </span>
               </div>
             </div>
@@ -131,15 +131,15 @@ export const ProfilePage = () => {
             {/* Right Profile Details / Edit Form Card */}
             <div className="md:col-span-8 bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Profile Details</h3>
-                <span className="text-xs text-gray-400 font-mono">ID: {user?.id}</span>
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">{t('Profile Details')}</h3>
+                <span className="text-xs text-gray-400 font-mono">{t('ID')}: {user?.id}</span>
               </div>
 
               {isEditing ? (
                 <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">Full Name</label>
+                      <label className="block font-semibold text-gray-700 mb-1">{t('Full Name')}</label>
                       <input
                         type="text"
                         value={profileData.full_name}
@@ -148,7 +148,7 @@ export const ProfilePage = () => {
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">Mobile</label>
+                      <label className="block font-semibold text-gray-700 mb-1">{t('Mobile')}</label>
                       <input
                         type="text"
                         value={profileData.mobile}
@@ -160,7 +160,7 @@ export const ProfilePage = () => {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">State</label>
+                      <label className="block font-semibold text-gray-700 mb-1">{t('State')}</label>
                       <input
                         type="text"
                         value={profileData.state}
@@ -169,7 +169,7 @@ export const ProfilePage = () => {
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-gray-700 mb-1">District</label>
+                      <label className="block font-semibold text-gray-700 mb-1">{t('District')}</label>
                       <input
                         type="text"
                         value={profileData.district}
@@ -186,42 +186,42 @@ export const ProfilePage = () => {
                       className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs flex items-center gap-1.5"
                     >
                       <Save className="w-4 h-4" />
-                      <span>{saving ? "Saving..." : "Save changes"}</span>
+                      <span>{saving ? t("Saving...") : t("Save changes")}</span>
                     </button>
                   </div>
                 </form>
               ) : (
                 <div className="grid sm:grid-cols-2 gap-6 text-xs">
                   <div>
-                    <span className="text-gray-400 font-semibold block">Full Name</span>
+                    <span className="text-gray-400 font-semibold block">{t('Full Name')}</span>
                     <span className="font-bold text-gray-900 text-sm">{profileData.full_name}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Email Address</span>
+                    <span className="text-gray-400 font-semibold block">{t('Email Address')}</span>
                     <span className="font-bold text-gray-900 text-sm">{profileData.email}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Mobile Number</span>
+                    <span className="text-gray-400 font-semibold block">{t('Mobile Number')}</span>
                     <span className="font-bold text-gray-900 text-sm">{profileData.mobile}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Preferred Language</span>
+                    <span className="text-gray-400 font-semibold block">{t('Preferred Language')}</span>
                     <span className="font-bold text-gray-900 text-sm">
                       {languagesList.find(l => l.code === profileData.preferred_language)?.native || 'English'}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">State & District</span>
+                    <span className="text-gray-400 font-semibold block">{t('State & District')}</span>
                     <span className="font-bold text-gray-900 text-sm">{profileData.district}, {profileData.state}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-400 font-semibold block">Prior Business Experience</span>
-                    <span className="font-bold text-gray-900 text-sm">{profileData.business_experience}</span>
+                    <span className="text-gray-400 font-semibold block">{t('Prior Business Experience')}</span>
+                    <span className="font-bold text-gray-900 text-sm">{t(profileData.business_experience)}</span>
                   </div>
                 </div>
               )}
@@ -230,8 +230,8 @@ export const ProfilePage = () => {
 
           {/* Preferences Section */}
           <div className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
-            <span className="eyebrow">PREFERENCES & ACCESSIBILITY</span>
-            <h2 className="text-xl font-bold text-gray-900">App Preferences</h2>
+            <span className="eyebrow">{t('PREFERENCES & ACCESSIBILITY')}</span>
+            <h2 className="text-xl font-bold text-gray-900">{t('App Preferences')}</h2>
 
             <div className="space-y-4 divide-y divide-gray-100 text-xs">
               {/* Language Row */}
@@ -239,8 +239,8 @@ export const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   <Globe className="w-5 h-5 text-primary-600 shrink-0" />
                   <div>
-                    <div className="font-bold text-gray-900">App Language</div>
-                    <div className="text-gray-500">English, Hindi and 7 more Indic languages supported</div>
+                    <div className="font-bold text-gray-900">{t('App Language')}</div>
+                    <div className="text-gray-500">{t('English, Hindi and 7 more Indic languages supported')}</div>
                   </div>
                 </div>
 
@@ -260,8 +260,8 @@ export const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   <Eye className="w-5 h-5 text-emerald-600 shrink-0" />
                   <div>
-                    <div className="font-bold text-gray-900">Accessibility Preferences</div>
-                    <div className="text-gray-500">High-contrast visuals and reduced animation settings</div>
+                    <div className="font-bold text-gray-900">{t('Accessibility Preferences')}</div>
+                    <div className="text-gray-500">{t('High-contrast visuals and reduced animation settings')}</div>
                   </div>
                 </div>
 
@@ -273,7 +273,7 @@ export const ProfilePage = () => {
                       onChange={(e) => handleAccessibilityToggle('highContrast', e.target.checked)}
                       className="rounded text-primary-600"
                     />
-                    <span>High contrast</span>
+                    <span>{t('High contrast')}</span>
                   </label>
 
                   <label className="flex items-center gap-2 font-semibold text-gray-700">
@@ -283,7 +283,7 @@ export const ProfilePage = () => {
                       onChange={(e) => handleAccessibilityToggle('reducedMotion', e.target.checked)}
                       className="rounded text-primary-600"
                     />
-                    <span>Reduced motion</span>
+                    <span>{t('Reduced motion')}</span>
                   </label>
                 </div>
               </div>
