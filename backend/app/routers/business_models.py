@@ -6,49 +6,62 @@ from app.data.mock_business_models import MOCK_BUSINESS_MODELS
 
 router = APIRouter(prefix="/business-models", tags=["Business Models"])
 
+
 @router.get("", response_model=List[CategoryResponse])
 async def get_all_business_models():
     db = get_database()
     models = []
+
     try:
         if db is not None:
             cursor = db["business_models"].find({})
             models = await cursor.to_list(length=20)
-<<<<<<< HEAD
-            for m in models:
-                m["_id"] = str(m.get("_id"))
-    except Exception:
-        pass
-
-    if not models:
-        models = MOCK_BUSINESS_MODELS
-
-=======
     except Exception:
         models = []
+
+    # Use mock data if database is unavailable or empty
     if not models:
         models = MOCK_BUSINESS_MODELS
+
+    # Convert MongoDB ObjectId to string
     for m in models:
-        m["_id"] = str(m.get("_id"))
->>>>>>> development
+        if "_id" in m:
+            m["_id"] = str(m.get("_id"))
+
     return models
+
 
 @router.get("/{category}", response_model=CategoryResponse)
 async def get_business_model_by_category(category: str):
     db = get_database()
     model = None
+
     try:
         if db is not None:
-            model = await db["business_models"].find_one({"category": category})
+            model = await db["business_models"].find_one(
+                {"category": category}
+            )
     except Exception:
         pass
 
+    # Fall back to mock data
     if not model:
-        model = next((m for m in MOCK_BUSINESS_MODELS if m["category"].lower() == category.lower()), None)
+        model = next(
+            (
+                m
+                for m in MOCK_BUSINESS_MODELS
+                if m["category"].lower() == category.lower()
+            ),
+            None,
+        )
 
     if not model:
-        raise HTTPException(status_code=404, detail=f"Business category '{category}' not found")
+        raise HTTPException(
+            status_code=404,
+            detail=f"Business category '{category}' not found",
+        )
 
+    # Convert MongoDB ObjectId to string
     if "_id" in model:
         model["_id"] = str(model.get("_id"))
 
